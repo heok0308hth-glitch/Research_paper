@@ -744,6 +744,17 @@ def fig6():
 
 
 
+def exp6(nseed=40):
+    """Recovery channel: does a halt that restores maker capacity help?"""
+    rows = []
+    for cr in (0.0, 0.1, 0.2, 0.4):
+        st = ensemble(nseed, gamma=0.5, shock=90.0, limit_L=6.0, cap_recover=cr)
+        rows.append(dict(cap_recover=cr, **st))
+        print("E6 cr=%.1f dd=%.3f" % (cr, st["dd"]), flush=True)
+    json.dump(rows, open(os.path.join(OUT, "e6.json"), "w"), indent=1)
+    return rows
+
+
 def main():
     global OUT, FIG, RES
     cmd = sys.argv[1] if len(sys.argv) > 1 else "all"
@@ -757,12 +768,12 @@ def main():
             p = os.path.join(OUT, f)
             if os.path.exists(p):
                 os.remove(p)
-        exp1(nseed=n); exp2(nseed=n); exp3(nseed=n); exp4(nseed=n); exp5(nseed=n)
+        exp1(nseed=n); exp2(nseed=n); exp3(nseed=n); exp4(nseed=n); exp5(nseed=n); exp6(nseed=n)
         fig1(); fig2(); fig3(); fig4(); fig5(); fig6()
         print("smoke ok")
         return
     os.makedirs(OUT, exist_ok=True); os.makedirs(FIG, exist_ok=True)
-    exp1(); exp2(); exp3(); exp4(); exp5()
+    exp1(); exp2(); exp3(); exp4(); exp5(); exp6()
     fig1(); fig2(); fig3(); fig4(); fig5(); fig6()
     print("done")
 
