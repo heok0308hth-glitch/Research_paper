@@ -41,6 +41,12 @@ for name, f in (("Mono", "DejaVuSansMono.ttf"), ("MonoB", "DejaVuSansMono-Bold.t
 # ceiling bars, the empty set, the set-minus sign, and Latin diacritics in
 # reference author names. Those are drawn with DejaVuSans instead, so they are
 # neither dropped nor replaced by blanks.
+LATIN = "Lat"
+try:
+    pdfmetrics.registerFont(TTFont(LATIN, os.path.join(_mp, "STIXGeneral.ttf")))
+except Exception:
+    LATIN = SERIF
+
 FALLBACK = "Sym"
 MISSING_GLYPHS = "·Éáéóćčń∅−∖⌈⌉⌊⌋"
 try:
@@ -56,8 +62,10 @@ FOOTER_TITLE = sys.argv[3] if len(sys.argv) > 3 else ""
 ss = getSampleStyleSheet()
 ST = {
     "body": ParagraphStyle("body", parent=ss["BodyText"], fontName=SERIF, fontSize=10,
-                           leading=16.2, alignment=TA_JUSTIFY, spaceAfter=6,
-                           wordWrap="CJK"),
+                           leading=16.2,
+                           alignment=TA_LEFT if os.environ.get("BUILD_PDF_LEFT") else TA_JUSTIFY,
+                           spaceAfter=6,
+                           wordWrap=None if os.environ.get("BUILD_PDF_LEFT") else "CJK"),
     "abs": ParagraphStyle("abs", parent=ss["BodyText"], fontName=SERIF, fontSize=9.2,
                           leading=14.6, alignment=TA_JUSTIFY, leftIndent=14,
                           rightIndent=14, spaceAfter=5, wordWrap="CJK"),
@@ -85,9 +93,10 @@ ST = {
                              bulletIndent=4, spaceAfter=3, wordWrap="CJK"),
     "formula": ParagraphStyle("formula", fontName=SERIF, fontSize=9.8, leading=15,
                               alignment=TA_CENTER, spaceBefore=3, spaceAfter=6,
-                              wordWrap="CJK"),
-    "ref": ParagraphStyle("ref", fontName=SERIF, fontSize=8.7, leading=12.6,
-                          alignment=TA_JUSTIFY, leftIndent=16, firstLineIndent=-16,
+                              wordWrap=None),
+    "ref": ParagraphStyle("ref", fontName=LATIN if os.environ.get("BUILD_PDF_LEFT") else SERIF,
+                          fontSize=8.7, leading=12.6,
+                          alignment=TA_LEFT, leftIndent=16, firstLineIndent=-16,
                           spaceAfter=2.5, wordWrap="CJK"),
     "code": ParagraphStyle("code", fontName="Mono", fontSize=7.4, leading=10.2,
                            leftIndent=8, backColor=colors.HexColor("#f4f4f4"),
@@ -107,6 +116,7 @@ def esc(t):
     if FALLBACK:
         t = re.sub("[%s]" % MISSING_GLYPHS,
                    lambda m: '<font name="%s">%s</font>' % (FALLBACK, m.group(0)), t)
+    t = t.replace("_{", "_").replace("^{", "^").replace("}", "")
     t = re.sub(r"\*\*(.+?)\*\*", r'<font name="%s">\1</font>' % GOTHIC, t)
     t = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<i>\1</i>", t)
     return t
@@ -153,11 +163,15 @@ def build():
                 i += 1
             i += 1
             label = "초록" if s == "%ABS" else "Abstract"
+            en = (s == "%ABSEN")
             flow.append(Paragraph(f"<font name='{GOTHIC}' size=9.5>{label}</font>",
                                   ParagraphStyle("al", fontName=GOTHIC, fontSize=9.5,
                                                  leading=13, spaceBefore=6, spaceAfter=2)))
+            en_style = ParagraphStyle("abs_en", parent=ST["abs"],
+                                      fontName=LATIN if os.environ.get("BUILD_PDF_LEFT") else SERIF,
+                                      wordWrap=None, leading=13.6)
             for x in buf:
-                flow.append(Paragraph(esc(x), ST["abs"]))
+                flow.append(Paragraph(esc(x), en_style if en else ST["abs"]))
             flow.append(Spacer(1, 6))
             continue
         # ---- headings
@@ -199,6 +213,7 @@ def build():
         # ---- table
         if s.startswith("!table:"):
             cap = s[7:].strip()
+            cap = re.sub(r"\|\s*[0-9.]+(\s*,\s*[0-9.]+)*\s*$", "", cap).strip()
             i += 1
             rows = []
             while i < len(lines) and not lines[i].strip().startswith("!endtable"):
@@ -229,7 +244,11 @@ def build():
                 ("TOPPADDING", (0, 0), (-1, -1), 2.5),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 2.5),
             ]))
-            flow.append(KeepTogether([t, Paragraph(esc(cap), ST["cap"])]))
+            if len(rows) <= 8:
+                flow.append(KeepTogether([t, Paragraph(esc(cap), ST["cap"])]))
+            else:
+                flow.append(t)
+                flow.append(Paragraph(esc(cap), ST["cap"]))
             continue
         # ---- bullets
         if s.startswith("- "):
@@ -245,7 +264,9 @@ def build():
         if re.match(r"^\[[^\]]+\]\s", s):
             buf = [s]
             i += 1
-            while i < len(lines) and lines[i].strip() and not lines[i].strip().startswith(("#", "- ", "!fig", "!table", "$$")):
+            while (i < len(lines) and lines[i].strip()
+                   and not lines[i].strip().startswith(("#", "- ", "!fig", "!table", "$$"))
+                   and not re.match(r"^\[\d+\]\s", lines[i].strip())):
                 buf.append(lines[i].strip()); i += 1
             flow.append(Paragraph(esc(" ".join(buf)), ST["ref"]))
             continue
