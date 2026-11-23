@@ -1,7 +1,7 @@
 # 허태혁 (Taehyeok Heo) — 논문 · 연구 노트
 
 그래프 이론, 조합 탐색, 램지 이론, 분산 오케스트레이션, 정수론, 사회·경제 상전이 모형, 수리물리·존재론, 그리고 AI 이론·실험에 관한 논문 열네 편을 모은 저장소입니다.
-열네 편 모두 **허태혁 (Taehyeok Heo) 단독 저자**이며, 각 논문은 본문(Markdown)과 조판본(PDF), 그리고 해당되는 경우 재현용 인증서를 함께 담고 있습니다.
+열네 편 모두 **허태혁 (Taehyeok Heo) 단독 저자**이며, 각 논문은 조판본(PDF)을, 해당되는 경우 본문(Markdown)과 재현용 인증서를 함께 담고 있습니다(논문 3은 조판본과 인증서만 있습니다).
 
 | # | 논문 | 분야 | 조판본 |
 |---|------|------|--------|
@@ -9,18 +9,18 @@
 | 2 | **값비싼 질문, 거짓말하는 대답** — 문항수 가격이 있는 q진 탐색의 정확 계산과 그 한계 | 조합 탐색 · 결정트리 · 그룹테스트 | 16쪽 |
 | 3 | **A new lower bound R(5,24) ≥ 565** — 두 블록 사이클로토믹 그래프 | 램지 이론 · 대수적 구성 | 4쪽 + 인증서 |
 | 4 | **비동기 다중 캐리어 오케스트레이션에서의 확률적 응답 정합과 최소 인간 개입 스케줄링** | 분산 시스템 · 확률적 정합 · 결정이론 | 14쪽 |
-| 5 | **일반화 콜라츠 사상의 잉여류 전이 스펙트럼, 정지시간 밀도, 그리고 순환의 공명 구조** | 정수론 · 동역학계 · 스펙트럼 해석 | 14쪽 |
-| 6 | **혁신의 역설과 사회적 수용: 정당성·네트워크 외부성·반발의 이중안정성 상전이 모형** | 사회물리 · 복잡계 · 제도이론 | 19쪽 |
-| 7 | **시간과 공간의 존재론적 관계: 상태 변화·형상공간·인과 구조에 대한 수리적 분석** | 수리물리 · 양자시간 · 존재론 | 15쪽 |
+| 5 | **일반화 콜라츠 사상 $T_{q,d}$의 잉여류 전이 행렬과 비자명 순환** — 공명 갭, 2비트 엔트로피 법칙, $d\mathbb{Z}$ 재규격화 | 정수론 · 동역학계 · 스펙트럼 해석 | 14쪽 |
+| 6 | **혁신의 역설과 사회적 수용** — 네트워크 상보성·정당성 학습·기억 재구성이 만드는 이중안정성과 그 폭의 닫힌 형태 | 사회물리 · 복잡계 · 제도이론 | 19쪽 |
+| 7 | **시간과 공간의 존재론적 관계** — 시간은 공간 내 상태 변화의 표현인가, 독립적 차원인가 | 수리물리 · 양자시간 · 존재론 | 15쪽 |
 | 8 | **다중 턴 자기수정의 역설: 비대칭 검증기 잡음 하에서의 오답 고착과 최적 정지 규칙** | AI 추론 · 마르코프 연쇄 · 결정이론 | 16쪽 |
 | 9 | **2-블록 사이클로토믹 그래프의 대수적 구조와 램지 하한: 스펙트럼, 동형류 축소, 그리고 블록 선택의 효과** | 램지 이론 · 대수적 그래프 · 조합 탐색 | 14쪽 |
-| 10 | **가중치 학습 없는 지능의 용량 법칙: 동결 랜덤 신경망의 입력 위상 시프트와 위상적 그림자** | AI 이론 · 표현 기하학 · 위상 데이터 분석 | 13쪽 |
-| 11 | **추론의 시간역전 대칭성 깨짐: 역인과(Reverse-Time) CoT의 정보·계산 분해와 암기 함정** | AI 추론 · 정보이론 · 계산복잡도 | 15쪽 |
-| 12 | **다중 에이전트 공유 메모리의 자기복제 기생 패턴 역학과 흉선 면역 어텐션** | AI 보안 · 전염병 역학 · 적응 면역 | 14쪽 |
+| 10 | **동결 랜덤망의 위상적 그림자** — 위상 차원은 너비를 대체하지 못한다 | AI 이론 · 표현 기하학 · 위상 데이터 분석 | 13쪽 |
+| 11 | **추론의 시간역전 대칭성 깨짐** — 역인과(Reverse-Time) CoT의 정보 결핍과 탐색 이득 | AI 추론 · 정보이론 · 계산복잡도 | 15쪽 |
+| 12 | **다중 에이전트 공유 메모리의 자기복제 프롬프트 기생 바이러스 역학과 흉선 면역 어텐션** | AI 보안 · 전염병 역학 · 적응 면역 | 14쪽 |
 | 13 | **자기참조 검증기의 불완전성과 다중 에이전트 합의 붕괴 임계** — 대각 사각지대, 증명 폭 대 감사 폭, 오답 고착 상전이 | 계산이론 · 검증 이론 · 통계물리 | 16쪽 |
-| 14 | **비추이적 메타게임에서의 내시 균형 붕괴와 브라에스 역설** — 강한 전략 주입, 비례 손실 상계, 지지집합·안정성·유일성의 세 붕괴 | 게임이론 · 진화동역학 · 선형계획 | 16쪽 |
+| 14 | **비추이적 메타게임에서의 내시 균형 붕괴와 브라에스 역설** — 강한 전략과 지름길 행동은 왜 균형을 옮기면서 후생을 낮추는가 | 게임이론 · 진화동역학 · 선형계획 | 16쪽 |
 
-세 논문의 공통된 방법론은 같습니다. **작은 규모에서 정확히 계산하고, 그 최적해마다 정의를 그대로 따르는 별도 검증기로 재확인하는 인증서를 붙이며, 계산이 뒤집은 주장은 스스로 철회해 기록한다.** 각 논문의 "한계"와 "철회한 주장" 절은 이 원칙의 결과물입니다.
+열네 편의 공통된 방법론은 같습니다. **작은 규모에서 정확히 계산하고, 그 최적해마다 정의를 그대로 따르는 별도 검증기로 재확인하는 인증서를 붙이며, 계산이 뒤집은 주장은 스스로 철회해 기록한다.** 각 논문의 "한계"와 "철회한 주장" 절은 이 원칙의 결과물입니다.
 
 ---
 
@@ -28,7 +28,7 @@
 
 > *Burning Graphs with Heterogeneous Thresholds: The Ignition Profile, Exact Algorithms, and the Price of Round Budgets* (2026-11-21)
 
-📄 [`papers/01-heterogeneous-threshold-burning/paper.pdf`](papers/01-heterogeneous-threshold-burning/paper.pdf) · [`paper.md`](papers/01-heterogeneous-threshold-burning/paper.md) · 그림 9장
+📄 [`papers/01-heterogeneous-threshold-burning/paper.pdf`](papers/01-heterogeneous-threshold-burning/paper.pdf) · [`paper.md`](papers/01-heterogeneous-threshold-burning/paper.md) · 그림 8장
 
 ### 문제
 
@@ -144,9 +144,9 @@ $R(5,24)$는 서베이 표(DS1 rev. 18) 바로 밖의 값이고, 개선은 탐�
 
 ---
 
-## 5. 일반화 콜라츠 사상의 잉여류 전이 스펙트럼, 정지시간 밀도, 그리고 순환의 공명 구조
+## 5. 일반화 콜라츠 사상 $T_{q,d}$의 잉여류 전이 행렬과 비자명 순환
 
-> *Residue-Class Transition Spectra, Stopping-Time Densities, and Resonance Cycles of Generalized Collatz Maps* (2026-11-23)
+> *Residue-Class Transition Matrices and Nontrivial Cycles of Generalized Collatz Maps: Resonance Gaps, the Two-Bit Entropy Law, and dℤ Renormalisation* (2026-11-23)
 
 📄 [`papers/05-generalized-collatz/paper.pdf`](papers/05-generalized-collatz/paper.pdf) · [`paper.md`](papers/05-generalized-collatz/paper.md) · 그림 6장
 
@@ -162,9 +162,9 @@ $R(5,24)$는 서베이 표(DS1 rev. 18) 바로 밖의 값이고, 개선은 탐�
 
 ---
 
-## 6. 혁신의 역설과 사회적 수용: 정당성·네트워크 외부성·반발의 이중안정성 상전이 모형
+## 6. 혁신의 역설과 사회적 수용
 
-> *The Innovation Paradox and Social Acceptance: A Bistable Phase-Transition Model of Legitimacy, Network Externalities, and Mandate Backlash* (2026-11-23)
+> *The Innovation Paradox and Social Acceptance: Bistability and the Closed Form of Its Width under Network Complementarity, Legitimacy Learning and Reconstructive Recall* (2026-11-23)
 
 📄 [`papers/06-innovation-paradox/paper.pdf`](papers/06-innovation-paradox/paper.pdf) · [`paper.md`](papers/06-innovation-paradox/paper.md) · 그림 6장
 
@@ -181,9 +181,9 @@ $R(5,24)$는 서베이 표(DS1 rev. 18) 바로 밖의 값이고, 개선은 탐�
 
 ---
 
-## 7. 시간과 공간의 존재론적 관계: 상태 변화·형상공간·인과 구조에 대한 수리적 분석
+## 7. 시간과 공간의 존재론적 관계
 
-> *The Ontological Relationship between Time and Space: A Mathematical Analysis of State Change, Configuration Space, and Causal Structure* (2026-11-23)
+> *The Ontological Relationship between Time and Space: Is Time a Representation of State Change within Space, or an Independent Dimension?* (2026-11-23)
 
 📄 [`papers/07-spacetime-ontology/paper.pdf`](papers/07-spacetime-ontology/paper.pdf) · [`paper.md`](papers/07-spacetime-ontology/paper.md) · 그림 7장
 
@@ -219,7 +219,7 @@ $R(5,24)$는 서베이 표(DS1 rev. 18) 바로 밖의 값이고, 개선은 탐�
 
 ## 9. 2-블록 사이클로토믹 그래프의 대수적 구조와 램지 하한
 
-> *Algebraic Structure and Ramsey Lower Bounds of Two-Block Cyclotomic Graphs: Spectra, Isomorphism Reduction, and Block-Selection Effects* (2026-11-23)
+> *Two-Block Cyclotomic Graphs: Algebraic Structure, Isomorphism Reduction, and the Effect of Block Selection on Ramsey Lower Bounds* (2026-11-23)
 
 📄 [`papers/09-cyclotomic-ramsey/paper.pdf`](papers/09-cyclotomic-ramsey/paper.pdf) · [`paper.md`](papers/09-cyclotomic-ramsey/paper.md) · 그림 6장
 
@@ -235,9 +235,9 @@ $p \equiv 1 \pmod 8$ 소수와 $D \mid (p-1)/2$에 대한 2-블록 사이클로�
 
 ---
 
-## 10. 가중치 학습 없는 지능의 용량 법칙: 동결 랜덤 신경망의 입력 위상 시프트와 위상적 그림자
+## 10. 동결 랜덤망의 위상적 그림자
 
-> *Capacity Laws of Weight-Frozen Intelligence: Input Phase Shifts and Topological Shadows in Random Neural Networks* (2026-11-23)
+> *Topological Shadows of Frozen Random Networks: The Topological Dimension Cannot Replace Width — the Boundary of Expressive Power Measured with Zero Weight Updates* (2026-11-23)
 
 📄 [`papers/10-topological-shadow/paper.pdf`](papers/10-topological-shadow/paper.pdf) · [`paper.md`](papers/10-topological-shadow/paper.md) · 그림 7장
 
@@ -252,9 +252,9 @@ $p \equiv 1 \pmod 8$ 소수와 $D \mid (p-1)/2$에 대한 2-블록 사이클로�
 
 ---
 
-## 11. 추론의 시간역전 대칭성 깨짐: 역인과(Reverse-Time) CoT의 정보·계산 분해와 암기 함정
+## 11. 추론의 시간역전 대칭성 깨짐
 
-> *Breaking Time-Reversal Symmetry in Reasoning: Information–Computation Decomposition and Memorization Traps of Reverse-Time CoT* (2026-11-23)
+> *Breaking Time-Reversal Symmetry in Reasoning: The Information Deficit and Search Gain of Reverse-Time CoT — the Exact Location of the Sample-Complexity Reversal* (2026-11-23)
 
 📄 [`papers/11-reverse-time-cot/paper.pdf`](papers/11-reverse-time-cot/paper.pdf) · [`paper.md`](papers/11-reverse-time-cot/paper.md) · 그림 7장
 
@@ -264,15 +264,15 @@ $p \equiv 1 \pmod 8$ 소수와 $D \mid (p-1)/2$에 대한 2-블록 사이클로�
 
 ### 기여와 주요 결과
 
-- **정보 축 vs 계산 축 분해.** 대칭 2대1·깊이 6 과제에서 순방향 정확도는 $1.000$인 반면 역방향 정확도는 $(1/2)^6$에 가까운 $0.0188$(이론 $0.0156$)으로 붕괴하며, 폭은 $w=32$에서 $0.510$(예측 $1/2$), $w=64(=2^6)$에서만 $1.000$을 회복합니다.
+- **정보 축 vs 계산 축 분해.** 대칭 2대1·깊이 6 과제에서 순방향 정확도는 $1.000$인 반면 역방향 정확도는 $(1/2)^6$에 가까운 $0.0143$–$0.0190$(이론 $0.0156$)에 머물며, 폭은 $w=32$에서 $0.510$(예측 $1/2$), $w=64(=2^6)$에서만 $1.000$을 회복합니다.
 - **양방향 접합(Meet-in-the-Middle) 한계.** $m=4, d=6$에서 접합이 요구 폭을 $4096 \to 64(=4^3)$로 줄이지만, 접합 유일성은 깊이 4에서 $38.0\%$, 깊이 6에서 $4.0\%$로 급락합니다.
 - **역방향 암기 함정(R+ 반례).** 문제를 조건에 함께 준 역방향(R+)은 학습 데이터에서 $1.000$을 기록하지만 문제 키를 절제하면 $0.000$으로 떨어져 역추론이 아닌 암기임을 입증했습니다.
 
 ---
 
-## 12. 다중 에이전트 공유 메모리의 자기복제 기생 패턴 역학과 흉선 면역 어텐션
+## 12. 다중 에이전트 공유 메모리의 자기복제 프롬프트 기생 바이러스 역학과 흉선 면역 어텐션
 
-> *Dynamics of Self-Replicating Parasitic Patterns in Multi-Agent Shared Memory and Thymic Immune Attention* (2026-11-23)
+> *Dynamics of Self-Replicating Prompt Parasites in Multi-Agent Shared Memory and Thymic Immune Attention: Why Self–Nonself Discrimination Cannot See Replication — R0, Mutation, and Danger Signals* (2026-11-23)
 
 📄 [`papers/12-immune-attention/paper.pdf`](papers/12-immune-attention/paper.pdf) · [`paper.md`](papers/12-immune-attention/paper.md) · 그림 8장
 
@@ -311,7 +311,7 @@ $p \equiv 1 \pmod 8$ 소수와 $D \mid (p-1)/2$에 대한 2-블록 사이클로�
 
 ## 14. 비추이적 메타게임에서의 내시 균형 붕괴와 브라에스 역설
 
-> *Non-Transitive Meta-Games: Nash Equilibrium Collapse and Braess Paradox under Strategy Injection* (2026-11-23)
+> *Non-Transitive Meta-Games: Nash Equilibrium Collapse and Braess Paradox — Why Strong Strategies and Shortcut Actions Move the Equilibrium while Lowering Welfare* (2026-11-23)
 
 📄 [`papers/14-nontransitive-meta-braess/paper.pdf`](papers/14-nontransitive-meta-braess/paper.pdf) · [`paper.md`](papers/14-nontransitive-meta-braess/paper.md) · 그림 8장
 
@@ -333,13 +333,15 @@ $p \equiv 1 \pmod 8$ 소수와 $D \mid (p-1)/2$에 대한 2-블록 사이클로�
 
 ### 조판본 다시 만들기
 
-각 논문 폴더에서:
+논문 1·2·4·6·8·9·14는 각 폴더에서 다음 한 줄로 조판본을 다시 만들 수 있습니다.
 
 ```bash
 python3 ../../tools/build_pdf.py paper.md paper.pdf "<바닥글 제목>"
 ```
 
-`reportlab`과 matplotlib 기본 글꼴만 있으면 됩니다(한글은 ReportLab 내장 CID 글꼴 사용). Markdown 원본에는 제목·부제·저자(`%T`, `%T2`, `%A`), 초록(`%ABS`), 그림(`!fig:path|caption`), 표(`!table:` … `!endtable`), 수식 줄(`$$ … $$`)이 소량의 자체 표기로 들어 있고, `tools/build_pdf.py`가 이를 읽어 A4 조판본을 만듭니다. 그림 파일은 각 논문의 `figures/`에 함께 있습니다.
+`reportlab`과 matplotlib 기본 글꼴만 있으면 됩니다(한글은 ReportLab 내장 CID 글꼴 사용). 이 일곱 편의 Markdown 원본에는 제목·부제·저자(`%T`, `%T2`, `%A`), 초록(`%ABS`), 그림(`!fig:path|caption`), 표(`!table:` … `!endtable`), 수식 줄(`$$ … $$`)이 소량의 자체 표기로 들어 있고, `tools/build_pdf.py`가 이를 읽어 A4 조판본을 만듭니다.
+
+논문 5·7·10·11·12·13은 표준 Markdown(제목 `#`, 그림 `![그림 1. 캡션](figures/fig1.png)`, Markdown 표)으로 쓰였고, 조판에는 Noto CJK 서브셋을 심는 별도 파이프라인(수식 PNG 생성 → PDF 빌드)을 썼습니다. 그 스크립트는 이 저장소에 포함하지 않았으므로, 이 여섯 편은 배포용 원본과 조판본을 그대로 두었습니다. 그림 파일은 모든 논문의 `figures/`에 함께 있습니다(논문 05의 `figures/eq*.png`는 수식 이미지).
 
 ### 논문 1·2의 실험 코드
 
