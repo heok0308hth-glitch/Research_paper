@@ -6,7 +6,7 @@
 
 ## 초록
 
-여러 에이전트가 하나의 공유 컨텍스트 풀을 읽고 쓰기 시작하면, 그 풀은 더 이상 저장소가 아니라 **숙주 집단**이 된다. 자기복제하는 패턴은 읽힌 자리에서 자신을 다시 쓰고, 쓰인 자리는 다시 읽힌다. 이 논문은 그 순환을 전염병 역학으로 정식화하고, 지금 쓰이는 방어—문자열 블랙리스트—가 원리적으로 무엇을 볼 수 없는지를 정량화한다. 실제 공격 페이로드는 한 줄도 쓰지 않는다. 토큰 배열과 어텐션 가중치만으로 된 추상 모형에서, 기생 패턴의 기본감염재생산수 R_0는 R_0 = β N p / (γ + μ_(lethal)) 꼴로 유도되고, 공유 풀이 포화되는 상전이는 R_0=1에서 일어난다.
+여러 에이전트가 하나의 공유 컨텍스트 풀을 읽고 쓰기 시작하면, 그 풀은 더 이상 저장소가 아니라 **숙주 집단**이 된다. 자기복제하는 패턴은 읽힌 자리에서 자신을 다시 쓰고, 쓰인 자리는 다시 읽힌다. 이 논문은 그 순환을 전염병 역학으로 정식화하고, 지금 쓰이는 방어—문자열 블랙리스트—가 원리적으로 무엇을 볼 수 없는지를 정량화한다. 실제 공격 페이로드는 한 줄도 쓰지 않는다. 토큰 배열과 어텐션 가중치만으로 된 추상 모형에서, 기생 패턴의 기본감염재생산수 R_0는 R_0 = N p v/(Wργ) (v=(1-μ)^(n_c)) 꼴로 유도되고, 공유 풀이 포화되는 상전이는 R_0=1에서 일어난다.
 
 첫째, **상전이는 연속이 아니다.** 어텐션이 기생 패턴의 밀도에 따라 더 강하게 끌리는 경우(주파수 점화), 같은 모형에 접힘 분기(saddle-node)가 생겨 R_0=0.77부터 R_0=1까지의 구간에서 두 개의 안정 상태가 공존한다. 이 구간에서 확산 여부는 R_0가 아니라 **초기 접종량**이 결정한다. 이론이 예측한 임계 접종 f_c W = 24개 블록에서 측정값이 정확히 갈렸고(n_0=16 이하 전멸, n_0=64 이상 100% 발병), 히스테리시스 고리도 같은 풀을 이어 돌려 확인했다.
 
@@ -20,7 +20,7 @@
 
 ## Abstract
 
-When several agents read and write one shared context pool, the pool stops being storage and becomes a host population. A self-replicating pattern copies itself wherever it is read, and what is written is read again. This paper formalises that cycle as an epidemic and quantifies what the current defence -- string blacklists -- can and cannot see. No attack payload appears anywhere; the model is integer token arrays and attention weights.
+When several agents read and write one shared context pool, the pool stops being storage and becomes a host population. A self-replicating pattern copies itself wherever it is read, and what is written is read again. This paper formalises that cycle as an epidemic and quantifies what the current defence -- string blacklists -- can and cannot see. No attack payload appears anywhere; the model is integer token arrays and attention weights. Within that model the basic reproduction number is R_0 = N p v/(Wργ) with v=(1-μ)^(n_c), and the shared pool saturates at R_0=1.
 
 First, the transition is not continuous. When attention is pulled more strongly to a pattern as its density grows (frequency priming), the same model acquires a saddle-node fold, and two stable states coexist for R_0 between 0.77 and 1. In that band the outcome is decided by the initial inoculum, not by R_0. The predicted critical seed of 24 blocks separated the measurements exactly (all seeds of 16 or fewer died; seeds of 64 or more always broke out), and a hysteresis loop was reproduced by carrying one pool through a ramp.
 
@@ -43,7 +43,7 @@ Fifth, defence is worse than none at both ends. Below the natural variation scal
 
 기여는 다섯 가지다.
 
-- **역학적 정식화(3, 4절).** 공유 풀 W, 에이전트 N, 어텐션 온도 τ, 복제율 p, 제거율 γ, 치명률 μ_(lethal)로 이루어진 모형에서 R_0 = β N p/(γ+μ_(lethal))를 유도하고, 포화 상전이의 정확한 고정점과 그 1차/2차 성질을 보인다(정리 1).
+- **역학적 정식화(3, 4절).** 공유 풀 W, 에이전트 N, 어텐션 온도 τ, 복제율 p, 제거율 γ, 치명률 μ_(lethal)로 이루어진 모형에서 R_0 = N p v/(Wργ) (v=(1-μ)^(n_c))를 유도하고, 포화 상전이의 정확한 고정점과 그 1차/2차 성질을 보인다(정리 1).
 - **정적 필터의 한계(4.2절).** 서명 예산의 지수적 요구량, 계보별 검출률 감쇠, 그리고 "지연은 예방이 아니다"를 하나의 정리로 묶는다(정리 2).
 - **흉선 면역의 기하학(4.3절).** 창 단위 음성선택의 검출 임계를 삽입 길이의 함수로 주고, 자기 언어 사각지대와 레퍼토리 계산 가능성 조건을 제시한다(정리 3).
 - **출처 감시의 충실도 하한(4.4절).** 복제 충실도와 생존 조건만으로 면역 임계값의 상한을 계산해 낸다(정리 4). 이것이 이 논문의 가장 실용적인 결과다.
