@@ -7,7 +7,7 @@
 
 $γ_c = N / (2 S_0 μ_0 T a σ^2 H)$
 
-이다. 기준 보정점에서 이 식은 0.368을 주고 시뮬레이션은 0.349를 준다(5% 이내). 그러나 이 닫힌 형태는 지연 의존성을 과대평가한다. τ를 1에서 8로 늘리면 예측은 4.9배 떨어지지만 측정은 1.7배만 떨어진다. 그 이유는 정리의 가정이 마켓메이커의 가격 양보를 고정해 두기 때문이고, 시뮬레이션에서는 실효 깊이가 함께 줄어 상쇄가 일어난다. 이 논문은 그 상쇄의 크기를 재서 보고한다.
+이다. 기준 보정점에서 이 식은 0.368을 주고 시뮬레이션은 0.349를 준다(5% 이내). 그러나 이 닫힌 형태는 지연 의존성을 과대평가한다. τ를 1에서 8로 늘리면 예측은 4.8배 떨어지지만 측정은 1.7배만 떨어진다. 그 이유는 정리의 가정이 마켓메이커의 가격 양보를 고정해 두기 때문이고, 시뮬레이션에서는 실효 깊이가 함께 줄어 상쇄가 일어난다. 이 논문은 그 상쇄의 크기를 재서 보고한다.
 
 첫째, **붕괴는 연속이 아니라 도약이다.** 종료 깊이 비율 $ρ=D_{end}/D_0$는 γ가 0.07~0.11만큼 움직이는 사이에 1.04에서 0.00으로 떨어진다. 폭 0.065~0.284의 1차 전이이고, 같은 조건에서 가격 하락은 3.5에서 8.2로 함께 뛴다. 붕괴 뒤 시장은 회복하지 않는다(마지막 60틱 평균 깊이가 기저의 0.1~0.2%).
 
@@ -29,7 +29,7 @@ An order book fails through two doors: inventory and delay. This paper couples t
 
 gamma_c = N / (2 S0 mu0 T a sigma^2 H).
 
-At the calibration point the formula gives 0.368 and the simulation 0.349, within 5%. The closed form, however, overstates the latency dependence: raising tau from 1 to 8 predicts a 4.9-fold fall and the measurement gives 1.7-fold, because the theorem holds the makers' price concession fixed while in the simulation the effective depth falls with it and offsets part of the effect. The paper measures that offset.
+At the calibration point the formula gives 0.368 and the simulation 0.349, within 5%. The closed form, however, overstates the latency dependence: raising tau from 1 to 8 predicts a 4.8-fold fall and the measurement gives 1.7-fold, because the theorem holds the makers' price concession fixed while in the simulation the effective depth falls with it and offsets part of the effect. The paper measures that offset.
 
 First, the collapse is a jump, not a slide. The terminal depth ratio rho = D_end/D0 falls from 1.04 to 0.00 while gamma moves by 0.07 to 0.11; the transition is first order with a width of 0.065 to 0.284, and the price drawdown jumps from 3.5 to 8.2 in the same window. The market does not recover afterwards: the mean depth of the last sixty ticks is 0.1 to 0.2 percent of the base.
 
@@ -465,7 +465,7 @@ $\gamma=0.9$(임계 위)에서는 그림이 바뀐다. 15틱 배치도 9.80에�
 
 # 9. 결론
 
-유동성은 값이 아니라 상태다. 그리고 그 상태가 뒤집히는 조건은 두 개의 문턱, 재고와 지연으로 적을 수 있다. 재고가 차면 메이커가 항복하고, 지연이 길면 항복이 빨라진다. 이 논문은 그 항복의 임계를 $γ_c = N/(2S_0\mu_0Taσ^2H)$로 적고, 3만 회의 시뮬레이션에서 기준점 5% 안에 맞췄다. 그리고 그 식이 어디서 틀리는지도 적었다. 지연 의존성을 2.9배 과대평가한다.
+유동성은 값이 아니라 상태다. 그리고 그 상태가 뒤집히는 조건은 두 개의 문턱, 재고와 지연으로 적을 수 있다. 재고가 차면 메이커가 항복하고, 지연이 길면 항복이 빨라진다. 이 논문은 그 항복의 임계를 $γ_c = N/(2S_0\mu_0Taσ^2H)$로 적고, 8천 회의 시뮬레이션에서 기준점 5% 안에 맞췄다. 그리고 그 식이 어디서 틀리는지도 적었다. 지연 의존성을 2.9배 과대평가한다.
 
 붕괴는 미끄러짐이 아니라 도약이다. 종료 깊이가 1.04에서 0.00으로 떨어지고, 그 폭은 0.065~0.11이다. 도약인지 아닌지는 깊이 탄성력이 정하고(정리 4), 측정값 0.78은 도약 쪽이다. 지연은 조용한 시장에서 거의 무해하고(깊이 $-0.34$승) 붕괴 직전에서 결정적이다(임계 $-40$%). 틱 크기는 부호가 바뀌는 변수이고, 그 부호는 지연이 정한다.
 
