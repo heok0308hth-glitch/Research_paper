@@ -1,0 +1,61 @@
+\section{Preliminaries}
+\label{sec:prelim}
+
+\paragraph{Setting.}
+Let $M \in \R^{m\times n}$ have full column rank, $m\ge n$, and let
+$X_0 = M/\norm{M}_2$ with $\sigma(X_0) \subset [\ell,1]$; the target is the polar factor
+$\polar(M) = UV^\top$, $M = U\Sigma V^\top$.  A Muon update has this shape with $m = H$,
+$n = D_{\mathrm{in}}$; $d=m=n$ in the square experiments and \S\ref{sec:realmomentum}
+reports the rectangular case.  A step with coefficients $(a,b,c)$ is
+\begin{equation}
+X \mapsto aX + b\,(XX^\top)X + c\,(XX^\top)^2 X ,
+\label{eq:step}
+\end{equation}
+$P_K$ is the composition of $K$ steps, a design is the sequence $(a_t,b_t,c_t)_{t\le K}$,
+and the shipped family is the minimax quintic sequence of~\cite{amsel2025polar} with
+cushion $0.02$ and safety $1.01$ unless stated.
+$E_K = \max_{\sigma\in[\ell,1]}|p_K(\cdots p_1(\sigma)) - 1|$ is the exact-arithmetic
+error, a scalar because the exact iteration can be simulated on $[\ell,1]$ alone.
+
+\paragraph{Kernel model.}
+We model storage, not the arithmetic: $x$ is stored as
+$q(x,p) = \mathrm{ldexp}(\mathrm{round}(\mathrm{mant}(x)2^{p-1})2^{1-p},\allowbreak
+\mathrm{exp}(x))$, i.e.\ $p$ significant binary digits, with relative rounding error at
+most $2^{1-p}$ and rms $u/\sqrt3$ for $u = 2^{-p}$, and one step is
+\begin{equation}
+A = XX^\top, \qquad B = q\bigl(bA + cA^2,\, p\bigr), \qquad
+X \leftarrow q\bigl(aX + BX,\, p\bigr),
+\label{eq:kernel}
+\end{equation}
+with products accumulated in float64, a wide accumulator: the standard picture of a
+low-precision kernel, reproducing what matters (a floor $\propto u$, saturation in $K$,
+divergence) with every claim attributable to one equation.  A schedule $(p_0,\dots,p_K)$
+gives the precision of the input cast and of each step.
+
+\paragraph{Orbit sensitivity and its ratchet.}
+For a design $(p_t)_{t\le K}$ and $\sigma\in[\ell,1]$ let $x_0=\sigma$ and\begin{equation}
+S_K(\sigma) = \max_{1\le j \le K}\ \prod_{l=j}^{K} \bigl|p_l'(x_{l-1})\bigr|,
+\qquad S(K) = \max_{\sigma\in[\ell,1]} S_K(\sigma).
+\label{eq:S}
+\end{equation}
+$S_K(\sigma)$ is the largest amplification a rounding injected at step $j$ suffers on its
+way to the output; the product form is exact because each $p_l$ is differentiable and the
+orbit is one-dimensional.  $S(K)$ is a scalar of the coefficients: on a 400-point grid it
+costs $O(K)$ arithmetic per point, needs no matrix and no SVD.
+
+\begin{definition}[Prefix ratchet sensitivity indicator]
+\label{def:ratchet}
+$S_{\mathrm{pert}}(K) = \max_{1\le t\le K} S(t)$.
+\end{definition}
+
+The ratchet is what makes $S$ usable.  A Newton-type final step has $p'(1)=0$, so the
+terminal factor of $S_K$ vanishes and $S(K)$ collapses to $1.0$ exactly where the floor
+dominates: at $\ell=10^{-3}$, $K=7$, $p=8$ it predicts $3.9\times10^{-3}$ against a measured
+$2.58\times10^{-1}$, a $66\times$ under-estimate, while the off-diagonal gain of that step
+is $1/2$ --- which the prefix maximum retains (Fig.~\ref{fig:ratchet}).
+
+\paragraph{Decomposition.}
+We separate $\mathrm{err} = \norm{X_K - \polar(M)}_2$ into the singular-value part
+$\sigma_{\mathrm{err}} = \norm{X_K - \polar(X_K)}_2$ and the subspace part
+$\mathrm{sub}_{\mathrm{err}} = \norm{\polar(X_K) - \polar(M)}_2$; over 12 cells the
+subspace part is $86$--$100\%$ of the total (\S\ref{sec:invariance} explains why).

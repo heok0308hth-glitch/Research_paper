@@ -1,0 +1,89 @@
+\section{Introduction}
+
+\paragraph{Motivation.}
+Orthogonalizing the update matrix is standard in large-scale optimization: Muon and its
+descendants replace the momentum matrix $M$ by its polar factor $UV^\top$
+($M = U\Sigma V^\top$), and since an SVD per step is unaffordable the factor is computed
+by a fixed polynomial iteration
+\begin{equation}
+X_{t} \;=\; p_t(X_{t-1}), \qquad
+p_t(x) \;=\; a_t x + b_t x^3 + c_t x^5 , \qquad X_0 = M/\norm{M}_2 ,
+\label{eq:iter}
+\end{equation}
+applied to the symmetric positive semidefinite form $XX^\top$.  The Polar Express
+line of work~\cite{amsel2025polar} derives the coefficients minimizing
+$\max_{\sigma\in[\ell,1]} |1 - p(\sigma)|$ for a given number of steps, where
+$[\ell,1]$ is the spectrum of $X_0$ after normalization.  Optimality is a statement
+about exact arithmetic; in $p$ significant bits neither part survives unqualified, and
+the shipped designs compensate empirically with a safety factor $\approx1.01$, a cushion
+$\approx0.02$ and a damped first step.
+
+\paragraph{What to change in the next Muon step.}
+Three prescriptions are wrong at four bits, each with its measured price.
+\begin{enumerate}
+\item \textbf{Safety $1.01 \to \ge 1.035$.}  At E5M2 and $K=6$ the shipped $1.01$
+  loses 6 of 11 seed-runs to an overflow of the update within $400$ steps; $1.035$ loses
+  none there and lowers the hazard of a single call $4$--$200\times$ over $1{,}200$ steps,
+  for $0.4\%$ of the update's Frobenius norm.  That is margin, not immunity (\S\ref{sec:escape});
+  the damping widens the excess a certified
+  window tolerates from $0.8\%$ to $4.8\%$ of its upper edge, and one rounding beyond the
+  edge lets the quintic's gain exceed one (\S\ref{sec:escape}).
+\item \textbf{$K=6 \to 4$--$5$.}  The sixth step spends eight bits for under $1.5\%$ of
+  the window error; $69$ of $80$ real momentum matrices want $K=5$ and the rest $K=4$;
+  at 25 bits a four-step E4M3 update errs by $1.3\times10^{-1}$
+  (\S\ref{sec:steps}).
+\item \textbf{Mix precision only inside the window.}  The bf16-cast, two-bf16-step
+  hybrid is Pareto dominated outside a $\sigma_{\max}$-anchored window with
+  $\ell\le10^{-2}$: at 40 bits it errs by $1.4\times10^{-1}$ where a four-step bf16
+  update errs by $2.4\times10^{-2}$, and is six times worse than bf16 on every real
+  momentum matrix (\S\ref{sec:steps}).
+\end{enumerate}
+
+\paragraph{Contributions.}
+\begin{enumerate}
+\item \textbf{A computable sensitivity indicator and its calibration}
+(Proposition~\ref{thm:cert}).  $S_{\mathrm{pert}}$ is a \emph{prefix ratchet} of the
+orbit sensitivity of the coefficients: a scalar of $O(K)$ arithmetic, needing no
+matrix.  The ratchet matters: the terminal sensitivity collapses to $1.0$ when the last
+step is of Newton type and under-estimates the error by $66\times$.  With one constant
+$c=0.142$ it forms $\mathrm{err} \approx E_K + c\,u\,S_{\mathrm{pert}}(K)$, whose median
+ratio to measurement is $1.10$ over 90 cells.
+\item \textbf{The floor is a subspace error, and it is invariant} (Theorems
+\ref{thm:invariance}, \ref{thm:firstorder}).  The exact iteration preserves the polar
+factor, so no step count, design or schedule reduces the floor; it is created at the first
+quantisation of a state whose spectrum is still $[\ell,1]$.  A
+first-order formula predicts it within $10\%$ in 52 of 54 square cells and, in the
+two-term form rectangular matrices require, within $0.6\%$ in all 500 real momentum
+matrices, and yields $\mathrm{err}=\Theta(u/\ell)$.
+\item \textbf{The constant closes} (\S\ref{sec:profile}).  Normalising the pair operator
+by $\sqrt d$ leaves $6.07$, a derived $2\sqrt2$ times a profile factor $g$ measured at
+$1.31$ (median, 180 cells).  $g$ is the edge of a four-block
+variance-profile operator built from the spectrum, with no fitted constant ($1.2\%$ of the
+measurement at the median, $97\%$ of cells inside $\pm10\%$), and it follows the decades a
+spectrum spans, not $d$.
+\item \textbf{Two budget decisions} (\S\ref{sec:stopping}, \S\ref{sec:alloc}).  The
+target rule $K(\varepsilon) = \min\{K : E_K + c\,u\,S_{\mathrm{pert}}(K) \le
+\varepsilon\}$ holds on 62 cells (measured/target in $[0.02,1.15]$) and survives a
+wrong dynamic range in one direction only (252 decisions); the graded schedule gains a
+median $3.06\times$ where the first-slot premium exceeds two bits and is neutral on real
+momentum ($0.9$ bits).
+\item \textbf{Where the arithmetic ends: fp8} (\S\ref{sec:fp8}).  With the significand
+matched, the fp8 floor equals the unlimited-exponent kernel's to $1$--$3\%$ over four
+dynamic ranges, and the exponent window is a second, separable constraint with a computable
+boundary; inside it, casting the start and running the first step in bf16 cures the
+divergence, and outside it the same hybrid loses to dropping a step.
+\item \textbf{What real training breaks, and how} (\S\ref{sec:realtrain},
+\S\ref{sec:escape}).  The training loss is flat across four formats and update errors up
+to $0.73$; what fails is survival, and it fails inside one call of the iteration rather
+than in the training dynamics: the state's top leaves its certified window, the quintic
+amplifies it ($2.2\times$ at $1.5$ times the edge, $9.3\times$ at twice), and the update
+reaches $10^{44}$ in four steps.  Clamping the state into its window makes every long run
+finish where a $10\%$ cut in the learning rate leaves 7 of 11 failing, and the curvature loop
+gain stays below one ($\le0.83$ in five of six trajectories), which excludes an
+edge-of-stability story.
+\item \textbf{Three negative results.}  Accuracy does not require sensitivity (the error
+falls $500\times$ while the sensitivity is non-monotone); the law does not design (at
+bf16 the shipped point is within $1.11\times$ of the best of 35 designs and the law's own
+argmin is $1.58\times$ \emph{worse}); and no spectrum-free sensor predicts which matrices
+gain from precision (Spearman $\le0.33$, \S\ref{sec:online}).
+\end{enumerate}

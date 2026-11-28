@@ -1,0 +1,936 @@
+\appendix
+
+\section{Reproduction}
+\label{app:repro}
+
+Each experiment is one script that writes one JSON file; the text quotes the JSON.
+All scripts are pure \texttt{numpy}/\texttt{scipy}, run on a CPU, and the whole
+sequence takes about 70 minutes.  The scripts are named after the order in which
+they were run, not after the paper's sections.
+
+\begin{table}[h]
+\centering
+\caption{Measurement scripts.  ``cell'' counts are the number of distinct
+(matrix, precision, step count) measurements the script performs, which is the
+number the text quotes.}
+\label{tab:scripts}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{5.6cm}
+                >{\raggedright\arraybackslash}p{6.3cm}
+                >{\raggedright\arraybackslash}p{3.4cm}}
+\toprule
+script & what it measures & used in \\
+\midrule
+\texttt{pilot1\_polar\_precision} & exact vs p-bit error of NS5/PE/LSQ5 designs & \S\ref{sec:exp} \\
+\texttt{pilot1c\_precision\_scaling} & error against $K$ at fixed $p$ (flatness) & \S\ref{sec:exp} \\
+\texttt{pilot4\_precision\_placement} & two-operand table, equal-cost allocation & \S\ref{sec:alloc} \\
+\texttt{pilot4b\_k1\_separation} & the same table for $K=1,2,3,6$ (quintic) & \S\ref{sec:alloc} \\
+\texttt{pilot4c\_k1\_highdeg} & $K=1$ with a degree-17 step ($E_1$ small) & \S\ref{sec:firstorder}, \S\ref{sec:alloc} \\
+\texttt{pilot5\_lower\_bound} & single-step LP frontier, degree scaling, $\alpha$ & Appendix~\ref{app:refute} \\
+\texttt{pilot5b\_scaling} & $S_{\mathrm{peak}}(\ell)$, $K^\star(\ell)$, plateau constant & \S\ref{sec:exp} \\
+\texttt{pilot5c\_composition\_design} & non-monotone design path, $S_{\min}(\varepsilon,d)$ & Appendix~\ref{app:refute} \\
+\texttt{pilot6\_s\_pert} & 192-cell competition of certificate definitions & \S\ref{sec:prelim}, \S\ref{sec:cert} \\
+\texttt{pilot6b\_floor\_constant} & injected rounding size, $d$-scaling, $u$-linearity & \S\ref{sec:cert} \\
+\texttt{pilot7\_pert\_aware\_design} & 37 designs measured, objective argmin, divergence census & \S\ref{sec:design} \\
+\texttt{pilot7c\_table1} & certificate table over $p=4..24$, 90-cell stopping & \S\ref{sec:cert} \\
+\texttt{pilot8\_muon\_mlp} & coupled Muon runs, frozen replay, rules, dose-response & \S\ref{sec:loop} \\
+\texttt{pilot8b\_equilibrium} & subspace/value split, tail extension & \S\ref{sec:invariance} \\
+\texttt{pilot10\_subspace\_theory} & invariance, first-order formula, $C(\ell)$, SVD-free bound & \S\ref{sec:cert} \\
+\texttt{pilot10b\_first\_step\_schedule} & slot profile, 62-cell stopping, 48-cell schedule & \S\ref{sec:stopping}, \S\ref{sec:alloc} \\
+\texttt{pilot11\_momentum\_subspace} & 500 real momentum matrices: two-term formula, $C\ell$ & \S\ref{sec:realmomentum} \\
+\texttt{pilot11b\_application\_order} & fixed design and matrix, $K=1,2,3,4$ & \S\ref{sec:alloc} \\
+\texttt{pilot12\_arithmetic\_variants} & three other kernels, self-calibration of $c$, plan cost & \S\ref{sec:variants} \\
+\texttt{pilot13\_ell\_sensitivity} & design and stopping rule under $\hat\ell=\alpha\ell$, 252 decisions & \S\ref{sec:ellsens} \\
+\texttt{pilot14\_real\_allocation} & graded schedule on 500 real momenta, 712 matrix-cells, $\ell$ sweep & \S\ref{sec:premium} \\
+\texttt{pilot15\_fp8\_kernel} & E4M3/E5M2 with subnormals and saturation, 5 seeds, 4 dynamic ranges & \S\ref{sec:fp8} \\
+\texttt{pilot16\_stats\_and\_lp} & bootstrap intervals, LP grid convergence, integer DP, held-out shapes & \S\ref{sec:loop}, \S\ref{sec:alloc} \\
+\texttt{pilot17\_theory\_refinement} & family dependence of the constant, pair recursion, safety boundary & \S\ref{sec:limitations} \\
+\texttt{pilot18\_c\_scaling\_and\_e5m2\_fix} & dimension normalisation of the floor constant, four-bit repair sweep & \S\ref{sec:loop}, \S\ref{sec:fp8} \\
+\texttt{pilot18b\_bootstrap} & intervals and paired gains on the two above & \S\ref{sec:loop}, \S\ref{sec:fp8} \\
+\texttt{pilot19\_large\_d\_and\_decomp} & dimension extrapolation to $d=512$; the constant's factors & \S\ref{sec:loop} \\
+\texttt{pilot20\_analytic\_and\_d1024} & $2\sqrt2$ from the theorem-3 operator; $d=768,1024$; the practical rules & \S\ref{sec:loop}, \S\ref{sec:rules} \\
+\texttt{pilot21\_loss\_phase\_and\_scheduler} & the kernel inside training (digits, diabetes, 11 seed-runs); step budget on 80 real momenta; online sensors & \S\ref{sec:realtrain}, \S\ref{sec:steps}, \S\ref{sec:online} \\
+\texttt{pilot21b\_kmin} & per-matrix step counts on the same 80 momenta & \S\ref{sec:steps} \\
+\texttt{pilot22\_participation\_factor} & the profile factor $g$ on 180 cells; the block-operator closure; per-injection coefficients & \S\ref{sec:profile} \\
+\texttt{pilot23\_divergence\_mechanism} & the window and the escape; the four counterfactuals; the loop gain & \S\ref{sec:escape} \\
+\texttt{pilot24\_large\_d\_multiplicity} & the multiplicity to $d=512$; per-injection quartiles; the ratchet's bound & \S\ref{sec:profile}, Appendix~\ref{app:bound} \\
+\texttt{pilot25\_long\_census} & 1,200 steps $\times$ 25 seeds: the hazard of a call, with intervals and tests & \S\ref{sec:realtrain}, \S\ref{sec:escape}, Table~\ref{tab:census} \\
+\texttt{make\_figure\_data} & every plotted coordinate, read from the JSON files above & Figs.~\ref{fig:ratchet}--\ref{fig:pareto} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Determinism.}
+The momentum sequence used in \S\ref{sec:realmomentum} is reproduced bit for bit
+by rerunning the exact-arithmetic trajectory with the same seed; the replay was
+checked against the sequence of the run that produced \S\ref{sec:loop} (median
+dynamic range $0.1499$, best validation loss $0.6534$, accuracy $0.762$, all
+identical).  The matrix of \S\ref{sec:alloc} is reproduced by seeding
+\texttt{numpy} as in the single-step script; its exact error $E_1$ matches to
+seven digits.
+
+\paragraph{Design generator.}
+The coefficient generator (a Newton iteration on the fifth-degree equioscillation point)
+returns non-finite coefficients at five of three hundred grid values of $\ell$, from
+$3.2\times10^{-2}$ to $0.46$.  The held-out grid that would have used $3\times10^{-2}$
+tests the design and raises instead of running the kernel with a non-finite one, and uses
+$5\times10^{-2}$ there.
+
+\paragraph{Archive.}
+The scripts, their JSON results and logs, and the validation script are distributed as
+\path{iclr-2028-artifact.tar.gz}; \texttt{MANIFEST.sha256} pins each experiment file
+and hashes to \texttt{5aebe2b2772e38cc}\allowbreak\texttt{e2c054c2860d32c3}\allowbreak\texttt{a71845610635d1e5}\allowbreak\texttt{1e2ad70c579f2375}, so the numbers in the tables can be checked
+against the code that produced them without re-running it.
+
+\section{The Negative Results in Full}
+\label{app:refute}
+
+\paragraph{No lower bound of the form $S\ge c\,\varepsilon^{-\alpha}$.}
+Three measurements, all from linear programs over odd polynomials of degree
+$d\in\{3,5,7,9,13,17\}$ with the constraint $\max_{[\ell,1]}|P-1|=\varepsilon$ and
+the objective the coefficient $\ell_1$ norm.
+
+(i) At fixed error the minimal sensitivity decreases monotonically in the degree:
+\[ S_{\min} = 1.178,\ 0.937,\ 0.648,\ 0.371,\ 0.114,\ 0.0363
+   \quad \text{for } d = 3,5,7,9,13,17, \]
+at $\ell=0.3$, $\varepsilon=0.6$ --- a factor $32$ across the
+family.  So small $\varepsilon$ and small $S$ are simultaneously achievable.
+
+(ii) The local exponent of $S_{\min}(\varepsilon)$ is not a constant, and it depends
+on $\ell$ by two orders of magnitude:
+
+\begin{table}[h]
+\centering
+\caption{Local exponent $\alpha$ of $S_{\min}\propto\varepsilon^{-\alpha}$ at three
+dynamic ranges, from the linear program (log--log fit over the admissible range of
+$\varepsilon$; fit residual $0.19$--$0.26$ in $\log$).}
+\label{tab:alpha}
+\begin{tabular}{rcccccc}
+\toprule
+$\ell$ & $d=3$ & $d=5$ & $d=7$ & $d=9$ & $d=13$ & $d=17$ \\
+\midrule
+$0.3$   & 1.43 & 0.81 & 0.56 & 0.45 & 0.32 & 0.22 \\
+$0.1$   & 7.50 & 3.55 & 2.39 & 1.78 & 1.13 & 0.77 \\
+$0.03$  & 21.4 & 13.1 & 7.11 & 5.02 & 4.60 & 3.13 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+(iii) Along a design path at fixed $(\ell,K,d)$ the error falls by $500\times$ while
+the sensitivity is non-monotone:
+\[ \varepsilon = 0.843,\ 0.782,\ 0.705,\ 0.612,\ 0.505,\ 0.386,\ 0.263,\ 0.150,\ 0.061,\ 0.021,\ 0.0016, \]
+\[ S = 155.6,\ 215.0,\ 286.4,\ 366.7,\ 448.5,\ 516.8,\ 548.8,\ 517.1,\ 404.3,\ 228.0,\ 60.4. \]
+The local slope
+$\mathrm{d}\log S/\mathrm{d}\log\varepsilon$ runs from $-4.26$ to $+0.53$.
+
+\paragraph{Why.}
+The work of the lower bound would have to happen in the boundary layer
+$[0,\ell]$, where the polynomial has to leave its value at the origin; the
+sensitivity is measured on $[\ell,1]$ only, and raising the degree thins the
+boundary layer without paying on the interval.  At $\ell=10^{-3}$ a single step
+cannot achieve an error below $0.873$ even at degree $65$, so the regime the paper
+works in is one where iteration is mandatory and no single-step bound can be tight.
+
+\paragraph{Two operands.}
+Table~\ref{tab:k1} is the two-operand question across the state and the intermediate.
+The whole column of $B$ from 6 to 24 bits is worth $1.12\times$ at $p_X=8$ and
+$71.7\times$ at $p_X=16$: the bottleneck is whichever operand is coarser, and at equal
+total bits $(16,16)$ gives $\e{2.14}{-3}$ against $\e{2.90}{-2}$ for $(24,8)$.  The
+operands are interchangeable to $1\%$ at $K=1$ and separate by $2.5\times$ at $K=2$, and
+the quintic keeps that separation at $K=6$.  On the real spectra it is larger: $(24,8)$
+gives $\e{5.74}{-2}$ against $\e{2.44}{-4}$ for $(16,16)$, a factor $236$.
+
+\paragraph{The design axis is empty.}
+\label{sec:design}
+The law invites one more use: minimize $J(K)$ over the coefficients.  Three measurements
+of a $37$-design family (cushion, safety, first-step damping $\tau$; $d=64$) say no.
+(i) \emph{No interior optimum}: the argmin over
+$(\text{cushion},\text{safety},\tau,K)$ sits on the scan boundary ($K=12$, $\tau=2.2$)
+in every cell, because a step costs arithmetic and $J$ does not count it.  (ii) \emph{The
+last step's derivative is not a handle}: with $p'(1)=\lambda$ fixed, $J$ is minimized at
+$\lambda^\star=-0.0353$, the shipped step's own value, while $S_{\mathrm{pert}}$ is
+identical ($609.6$) for all $|\lambda|\le0.5$.  (iii) \emph{Measured, the shipped design
+is already there}: at $\ell=10^{-3}$, $K=8$, bf16 the $35$ non-divergent designs span
+$0.232$--$0.768$, the shipped point is $2.578\times10^{-1}$ ($1.112\times$ from the best),
+and the objective's argmin is $1.58\times$ \emph{worse}.  The reason is in
+\eqref{eq:firstorder}: the subspace gain is set by the whole spectrum while
+$S_{\mathrm{pert}}$ is a scalar of the one-dimensional recurrence, so $c$ is not
+design-independent --- over the 37 designs it ranges over $-0.08$--$0.25$ with
+$\mathrm{Spearman}(S_{\mathrm{pert}},\mathrm{err})$ between $-0.84$ and $-0.91$.  Designs
+with safety $1.0$ diverge at bf16 in six of the 37 cells, so the shipped $1.01$ is a
+divergence margin (\S\ref{sec:limitations}).
+
+\section{A Matrix-Free Bound, and Why No Spectral Bound Exists}
+\label{app:bound}
+
+\begin{proposition}[Computable upper bound]
+\label{prop:bound}
+For full-rank $A$, $B$,
+$\norm{\polar(A)-\polar(B)}_2 \le 2\norm{A-B}_2/(\sigma_{\min}(A)+\sigma_{\min}(B))$.
+With $A = q(\hat M,p)$, $B = \hat M$ and $\sigma_{\min}(A) \ge \ell - \norm{E}_2$,
+\begin{equation}
+\mathrm{sub}_{\mathrm{err}} \;\le\; \frac{2\norm{E}_2}{2\ell - \norm{E}_2},
+\qquad E = q(\hat M,p) - \hat M ,
+\label{eq:bound}
+\end{equation}
+where $\ell$ is the design's assumed dynamic range and $\norm{E}_2$ is obtained
+with matrix--vector products only: power iteration on $E^\top E$ reproduces the
+SVD value to a relative $1.2\times10^{-15}$ in all 24 bound cells.
+\end{proposition}
+
+Equation~\eqref{eq:bound} is valid in all 24 cells tested and loose by
+$2.1$--$14.0\times$ (median $5.7\times$); the slack grows with the dynamic range
+because $1/(2\ell)$ assumes the worst orientation while rounding has a fixed
+participation.  Replacing $\norm{E}_2$ by the exactly computable $\norm{E}_F$ costs
+another factor: the Frobenius form is valid but loose by $6.3$--$45\times$ (median
+$24\times$).  A matrix-free guarantee therefore exists, at about one order of
+magnitude in accuracy; the tight prediction of \eqref{eq:firstorder} is not
+matrix-free.
+
+\begin{proposition}[Spectral information is not enough]
+\label{prop:nospectral}
+No function of the singular values of $X$ upper-bounds
+$\mathrm{sub}_{\mathrm{err}}(X) = \norm{\polar(X)-\polar(M)}_2$.
+\end{proposition}
+
+Take a random orthogonal $Q$: its singular values are all $1$, so any spectral
+functional takes the value it takes at $\polar(M)$, while
+$\norm{\polar(Q)-\polar(M)}_2 = 2.000$ (measured: $\norm{QQ^\top-I}_2 =
+1.6\times10^{-15}$).  The subspace is free once the spectrum is fixed.  On our grid
+the two quantities co-vary ($\mathrm{Spearman}(\norm{XX^\top-I},
+\mathrm{sub}_{\mathrm{err}}) = +0.83$, 32 cells), but only because both grow with
+the dynamic range: a correlation is not a certificate.  This is why
+\eqref{eq:cert} contains the orbit sensitivity of the \emph{design}, and why the
+floor analysis contains $\norm{E}$, the size of the start error, rather than
+anything measured from $X$ alone.
+
+\paragraph{The ratchet, and the channel it certifies.}
+Definition~\ref{def:ratchet} is a maximum, and it is worth stating exactly what it
+bounds.  Write the $p$-bit scalar orbit as $\hat x_t = p_t(\hat x_{t-1}) + \delta_t$ with
+$|\delta_t|\le\rho u$ --- one cast and, per step, the rounding of $B$ and of the state,
+$2K+1$ injections in all --- and let $x_t$ be the exact orbit it shadows.
+
+\begin{proposition}[What the ratchet bounds]
+\label{prop:ratchet}
+Let $p_l\in C^1(W)$ on a window $W$ containing the orbit of every $\sigma\in[\ell,1]$ and
+its perturbations, $\rho=\max_W|x|$.  Then, for $u\to0$,
+\begin{equation}
+|x_K-\hat x_K| \;\le\; (2K+1)\,\rho\,u\,S_{\mathrm{pert}}(K) \;+\; O(u^2),
+\label{eq:ratchet}
+\end{equation}
+and with the off-diagonal gain $\gamma_l(x,y)=a_l+b_l(x^2+y^2)+c_l(x^4+x^2y^2+y^4)$ in
+place of $|p_l'|$ in the same prefix maximum, call it $G_{\mathrm{pert}}(K)$, the subspace
+error obeys the same inequality.  In neither case may $S_{\mathrm{pert}}(K)$ be replaced by
+the terminal $S(K)$.
+\end{proposition}
+
+\begin{proof}
+$\hat x_t = \phi_t(\hat x_{t-1})+\delta_t$ with $\phi_t$ differentiable on $W$, so the
+first-order response to the injection at step $j$ is
+$\delta_j\prod_{l>j}p_l'(x_{l-1})$; the response to $\delta_j$ summed over the $2K+1$
+injections is bounded by $\rho u\sum_j\prod_{l>j}|p_l'|\le(2K+1)\rho u\max_j\prod_{l>j}|p_l'|$,
+and $\prod_{l>j}|p_l'|\le S(K)\le S_{\mathrm{pert}}(K)$ by Definition~\ref{def:ratchet} ---
+the suffix product is one of the products $S(K)$ maximises over.  The $O(u^2)$ term is the
+second-order remainder of the composition, once per injection, and it can be given its own
+coefficient: with $M=\max_W|p_\ell''|$ and $B=\max_W|x|$, the recursion
+$e_t=p_t'(x_{t-1})e_{t-1}+\delta_t+\tfrac12p_t''(\xi_t)e_{t-1}^2$ with
+$|e_{t-1}|\le(2t-1)BuS_{\mathrm{pert}}(t-1)$ propagates the quadratic parts through the
+same prefix products, so
+\begin{equation}
+|x_K-\hat x_K| \le (2K{+}1)BuS_{\mathrm{pert}}(K)
++ \tfrac12 M B^2 u^2 S_{\mathrm{pert}}(K)\sum_{t=1}^{K}(2t-1)^2 S_{\mathrm{pert}}(t-1)^2
++ o(u^2).
+\label{eq:second}
+\end{equation}
+At the shipped point ($\ell=10^{-3}$, $K=7$, $u=2^{-8}$, $B=1$, $M=2.0\cdot10^3$ over the
+visited window) the quadratic coefficient exceeds the first-order term by orders of
+magnitude: \eqref{eq:second} is a $u\to0$ statement, and at four bits what certifies
+\eqref{eq:ratchet} is the measurement (24 of 24 cells, $16$--$1048\times$ slack), not the
+remainder bound.  We claim it as a first-order envelope at four bits.  The pair channel is the
+same argument: an injection's off-diagonal component is multiplied, step by step, by
+$\gamma_l$ at the pair's own orbit, so the triangle inequality and the definition of
+$G_{\mathrm{pert}}$ give it.  The terminal value fails because $S(K)$ maximises over the
+injection points of \emph{one} prefix, while the same products regrouped by prefix can
+exceed it --- and do when the last step collapses (Fig.~\ref{fig:ratchet}a).
+\end{proof}
+
+Two measurements test it (\texttt{pilot24}).  The certified bound holds in all 24 cells
+tested ($d=64$, $p=8$, $K=6,7$, four families, three $\ell$) with a slack of
+$16$--$1048\times$ (median $41\times$), computed with $\rho=1$: the inequality is true and
+loose by about the ratio of $2K+1$ to the calibrated $c$, which is what sign cancellation
+does (\S\ref{sec:profile}).  The pair ratchet is not a small correction to the scalar one:
+$G_{\mathrm{pert}}/S_{\mathrm{pert}}$ is $0.62$--$1.21$ (below one in 16 of 24 cells), and
+the constant it leaves, $\mathrm{err}/(u\,G_{\mathrm{pert}})$, is $0.011$--$0.912$
+(median $0.44$) --- below one in every cell.  So the subspace channel needs no constant
+above one, and the $0.142$ the text reports is the scalar surrogate of that envelope.  The
+two constants are unstable and tight for the same reason.  The scalar inequality replaces
+each signed response by its modulus, so the $2K+1$ injections add at full size and the
+measured error sits $41\times$ (median) below the bound only through a cancellation that
+belongs to the data, not to the design --- which is why what the modulus leaves over moves
+over two orders of magnitude.  The pair channel keeps each pair's off-diagonal gain and,
+unlike the modulus, does not let the diagonal and off-diagonal parts of an injection be
+traded against each other from step to step; that is what makes its envelope hold at one in
+every cell (\S\ref{sec:profile}), and its price is a constant that has to be measured
+rather than read off $S_{\mathrm{pert}}$.
+
+What no condition on the spectrum or on the coefficients can do is make
+$S_{\mathrm{pert}}$ a bound for the \emph{measured} floor.  The condition that would is
+$\gamma_l(x,y)\le\max_{u\in[\min(x,y),\max(x,y)]}|p_l'(u)|$ on every reachable pair, and it
+fails wherever a step has an interior zero of $p'$: a Newton step has $p'(1)=0$ and
+$\gamma(1,1)=1/2$, and the ratio is unbounded as the pair approaches that point.  Over the
+reachable pairs and steps the worst ratio is $1.8\times10^3$ at $\ell=10^{-3}$ and
+$9\times10^9$ at $\ell=10^{-1}$, so the domination holds in none of the nine designs
+tested, and the shipped sequence's own last step at $\ell=10^{-3}$, $K=7$ is
+$(1.875,-1.250,0.375)$: $p'(1)=0$, $\gamma(1,1)=0.500$.  That is why the text reports
+$S_{\mathrm{pert}}$ with a calibrated constant and names the pair channel as what the
+multiplicity counts, instead of claiming a theorem for the floor it measures.
+
+\section{Is the Kernel Model the Arithmetic?}
+\label{sec:variants}
+
+A reviewer is entitled to ask whether $c=0.142$ is a constant of our kernel model rather
+than of the arithmetic.  We re-ran the shipped design under three other kernels on 12
+cells each ($\ell\in\{10^{-2},10^{-3},10^{-4}\}$, $d\in\{64,128\}$, $p\in\{8,11,16\}$)
+and report predicted/measured in Table~\ref{tab:variants}.  \emph{float32 accumulation}
+gives $0.84$--$1.70$ (median $1.13$) and the same $2.629\times10^{-1}$ at the reference
+cell as our kernel, so the wide-accumulator assumption is not what the constant measures;
+\emph{eager rounding} raises the floor by up to $2.2\times$ (ratio $0.45$--$1.68$) and
+\emph{stochastic rounding} gives $0.56$--$1.70$.  The constant moves by about a factor $2$
+across kernels while the $u$-scale and the $K$-dependence do not.  A caller who does not
+trust $0.142$ can fit it: $\hat c=0.109$ from 8 cells predicts a held-out grid to
+$0.58$--$1.19$ (median $0.85$, CI $[0.64,1.12]$), for the cost of 8 runs; the plan it
+enables takes $0.47$\,ms against $2.3$\,ms for the iteration.
+
+\section{The Floor Constant across Families and Dimensions}
+\label{app:constant}
+
+\paragraph{The cast factor.}  Measured against the assumed $\rho=u/\sqrt3$ of the input
+cast, the kernel's own cast rms is $1.472$ times larger, and for a log-uniform mantissa
+$\sqrt{\mathbb{E}[m^{-2}]}=\sqrt{3/(2\ln2)}=1.471$ --- derived, and reproducing the
+measured cast error to $0.6\%$ at every $d$ tested.  What remains is the response of an
+incoherent perturbation: on the sixteen cells checked in this way the channel factor is
+$4.53$, carried $3.8$ by the input cast and $2.3$ by the in-loop roundings in quadrature
+($4.43$, $2\%$ low), so the 240-cell constant is $6.07=1.471\times4.13$.  Gaussian noise
+of the same rms reproduces the cast channel to $1.00\times$ and a rank-one perturbation of
+the same norm is $4\times$ larger, so the incoherence is real and the channel factor is
+what stays measured.
+
+\paragraph{Extrapolation.}  Extending the grid to $d=384$ and $512$ (four times the top of
+the fit, 96 cells) leaves the constant at $6.48$, $+6.6\%$ with $88\%$ of cells inside
+$\pm40\%$, and the trend fitted on $d\le256$ extrapolates to within $11\%$ of them.  Two
+more dimension steps move nothing: over 32 cells at $d=768$ and $1024$ (two flat-start
+families, two $\ell$, two $p$, two seeds) the median is $6.99$, $1.01\times$ the pooled
+median of the same two families at $d=512$, every cell is inside $\pm40\%$ of $6.07$, and
+the trend fitted on $d\le512$ extrapolates to $0.93$--$1.00$ of the measurement on all
+$16$ predictions.
+
+\paragraph{The participation, and its closure.}  Of the response factor $4.13$ behind
+$6.07$, $2.83$ is derived.  On matrix units the first term of \eqref{eq:firstorder} is the
+fixed operator $T(e_{ij})=(\sigma_i+\sigma_j)^{-1}(e_{ij}-e_{ji})$, checked against finite
+differences over all $992$ units of a $d=32$ cell to a residual of $10^{-6}$, so its
+Hilbert--Schmidt norm is $2(\norm{W}_F^2-\sum_iW_{ii}^2)^{1/2}$ without a fitted constant;
+an exchangeable perturbation is then answered by $2\sqrt2\,\rho\norm{W}_F/\sqrt d$ --- a
+Wigner factor $2$ and a skew factor $\sqrt2$ --- and a flat spectrum realises it ($2.81$
+against $2\sqrt2=2.83$ at $d=1024$).  A real spectrum breaks exchangeability, and the
+factor that survives, $g$, is measured over 180 cells at $1.31$ (range $0.98$--$2.10$).
+It closes as the edge of a coarse-grained variance-profile operator: with $V=2D^2$ and $K$
+contiguous blocks of equal index count, $B_{kl}=\overline{V}_{kl}\sqrt{m_km_l}$ and the
+prediction $2\sqrt{\lambda_{\max}(B)}$ are within $1.2\%$ of the measurement at the
+median for $K=4$ and inside $\pm10\%$ in $97\%$ of 120 cells; the profile's
+$\lambda_{\max}$ is $11$--$23\times$ too large and a row degree $76$--$1657\times$, both
+of which are this operator with the normalisation misplaced.  The loop is not a second
+factor: the one-step formula and the full $K$-step propagation of the same error agree to
+$0.95$--$1.07$ (median $0.998$).
+
+\paragraph{What the loop does add, counted.}  The kernel injects one cast and two errors
+per step, and their first-order responses add in quadrature to $0.92$--$1.12$ of the
+measured floor over 96 cells, with $84\%$ of the total on the input cast.  Giving every
+injection the one-step law of the state it enters, however, over-predicts the floor by
+$1.27$--$2.36\times$: the per-injection coefficient divided by $2\sqrt2\,g(s_t)$ spans
+$0.003$--$2.6$ (median $0.57$), because a rounding injected into an intermediate is not a
+rounding of the state.  So $4.13=2.83\times g\times$(the counted multiplicity), with both
+factors computable and neither fitted.
+
+\paragraph{The coefficient, in quartiles.}  A range of $0.003$--$2.6$ hides where the mass
+is; Table~\ref{tab:w13} splits it.  The input cast obeys the one-step law almost exactly
+(median $0.990$, IQR $[0.944,1.011]$ over $16$ injections), the in-loop state roundings are
+within $11\%$ of it at the median, and the intermediate's own rounding is the one that
+carries almost no first-order response (median $0.054$): the spread the text quotes is one
+channel, not noise, which is exactly why the multiplicity is counted rather than modelled
+by a per-state law.  The median is stable in $d$ and in $\ell$ (Table~\ref{tab:w13}), and
+the coefficient itself does not drift with $d$ where $g$ is left out: over $1248$
+injections of the 96 large-$d$ cells the raw $\kappa$ has median $2.11$, $2.21$, $2.25$,
+$2.29$ at $d=64,128,256,512$ (a flat spectrum gives $2\sqrt2=2.83$).
+
+\begin{table}[h]
+\centering
+\caption{The per-injection coefficient of \S\ref{sec:profile} as quartiles
+(\texttt{pilot22}, $208$ injections, $p=8$, $K=6$, $d=64,96$): the response of one rounding
+divided by $2\sqrt2\,g(s_t)\,\mathrm{rms}(E)\,\mathrm{scale}_t$, so that $1$ means the
+one-step law of the state the rounding enters.  ``$X$'' is the rounding of the state,
+``$B$'' the rounding of the intermediate; $\ell=10^{-1}$ and $10^{-2}$ are the two windows
+of the grid.}
+\label{tab:w13}
+\begin{tabular}{lrrrrr}
+\toprule
+group & min & Q1 & median & Q3 & max \\
+\midrule
+all injections      & $0.003$ & $0.103$ & $0.569$ & $0.931$ & $2.64$ \\
+input cast          & $0.878$ & $0.944$ & $0.990$ & $1.011$ & $1.10$ \\
+in-loop, $X$        & $0.469$ & $0.715$ & $0.890$ & $0.959$ & $2.64$ \\
+in-loop, $B$        & $0.003$ & $0.012$ & $0.054$ & $0.236$ & $2.21$ \\
+$\ell=10^{-1}$      & $0.003$ & $0.038$ & $0.696$ & $0.902$ & $1.10$ \\
+$\ell=10^{-2}$      & $0.010$ & $0.149$ & $0.539$ & $0.951$ & $2.64$ \\
+logspace            & $0.003$ & $0.149$ & $0.536$ & $0.900$ & $1.05$ \\
+two-plateau         & $0.003$ & $0.103$ & $0.720$ & $0.958$ & $2.64$ \\
+gap                 & $0.003$ & $0.103$ & $0.541$ & $0.910$ & $1.04$ \\
+power               & $0.003$ & $0.050$ & $0.533$ & $0.896$ & $1.10$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The multiplicity at large $d$.}  The quadrature of the 13 responses was
+measured on 16 cells at $d=64,96$; does it survive the dimensions a real layer has?  It
+does: over 96 cells (four families, two $\ell$, three seeds, $d=64,128,256,512$) the ratio
+of the quadrature to the measured floor is $0.92$--$1.12$ (median $1.03$) with $97\%$ of
+cells inside $\pm10\%$, and at $d=512$ alone $0.997$--$1.080$ (median $1.035$, 24 cells;
+Table~\ref{tab:w13} and \texttt{pilot24}).  The responses themselves say why: the mean
+$|\cos|$ between the 13 response matrices is $0.017$ at the median and falls with $d$
+($0.023$, $0.015$, $0.012$, $0.011$ from $d=64$ to $512$), as an incoherent pair of
+$d^2$-dimensional responses should, while the largest single cosine is $0.69$.  The cast carries
+$0.85$--$0.86$ of the sum and $C_{\mathrm{total}}$ is flat in $d$ ($3.57$, $3.82$,
+$3.67$, $3.80$ for the four dimensions).
+
+\paragraph{The escape.}  The failing runs of \S\ref{sec:escape} repeat one trace.  At
+diabetes seed 0, step 24, layer 0 the exact tops are
+$0.70,\ 1.87,\ 1.65,\ 1.19,\ 1.01,\ 1.00$ and the E5M2 tops
+$0.71,\ 1.93,\ 1.96,\ 3.17,\ 78,\ 1.0\cdot10^{9},\ 4.9\cdot10^{44}$ against certified
+upper edges $1.00,\ 1.92,\ 1.71,\ 1.29,\ 1.02,\ 1.00$; the same shape appears at diabetes
+seed 2 (step 4) and at digits seeds 0 and 1 (steps 327 and 381).  The step at which a run
+escapes is a property of this implementation and this seed --- the same arithmetic escapes
+at step 4 for another seed of the same task --- so what repeats is the trace, not its
+index.  Beyond a window's edge
+the quintic's gain is $2.2\times$ at $1.5$ times the edge and $9.3\times$ at twice, and
+the largest start $1+\delta$ whose $p$-bit orbit over the six steps stays below $10$ is
+$\delta=0.0075$ at $s=1.01$ for four bits, $0.048$ at $1.035$ and $0.063$ at $1.05$
+($0.010$ and $0.035$ at five bits).  With the state rescaled into its window at every step
+all 11 runs finish, and all 50 of the long runs below; with the learning rate cut by $10\%$
+seven of 11 still fail.  The loop
+gain $G=\lambda_{\max}(\mathrm{diag}(\mathrm{step})^{1/2}H\,\mathrm{diag}(\mathrm{step})^{1/2})$,
+estimated by power iteration on Hessian-vector products (central differences of the
+analytic gradient) every 25 steps, exceeds one on no trajectory (median $\le0.26$; maximum
+$0.83$ in five of six; one $7.3$ spike in the sixth).
+
+\section{The Census at 1,200 Steps}
+\label{app:census}
+
+\begin{table}[h]
+\centering
+\caption{The long census (\texttt{pilot25}): 1,200 training steps $\times$ 25 seeds per cell,
+the hazard of one Muon call with a 95\% Wilson interval, and the calls at risk.  A call is
+one application of the composite to one hidden weight matrix; a run that has not diverged
+at 1,200 steps contributes all of its calls and no event (right censoring).  ``clamp'' is
+E5M2 at $s=1.01$ with the state rescaled into its window whenever a step would leave it
+(\S\ref{sec:escape}).}
+\label{tab:census}
+\begin{tabular}{llccccc}
+\toprule
+task & condition & div/runs & calls & hazard & 95\% CI & $1$ in \\
+\midrule
+\texttt{digits} & E5M2, $s=1.01$   & $25/25$ & $40\,002$  & $6.25\cdot10^{-4}$ & $[4.23,\,9.22]\cdot10^{-4}$ & $1\,600$ \\
+        & E5M2, $s=1.035$ & $17/25$ & $99\,822$  & $1.70\cdot10^{-4}$ & $[1.06,\,2.73]\cdot10^{-4}$ & $5\,872$ \\
+        & clamp           & $0/25$  & $120\,000$ & $0$ & $[0,\,3.20]\cdot10^{-5}$ & --- \\
+\texttt{diabetes} & E5M2, $s=1.01$ & $25/25$ & $2\,730$ & $9.16\cdot10^{-3}$ & $[6.21,\,13.48]\cdot10^{-3}$ & $109$ \\
+        & E5M2, $s=1.035$ & $0/25$  & $90\,000$  & $0$ & $[0,\,4.27]\cdot10^{-5}$ & --- \\
+        & clamp           & $0/25$  & $90\,000$  & $0$ & $[0,\,4.27]\cdot10^{-5}$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{What the run count cannot say.}  At this horizon the two tasks are
+indistinguishable as runs --- 25 of 25 fail in both at $s=1.01$, so Fisher's exact test is
+undefined --- and they are $14.7\times$ apart per call: $42\,732$ calls carry 50 events, and
+the exact conditional binomial test on that split gives $p=3.5\cdot10^{-17}$.  The task is
+not a single scale factor either: at $1.035$ \texttt{digits} still fails at $1$ in
+$5\,872$ calls (CI $1$ in $9\,400$ to $1$ in $3\,670$) while \texttt{diabetes} shows no
+failure in $90\,000$ calls (upper bound $1$ in $23\,400$), so the ordering of the two tasks
+is not preserved by the safety --- we report that as measured and offer no mechanism for
+it.  What the safety and the clamp do is bounded the same way: $1.035$ lowers the
+\texttt{digits} hazard $3.7\times$ and \texttt{diabetes} below $1$ in $23\,400$, the clamp
+below $1$ in $31\,200$ on \texttt{digits} and $1$ in $23\,400$ on \texttt{diabetes} over
+$210\,000$ calls in all.
+
+\paragraph{The shape of the hazard in time.}  It is not stationary.  On \texttt{digits} at
+$s=1.01$ the events per 200-step block are $3$, $10$, $11$, $0$, $1$ over $19\,273$,
+$15\,740$, $4\,060$, $800$ and $129$ calls ($0.016\%$, $0.064\%$, $0.271\%$, $0.775\%$ in
+the blocks that still have runs at risk), and at $1.035$ the first $400$ steps carry none
+of the $17$ events.  On \texttt{diabetes} every event is in the first 200 steps (median
+$35$ steps, mean $36.8$): that task fails early or not at all, which is why its $400$-step
+census already caught it and why its $1.035$ row is empty.  A run that has survived the
+first few hundred steps is therefore not safe, only slower --- the reading a per-run count
+of $1,200$ steps cannot give and a per-call rate can.
+
+\paragraph{The prefix check.}  Every 1,200-step run reproduces the $400$-step census of
+\texttt{pilot23} on its own prefix: 24 of 24 comparable runs agree (five \texttt{digits}
+seeds and three \texttt{diabetes} seeds, three conditions each), which is what makes the
+two censuses one experiment and not two.  The script writes no wall-clock field, so the
+JSON is a function of the seeds and reruns byte for byte.
+
+\paragraph{Two caveats on the estimate.}  The Wilson interval treats each call as an
+independent Bernoulli trial; within a run the calls are correlated through the weights, so
+the interval describes the exposure rather than upper-bounding a dependent process.  The
+clamp is not free: the implementation costs a four-iteration power estimate per step, which
+this paper does not price --- doing so at scale is the one measurement we would add to it.
+
+\section{Additional Tables}
+\label{app:tables}
+
+Table~\ref{tab:firstorder} is the square-grid test of
+Theorem~\ref{thm:firstorder}; Table~\ref{tab:twochannel} is the two-operand precision
+sweep of \S\ref{sec:alloc}; Tables~\ref{tab:variants}--\ref{tab:ci} are the kernel
+comparison of \S\ref{sec:variants}, the scale laws, the crossing rule, the two-operand
+step-count comparison, the graded schedule against the premium, the fp8 comparison of
+\S\ref{sec:fp8}, and the bootstrap intervals; Table~\ref{tab:dsinv} normalises the floor constant by
+$\sqrt d$, and Table~\ref{tab:e5m2} is the four-bit repair sweep of \S\ref{sec:fp8}.
+Table~\ref{tab:profile} is the per-slot gain profile behind \S\ref{sec:alloc},
+Table~\ref{tab:ell} the wrong-dynamic-range decisions behind \S\ref{sec:ellsens},
+Table~\ref{tab:realtrain} the seven training conditions of \S\ref{sec:realtrain},
+Table~\ref{tab:steps} the step budget of \S\ref{sec:steps}, and
+Table~\ref{tab:rules} collects the four rules of \S\ref{sec:rules}.
+
+\paragraph{Scale laws.}  Table~\ref{tab:scaling} gives $S_{\mathrm{peak}}(\ell)$ and the
+plateau constant; beside them, measured $\norm{\delta X}_2/u = 1.26$--$1.86$ and
+$\norm{\delta B}_2/u = 0.96$--$5.5$ carry no $\sqrt d$ component, while $\mathrm{err}/u$
+grows $1:1.07:1.16$ from $d=64$ to $128$ against $1:1.41:2.00$ for a bare $\sqrt d$ law
+--- the $\sqrt d$ appears only inside the normalisation of the pair weight
+(\S\ref{sec:loop}).
+
+\begin{table}[h]
+\centering
+\caption{Per-slot gain profile $\beta_t$ of the subspace channel, $d=64$, $p=8$,
+$K=6$.  The profile is independent of $K$: the input gain is $11.5$ and $59.3$
+at $\ell=10^{-2},10^{-3}$ for every $K\in\{4,6,8,10\}$ tested, and the tail sits at
+$1.1u$.}
+\label{tab:profile}
+\begin{tabular}{rccccccc}
+\toprule
+$\ell$ & input & step 0 & step 1 & step 2 & step 3 & step 4 & step 5 \\
+\midrule
+$10^{-2}$ & \textbf{11.5} & 6.2 & 3.1 & 1.6 & 1.1 & 1.1 & 1.1 \\
+$10^{-3}$ & \textbf{59.3} & 29.0 & 9.8 & 6.4 & 2.1 & 1.3 & 1.1 \\
+$10^{-4}$ & \textbf{512} & 222 & 55.5 & 18.0 & 8.7 & 4.1 & 1.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{The stopping rule with a wrong dynamic range, $\hat\ell=\alpha\ell$: 36 cells
+and three targets each, the targets set relative to the true predicted floor.
+``missed'' is a returned step count whose measured error exceeds $1.5\varepsilon$;
+``refused'' counts cells where the rule refuses a target that some step count of the
+true design meets within $1.5\varepsilon$ (each row also holds two cells where no step
+count does).  ``understatement'' is $\max\mathrm{err}/J(K)$ on the believed window: how
+far the caller's own prediction falls short of the measurement.}
+\label{tab:ell}
+\begin{tabular}{rcccccc}
+\toprule
+$\alpha$ & met & missed & refused & $\mathrm{err}/\varepsilon$ median & max & understatement \\
+\midrule
+$0.1$  & 18 & 0  & 16 & 0.30 & 0.99 & 1.0 \\
+$0.25$ & 18 & 0  & 16 & 0.53 & 0.99 & 1.0 \\
+$0.5$  & 26 & 0  & 8  & 0.32 & 0.98 & 1.0 \\
+$1$    & 36 & 0  & 0  & 0.59 & 1.09 & 1.3 \\
+$2$    & 20 & 16 & 0  & 1.25 & 59   & 101 \\
+$4$    & 14 & 22 & 0  & 2.52 & 121  & 614 \\
+$10$   & 12 & 24 & 0  & 3.11 & 244  & 1275 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Theorem~\ref{thm:firstorder} against measurement at the input cast.
+$C = \mathrm{sub}_{\mathrm{err}}/u$ measured; $C_{\mathrm{pred}}$ from
+\eqref{eq:firstorder} with $E = q(\hat M,p)-\hat M$.  The cell marked $\dagger$
+saturates at $\mathrm{sub}_{\mathrm{err}} = 2$.}
+\label{tab:firstorder}
+\begin{tabular}{rrrccc}
+\toprule
+$d$ & $\ell$ & $p$ & $C$ measured & $C_{\mathrm{pred}}$ & ratio \\
+\midrule
+32 & $10^{-1}$ & 8 & 2.24 & 2.24 & 1.00 \\
+32 & $10^{-3}$ & 8 & 58.96 & 57.92 & 0.98 \\
+32 & $3\cdot10^{-4}$ & 8 & $512.0^{\dagger}$ & 181.5 & $0.35^{\dagger}$ \\
+64 & $10^{-1}$ & 8 & 2.14 & 2.14 & 1.00 \\
+64 & $10^{-2}$ & 8 & 11.50 & 11.48 & 1.00 \\
+64 & $10^{-3}$ & 8 & 59.30 & 58.04 & 0.98 \\
+64 & $10^{-3}$ & 16 & 76.28 & 76.26 & 1.00 \\
+64 & $3\cdot10^{-4}$ & 11 & 230.25 & 225.74 & 0.98 \\
+128 & $10^{-3}$ & 8 & 77.51 & 77.05 & 0.99 \\
+128 & $3\cdot10^{-4}$ & 8 & 207.79 & 238.66 & 1.15 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Error $\|X_K - UV^\top\|_2$ against the storage precision of the state
+$p_X$ (rows) and of the intermediate $p_B$ (columns); shipping design, $\ell=10^{-3}$,
+$d=64$, $K=6$.  Each row and column is flat over a wide range and then falls
+steeply --- the signature of a bottleneck that moves.}
+\label{tab:twochannel}
+\begin{tabular}{r|ccccccc}
+\toprule
+$p_X \backslash p_B$ & 6 & 8 & 10 & 11 & 13 & 16 & 24 \\
+\midrule
+6  & \e{1.52}{0} & \e{1.45}{0} & \e{1.39}{0} & \e{1.41}{0} & \e{1.40}{0} & \e{1.41}{0} & \e{1.40}{0} \\
+8  & \e{3.53}{-1} & \e{3.38}{-1} & \e{3.07}{-1} & \e{3.00}{-1} & \e{3.19}{-1} & \e{3.17}{-1} & \e{3.15}{-1} \\
+10 & \e{1.78}{-1} & \e{9.48}{-2} & \e{9.58}{-2} & \e{8.96}{-2} & \e{8.91}{-2} & \e{9.15}{-2} & \e{9.21}{-2} \\
+11 & \e{1.55}{-1} & \e{4.26}{-2} & \e{3.48}{-2} & \e{3.73}{-2} & \e{3.43}{-2} & \e{3.49}{-2} & \e{3.51}{-2} \\
+13 & \e{1.57}{-1} & \e{2.97}{-2} & \e{1.13}{-2} & \e{1.07}{-2} & \e{1.09}{-2} & \e{9.96}{-3} & \e{9.77}{-3} \\
+16 & \e{1.52}{-1} & \e{2.87}{-2} & \e{8.33}{-3} & \e{4.83}{-3} & \e{2.37}{-3} & \e{2.14}{-3} & \e{2.12}{-3} \\
+24 & \e{1.56}{-1} & \e{2.90}{-2} & \e{8.62}{-3} & \e{4.81}{-3} & \e{1.90}{-3} & \e{1.64}{-3} & \e{1.62}{-3} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Predicted/measured error ratio of the shipped design under four kernels of
+$p$-bit arithmetic (\S\ref{sec:variants}), at $K=6$, one matrix per
+$(\ell,d)$.  ``eager'' rounds every matrix product, ``fp32 acc.'' accumulates in
+float32, ``stochastic'' uses stochastic rounding (mean of three seeds).}
+\label{tab:variants}
+\begin{tabular}{rrrcccc}
+\toprule
+$\ell$ & $d$ & $p$ & kernel & eager & fp32 acc. & stochastic \\
+\midrule
+$10^{-2}$ & 64 & 8 & 0.83 & 0.45 & 0.84 & 0.62 \\
+$10^{-2}$ & 64 & 11 & 0.94 & 0.47 & 0.92 & 0.61 \\
+$10^{-2}$ & 64 & 16 & 0.82 & 0.50 & 0.86 & 0.56 \\
+$10^{-3}$ & 64 & 8 & 1.29 & 0.65 & 1.29 & 0.75 \\
+$10^{-3}$ & 64 & 11 & 1.29 & 0.76 & 1.29 & 0.82 \\
+$10^{-3}$ & 64 & 16 & 1.28 & 1.04 & 1.24 & 1.21 \\
+$10^{-3}$ & 128 & 8 & 0.98 & 0.58 & 0.98 & 0.65 \\
+$10^{-3}$ & 128 & 11 & 0.94 & 0.64 & 0.93 & 0.72 \\
+$10^{-3}$ & 128 & 16 & 1.33 & 0.93 & 1.32 & 1.07 \\
+$10^{-4}$ & 64 & 8 & 1.70 & 1.68 & 1.70 & 1.70 \\
+$10^{-4}$ & 64 & 11 & 1.45 & 1.14 & 1.43 & 1.12 \\
+$10^{-4}$ & 64 & 16 & 1.03 & 1.02 & 1.03 & 1.02 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Graded schedule against uniform precision at equal total bits, as a function
+of the first-slot premium.  First row: the real momentum sample; rows 2--5: a
+logspace spectrum of the same $128\times32$ shape, two seeds, $K\in\{6,8\}$.  At
+$\ell=10^{-4}$ the design's own exact error $E_K$ dominates at the two smaller budgets,
+so the gain collapses there and returns at the largest.}
+\label{tab:premium}
+\begin{tabular}{lcccc}
+\toprule
+spectrum & premium (bits) & $K{=}6$, 8 bits & $K{=}6$, 12 bits & $K{=}8$, 12 bits \\
+\midrule
+real $128\times32$ & 0.9 & 1.00 & 1.00 & 1.00 \\
+logspace $10^{-1}$ & 1.6--1.7 & 1.09--1.19 & 1.07--1.16 & 1.05--1.13 \\
+logspace $10^{-2}$ & 4.3--4.5 & 3.17--3.71 & 3.22--3.59 & 4.23--4.86 \\
+logspace $10^{-3}$ & 7.3--7.5 & 6.38--8.10 & 9.13--9.79 & 10.2--15.4 \\
+logspace $10^{-4}$ & 8.8--9.8 & 2.25--2.32 & 1.30--1.46 & 20.7--29.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% scale laws table moved here from the body
+\begin{table}[h]
+\centering
+\caption{Scale laws of the certificate and the floor (synthetic logspace spectra,
+shipped design, $p=10$).  $S_{\mathrm{peak}}$ is the maximum of $S(K)$ over $K$,
+with the local log--log slope against $\ell$; $C = \mathrm{err}/u$ is the plateau
+constant, blank where the design has not converged by $K=8$.}
+\label{tab:scaling}
+\begin{tabular}{rcccccc}
+\toprule
+$\ell$ & $S_{\mathrm{peak}}$ & $K^\star$ & local slope & $C$ ($d=32$) & $C$ ($d=64$) & $C$ ($d=128$) \\
+\midrule
+$10^{-2}$ & 77.1 & 3 & $-1.67$ & 10.1 & 12.2 & 13.4 \\
+$10^{-3}$ & 609 & 5 & $-1.88$ & 48.5 & 82.9 & 93.1 \\
+$10^{-4}$ & $5.63\times10^{3}$ & 6 & $-1.81$ & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{The crossing rule \eqref{eq:cross} and the target rule \eqref{eq:target} on
+frozen real momentum spectra (500 matrices, design window $\ell=10^{-3}$; $K$ swept to
+10).  Costs are the measured error at the selected $K$ over the smallest measured error
+in $K$.  At $p=24$ the crossing lands on the argmin while the target rule stops three
+steps later, at the plateau.}
+\label{tab:cross}
+\begin{tabular}{rrc rrrc rr}
+\toprule
+$p$ & plateau (u) & $K_{\arg\min}$ & $K_{\mathrm{cross}}$ & cost & $K_{\mathrm{target}}$ & cost & $K_{\mathrm{target}}$, calibrated $c$ & cost \\
+\midrule
+6  & 15.8 & 6 & 2 & $4.01\times$ & 10 & $1.002\times$ & 6 & $1.000\times$ \\
+8  & 16.0 & 6 & 4 & $9.11\times$ & 10 & $1.001\times$ & 6 & $1.000\times$ \\
+11 & 16.0 & 7 & 5 & $16.7\times$ & 10 & $1.001\times$ & 6 & $1.006\times$ \\
+16 & 16.0 & 7 & 6 & $6.68\times$ & 10 & $1.001\times$ & 7 & $1.000\times$ \\
+24 & 16.1 & 7 & 7 & $1.00\times$ & 10 & $1.006\times$ & 7 & $1.000\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Equal-total-bit comparison of the two operands as a function of the step count.
+Rows 1--2 hold the design and the matrix fixed and change only $K$; rows 3--4 are the
+shipped quintic at $\ell=0.3$, $d=64$; the last row is the frozen real-spectrum replay at
+$K=8$.  ``asymmetry'' is the ratio of the two off-diagonal entries.}
+\label{tab:k1}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{3.25cm}
+                >{\raggedright\arraybackslash}p{2.0cm}
+                ccccc}
+\toprule
+setting & $\ell$, $d$ & balanced & intermediate richer & state richer & ratios & asymmetry \\
+\midrule
+degree-17, $K=1$, 16 bits & 0.3, 64 & $(8,8)$: \e{1.13}{-2} & $(6,10)$: \e{3.29}{-2} & $(10,6)$: \e{3.33}{-2} & 2.90, 2.94 & $1.01\times$ \\
+degree-17, $K=2$, 16 bits & 0.3, 64 & $(8,8)$: \e{1.03}{-2} & $(6,10)$: \e{3.38}{-2} & $(10,6)$: \e{8.32}{-2} & 3.29, 8.11 & $2.46\times$ \\
+quintic, $K=2$, 16 bits & 0.3, 64 & $(8,8)$: \e{1.09}{-2} & $(6,10)$: \e{3.79}{-2} & $(10,6)$: \e{1.67}{-2} & 3.48, 1.53 & $2.27\times$ \\
+quintic, $K=6$, 16 bits & 0.3, 64 & $(8,8)$: \e{1.21}{-2} & $(6,10)$: \e{4.04}{-2} & $(10,6)$: \e{1.78}{-2} & 3.33, 1.47 & $2.27\times$ \\
+real spectra, $K=8$, 32 bits & 0.15, $128\times32$ & $(16,16)$: \e{2.44}{-4} & $(8,24)$: \e{2.82}{-2} & $(24,8)$: \e{5.74}{-2} & 116, 236 & $2.03\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Critical safety $s^\star$: the smallest damping at which no run of the
+12-spectrum census diverges ($d\in\{48,64\}$, six seeds, $K=6$).  A dash marks a cell
+that is already stable at $s=1.0$; the last column is the measured
+$c=(s^\star-1)/2^{-p}$.}
+\label{tab:safety}
+\begin{tabular}{rccc c}
+\toprule
+$p$ & $\ell=10^{-1}$ & $\ell=10^{-2}$ & $\ell=10^{-3}$ & $c$ \\
+\midrule
+4  & 1.0028 & 1.0164 & 1.0313 & 0.04--0.50 \\
+5  & -- & 1.0053 & 1.0060 & 0.17--0.19 \\
+6  & -- & 1.0032 & 1.0047 & 0.20--0.30 \\
+8  & -- & 1.0002 & 1.0005 & 0.05--0.12 \\
+10 & -- & -- & 1.0001 & 0.08 \\
+12 & -- & -- & 1.00001 & 0.04 \\
+16 & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{The floor constant with the pair operator normalised by $\sqrt d$
+(\S\ref{sec:loop}): measured $(\mathrm{err}-E_K)/(u\,\hat v\norm{W}_F/\sqrt d)$ with
+$W=[1/(\sigma_i+\sigma_j)]$ and $\hat v=\norm{\hat M}_F/(\sqrt3 d)$, median over two
+$\ell$, two $p$ and three seeds per cell.  The last column is the held-out grid
+($\ell\in\{5\cdot10^{-2},3\cdot10^{-3}\}$, $p\in\{6,16\}$, other seeds, $d\in\{48,128\}$).
+The two columns after $d=256$ extend the same grid to four times its top, and at
+$d=768$ and $1024$ the two flat-start families read $7.94$/$7.93$ and $6.11$/$6.17$.
+Without the $\sqrt d$ these ratios fall with exponent $-0.42$ in $d$; weighting the
+operator by $\sigma_i\sigma_j/(\sigma_i+\sigma_j)$ instead spreads $65\times$
+($2.6\times$ worse out of sample) and normalising by its stable rank $136\times$
+($2.9\times$).}
+\label{tab:dsinv}
+\begin{tabular}{lcccccccc}
+\toprule
+family & $d=32$ & $d=48$ & $d=64$ & $d=128$ & $d=256$ & $d=384$ & $d=512$ & held out \\
+\midrule
+logspace & 6.64 & 6.77 & 6.96 & 7.33 & 7.64 & 7.76 & 7.75 & 6.96 \\
+two-plateau & 4.85 & 5.14 & 5.63 & 5.89 & 5.96 & 6.04 & 6.13 & 5.37 \\
+gap & 5.44 & 5.56 & 5.85 & 6.11 & 6.27 & 6.40 & 6.40 & 5.96 \\
+power & 5.30 & 6.00 & 6.50 & 7.35 & 7.25 & 7.49 & 7.74 & 6.26 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Four-bit repairs at $K=6$ with the shipped design, 12-spectrum census
+($d\in\{48,64\}$, six seeds).  ``blow-up'' counts runs whose state distance
+$\norm{X_K-UV^\top}_2$ exceeds $5$; ``floor'' is the median subspace error of the census
+(cap $2$); $s^\star$ is the smallest damping with no blow-up.  Each row names the
+precision of the slots in order; ``cast'' is the input quantisation, E4M3 is $p=5$ and
+bf16 $p=8$.}
+\label{tab:e5m2}
+\begin{tabular}{lcccccc}
+\toprule
+rule & blow-up & floor & floor & blow-up & floor & $s^\star$ \\
+     & $\ell=10^{-2}$ & $10^{-2}$ & $10^{-1}$ & $\ell=10^{-3}$ & $10^{-3}$ & $10^{-3}$ \\
+\midrule
+$p=4$, $s=1.01$ & 4/12 & 0.877 & 0.217 & 12/12 & 2.00 & 1.0313 \\
+$p=4$, $s=1.035$ & 0/12 & 0.841 & 0.221 & 0/12 & 2.00 & 1.0313 \\
+cast bf16 & 5/12 & 0.419 & 0.165 & 10/12 & 2.00 & 1.0235 \\
+cast, step 1 bf16 & 0/12 & 0.243 & 0.133 & 10/12 & 2.00 & 1.0221 \\
+cast, steps 1--2 bf16 & 0/12 & 0.146 & 0.114 & 5/12 & 0.537 & 1.0238 \\
+cast, step 1 E4M3 & 1/12 & 0.469 & 0.157 & 9/12 & 2.00 & 1.0219 \\
+cast, steps 1--2 E4M3 & 0/12 & 0.416 & 0.140 & 9/12 & 2.00 & 1.0221 \\
+E4M3 throughout & 0/12 & 0.411 & 0.107 & 0/12 & 1.92 & 1.0060 \\
+bf16 throughout & 0/12 & 0.049 & 0.014 & 0/12 & 0.283 & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The (format, step-count) grid.}  On \texttt{diabetes} (three seeds, 1200
+steps) the training MSE at K=2 is $1.71\times10^{-3}$ for bf16 (24 bits, update error
+$0.71$), $1.46\times10^{-3}$ for E4M3 (15 bits, $0.71$) and $2.14\times10^{-3}$ for E5M2
+at safety $1.035$ (12 bits, $0.73$); at K=4 they are $1.58$, $1.60$ and
+$1.62\times10^{-3}$, and no cell at $K\le4$ diverges.  Against the fp32 value $1.299\times10^{-3}$ the spread over the whole grid is
+a factor $1.65$, while the update error spans two orders of magnitude.
+
+\begin{table}[h]
+\centering
+\caption{The kernel inside training (\S\ref{sec:realtrain}).  Update error is the window
+error at the last probe, median over seeds; ``div'' counts weight blow-up
+($\max|W|>10^{3}$, reached before NaN).  Bits are the cast plus one stored width per
+step.  All rows are $400$ steps; the $1{,}200$-step census is Table~\ref{tab:census}.
+The E5M2 row at safety $1.01$ has no diabetes loss: all three runs stop.}
+\label{tab:realtrain}
+\begin{tabular}{lccccccc}
+\toprule
+condition & bits & upd.\ err & \texttt{digits} train & acc & div & \texttt{diabetes} train & div \\
+\midrule
+fp32              & 168 & $2.8\cdot10^{-14}$ & $5.84\cdot10^{-5}$ & $0.980$ & $0/5$ & $1.30\cdot10^{-3}$ & $0/3$ \\
+bf16              & 56  & $1.6\cdot10^{-2}$  & $5.79\cdot10^{-5}$ & $0.977$ & $0/5$ & $1.38\cdot10^{-3}$ & $0/3$ \\
+E4M3              & 35  & $1.2\cdot10^{-1}$  & $6.07\cdot10^{-5}$ & $0.980$ & $0/5$ & $1.46\cdot10^{-3}$ & $1/3$ \\
+E5M2, $s=1.01$    & 28  & $2.4\cdot10^{-1}$  & $7.39\cdot10^{-5}$ & $0.977$ & $2/5$ & --- & $3/3$ \\
+E5M2, $s=1.035$   & 28  & $2.5\cdot10^{-1}$  & $6.22\cdot10^{-5}$ & $0.980$ & $0/5$ & $1.57\cdot10^{-3}$ & $0/3$ \\
+hybrid, E5M2 body & 40  & $1.4\cdot10^{-1}$  & $5.77\cdot10^{-5}$ & $0.980$ & $0/5$ & $1.44\cdot10^{-3}$ & $0/3$ \\
+hybrid, E4M3 body & 44  & $7.3\cdot10^{-2}$  & $5.83\cdot10^{-5}$ & $0.977$ & $0/5$ & $1.42\cdot10^{-3}$ & $0/3$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Step count against precision on 80 real momentum matrices (\S\ref{sec:steps}),
+design window $\ell_0=10^{-2}$; bits are the input cast plus one stored width per step,
+and the error is the window error, median over the 80 matrices.  The last two rows are the
+hybrid rule of \S\ref{sec:fp8} at $K=6$.}
+\label{tab:steps}
+\begin{tabular}{llccc}
+\toprule
+format & $K$ & bits & window error & \\
+\midrule
+fp32    & 6 & 168 & $2.8\cdot10^{-14}$ & \\
+\midrule
+E5M2    & 2 & 12 & $7.35\cdot10^{-1}$ & \\
+        & 3 & 16 & $3.64\cdot10^{-1}$ & \\
+        & 4 & 20 & $2.49\cdot10^{-1}$ & \\
+        & 5 & 24 & $2.41\cdot10^{-1}$ & plateau \\
+        & 6 & 28 & $2.38\cdot10^{-1}$ & \\
+\midrule
+E4M3    & 3 & 20 & $3.13\cdot10^{-1}$ & \\
+        & 4 & 25 & $1.29\cdot10^{-1}$ & knee \\
+        & 5 & 30 & $1.24\cdot10^{-1}$ & plateau \\
+        & 6 & 35 & $1.25\cdot10^{-1}$ & \\
+\midrule
+bf16    & 2 & 24 & $7.17\cdot10^{-1}$ & \\
+        & 3 & 32 & $2.96\cdot10^{-1}$ & \\
+        & 4 & 40 & $2.43\cdot10^{-2}$ & knee \\
+        & 5 & 48 & $1.60\cdot10^{-2}$ & plateau \\
+        & 6 & 56 & $1.62\cdot10^{-2}$ & \\
+\midrule
+hybrid, E5M2 body & 6 & 40 & $1.45\cdot10^{-1}$ & \\
+hybrid, E4M3 body & 6 & 44 & $7.36\cdot10^{-2}$ & \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{The four rules of \S\ref{sec:rules}, the measurement behind each and its price.
+``bits'' is the width of the input cast plus one stored width per step; a named dynamic
+range means the logspace ladder at $d=64$, four seeds.}
+\label{tab:rules}
+\begin{tabular}{p{3.2cm}p{4.6cm}p{2.5cm}p{3.2cm}}
+\toprule
+decision & measurement & window error & cost \\
+\midrule
+stop at the plateau ($K=5$) & flat from $K=5$ in every format; sixth step $<1.5\%$; $78/80$ matrices prefer it & $1.60\cdot10^{-2}$ (bf16) & $+8$ bits, no gain \\
+buy steps, not precision & $40$-bit hybrid $1.45\cdot10^{-1}$ against bf16 $K=4$ $2.43\cdot10^{-2}$; one downgraded slot $2.7$--$12.6\times$ & $6\times$ at equal bits & $4$ bits per slot saved \\
+$p=4$ only with $s\ge1.035$ & blow-up $12/12\to0/12$ at $10^{-3}$; real data $6/11\to0/11$ at $400$ steps, $17/25$ at $1{,}200$ & cap $2.00$ in both & $+1.9\%$ at $10^{-1}$, $-4.1\%$ at $10^{-2}$ \\
+$\hat\ell\le\ell$ (halve $\sigma_{\min}$) & error $\le1.07\times$, $\le1$ extra step & --- & one extra step \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{fp8 against the same kernel with an unlimited exponent at the matched precision
+(\S\ref{sec:fp8}; median of five seeds, $d=64$, $K=6$).  ``E4M3 scaled'' uses
+per-tensor power-of-two scales; ``sub'' counts the stored singular directions of the
+start that fall below the format's smallest normal.  $\dagger$ marks a cell whose error
+sits at the cap $2$ that any pair of orthogonal factors obeys; at $\ell=1.3\times10^{-2}$
+E5M2 saturates $8192$ stored values.}
+\label{tab:fp8}
+\begin{tabular}{rrccccc}
+\toprule
+$\ell$ & $p=5$ ideal & E4M3 & E4M3 scaled & $p=4$ ideal & E5M2 & sub \\
+\midrule
+$0.15$   & \e{9.86}{-2} & \e{9.89}{-2} & \e{1.03}{-1} & \e{1.85}{-1} & \e{1.84}{-1} & 0 \\
+$0.1$    & \e{1.08}{-1} & \e{1.11}{-1} & \e{1.14}{-1} & \e{2.15}{-1} & \e{2.15}{-1} & 0 \\
+$3.6\cdot10^{-2}$ & \e{1.69}{-1} & \e{1.71}{-1} & \e{1.71}{-1} & \e{3.48}{-1} & \e{3.58}{-1} & 0 \\
+$1.3\cdot10^{-2}$ & \e{3.00}{-1} & \e{3.08}{-1} & \e{8.08}{-1} & $2.00^{\dagger}$ & $2.00^{\dagger}$ & 5 \\
+$4.8\cdot10^{-3}$ & \e{7.21}{-1} & \e{7.67}{-1} & \e{1.40}{0} & $2.00^{\dagger}$ & $2.00^{\dagger}$ & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Bootstrap 95\% percentile intervals (10\,000 resamples, fixed seed) on every
+ratio and constant the abstract and the introduction quote.  ``point'' is the statistic on the
+observed sample.  The 500-cell intervals are narrow because the formula reproduces that
+grid to three digits; the interval says the agreement is not carried by a few cells.}
+\label{tab:ci}
+\begin{tabular}{llcc}
+\toprule
+quantity & cells & point & interval \\
+\midrule
+certificate, err/pred median & 192 & 0.99 & $[0.98,1.00]$ \\
+certificate, worst deviation & 192 & $1.60$ & $[1.59,1.60]$ \\
+stopping rule, pred/meas median ($d=64$) & 90 & $1.11$ & $[1.07,1.14]$ \\
+stopping rule, pred/meas median ($d=128$) & 90 & $1.10$ & $[1.08,1.13]$ \\
+two-term formula, pred/meas median ($p=8$) & 500 & $1.0000$ & $[0.9999,1.0001]$ \\
+self-calibrated prediction, held out & 9 & $0.85$ & $[0.64,1.12]$ \\
+graded schedule, gain over uniform & 48 & $3.06$ & $[2.24,4.76]$ \\
+certificate on held-out shapes and spectra & 48 & $0.42$ & $[0.37,0.48]$ \\
+first-order formula on the same cells & 48 & $0.89$ & $[0.81,0.91]$ \\
+dimension-normalised constant, fit & 240 & $6.07$ & $[5.98,6.14]$ \\
+the same, held-out cells & 64 & $6.04$ & $[5.78,6.26]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Discretisation checks.}
+Two of the paper's quantities are produced by linear programs and one by integer
+rounding, so each could be an artefact of its grid.  (i) The minimax single-step error at
+$\ell=10^{-3}$ moves by $7.5\times10^{-4}$ (degree 5) and $2.2\times10^{-3}$ (degree 9)
+between $n=50$ and $n=3200$ grid points, and by $2\times10^{-5}$ between $n=1600$ and
+$n=3200$; degree 17 needs $n\ge400$ (a $5\%$ deviation at $n=50$, $1.9\times10^{-5}$ at
+$n=3200$), and the values quoted in the tables use $n\ge400$.  (ii) The last-step family's coefficients at $p'(1)=\lambda$ move by
+$5\times10^{-5}$ between $n=100$ and $n=1600$, and the argmin of $J$ over $\lambda$ is the
+same grid point on $n\in\{100,400,1600\}$ with $J$ changing by $4\times10^{-6}$.
+(iii) Against the exact integer optimum from a dynamic program over the $K+1$ slots, the
+largest-remainder schedule of \eqref{eq:maxform} is exactly optimal in 44 of the 48
+cells and within $1.47\times$ in the rest, so the quoted gain is not a rounding artefact.
+
+\paragraph{A verification in fp8.}
+Table~\ref{tab:fp8} also documents where the format leaves the law's domain: from
+$\ell=1.3\times10^{-2}$ downward the smallest stored directions are subnormal (5 of 64
+there, 14 at $4.8\times10^{-3}$), and below $\ell\approx6\times10^{-4}$ directions are
+flushed and the error sits at the cap in every format, including the unlimited-exponent
+one, because four significant bits are not enough for a dynamic range of $10^{3}$.

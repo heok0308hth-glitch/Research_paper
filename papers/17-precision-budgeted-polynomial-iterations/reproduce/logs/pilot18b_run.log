@@ -1,0 +1,101 @@
+====================================================================================================
+[1] the dimension-normalised constant over the 240 fit cells
+====================================================================================================
+  median 6.073  95% CI [5.980, 6.136]  n=240
+  cells inside +-25%: 89.2%   +-40%: 98.3%
+  cell range [4.050, 8.918]  (one-sided constant 8.918)
+   logspace: median 7.123 [6.904, 7.341]
+    plateau: median 5.584 [5.321, 5.702]
+        gap: median 5.897 [5.747, 6.027]
+      power: median 6.171 [6.040, 6.382]
+  family medians span 1.28x
+  d=  32: median 5.384 [5.230, 5.854]
+  d=  48: median 5.727 [5.471, 6.088]
+  d=  64: median 6.133 [5.961, 6.516]
+  d= 128: median 6.443 [6.101, 7.040]
+  d= 256: median 6.320 [6.113, 7.366]
+  d medians span 1.20x
+  p= 8 Fd: median 6.086 [5.933, 6.187]
+  p= 8  F: median 0.728 [0.675, 0.785]
+  p=12 Fd: median 6.053 [5.914, 6.200]
+  p=12  F: median 0.749 [0.667, 0.767]
+  cells lost to a blow-up: fit 0/240, held-out 0/64
+
+====================================================================================================
+[2] the extremes of the fit grid (where the 2.2x band comes from)
+====================================================================================================
+    4.050  plateau/d32/L0.01/p12/seed0  err 1.01e-02 EK 2.8e-14 u 2.4e-04
+    4.074  plateau/d32/L0.01/p8/seed2  err 1.63e-01 EK 2.8e-14 u 3.9e-03
+    4.165  plateau/d32/L0.01/p8/seed0  err 1.66e-01 EK 2.8e-14 u 3.9e-03
+    4.329  power/d32/L0.01/p12/seed1  err 1.08e-03 EK 2.8e-14 u 2.4e-04
+    4.524  plateau/d48/L0.01/p8/seed2  err 1.80e-01 EK 2.8e-14 u 3.9e-03
+    8.462  power/d256/L0.1/p12/seed0  err 7.32e-04 EK 6.7e-16 u 2.4e-04
+    8.574  power/d256/L0.1/p12/seed2  err 7.42e-04 EK 6.7e-16 u 2.4e-04
+    8.684  power/d256/L0.1/p8/seed0  err 1.20e-02 EK 6.7e-16 u 3.9e-03
+    8.769  power/d256/L0.1/p8/seed1  err 1.21e-02 EK 6.7e-16 u 3.9e-03
+    8.918  power/d256/L0.1/p8/seed2  err 1.23e-02 EK 6.7e-16 u 3.9e-03
+
+====================================================================================================
+[3] the held-out grid against the fit constant
+====================================================================================================
+  median 6.044 [5.776, 6.264]  = 0.995x the fit constant
+  cell range [3.701, 8.467], inside fit +-25%: 88%
+  the fit one-sided constant 8.918 covers the held-out max 8.467: True, conservatism 1.05x
+  held-out medians by (ell, p):
+   ell=  0.05 p= 6: median 5.958 n=16
+   ell=  0.05 p=16: median 6.075 n=16
+   ell= 0.003 p= 6: median 5.943 n=16
+   ell= 0.003 p=16: median 6.152 n=16
+
+====================================================================================================
+[4] E5M2 repairs: paired gain over the shipped p=4 rule
+====================================================================================================
+  ell= 0.1 p4_s1.020                  gain 0.97x [0.94,1.02]  paired median 0.97x improved 9/12
+  ell= 0.1 p4_s1.030                  gain 0.97x [0.93,1.00]  paired median 0.96x improved 10/12
+  ell= 0.1 p4_s1.035                  gain 0.98x [0.95,1.02]  paired median 0.99x improved 7/12
+  ell= 0.1 p4_s1.050                  gain 1.03x [0.99,1.06]  paired median 1.02x improved 4/12
+  ell= 0.1 p4_cast8_s1.010            gain 1.31x [1.26,1.37]  paired median 1.31x improved 0/12
+  ell= 0.1 p4_cast5_s1.010            gain 1.21x [1.16,1.25]  paired median 1.22x improved 0/12
+  ell= 0.1 p4_cast8_step1_8           gain 1.63x [1.58,1.72]  paired median 1.63x improved 0/12
+  ell= 0.1 p4_cast8_step12_8          gain 1.90x [1.85,1.98]  paired median 1.92x improved 0/12
+  ell= 0.1 p4_cast5_step1_5           gain 1.38x [1.33,1.42]  paired median 1.40x improved 0/12
+  ell= 0.1 p4_cast5_step12_5          gain 1.55x [1.48,1.59]  paired median 1.55x improved 0/12
+  ell= 0.1 p4_step1_8_cast4           gain 1.16x [1.12,1.20]  paired median 1.15x improved 0/12
+  ell= 0.1 p4_s1.020_cast5_step1_5    gain 1.35x [1.30,1.37]  paired median 1.34x improved 0/12
+  ell= 0.1 p5_s1.010                  gain 2.02x [1.93,2.06]  paired median 1.99x improved 0/12
+  ell= 0.1 p8_s1.010                  gain 15.74x [15.15,16.39]  paired median 16.00x improved 0/12
+  ell=0.01 p4_s1.020                  gain 1.03x [0.92,2.27]  paired median 1.04x improved 4/12
+  ell=0.01 p4_s1.030                  gain 1.04x [0.91,2.33]  paired median 1.04x improved 3/12
+  ell=0.01 p4_s1.035                  gain 1.04x [0.91,2.39]  paired median 1.06x improved 3/12
+  ell=0.01 p4_s1.050                  gain 1.15x [0.99,2.43]  paired median 1.09x improved 3/12
+  ell=0.01 p4_cast8_s1.010            gain 2.09x [0.38,4.80]  paired median 2.17x improved 4/12
+  ell=0.01 p4_cast5_s1.010            gain 1.65x [1.23,3.57]  paired median 1.55x improved 2/11
+  ell=0.01 p4_cast8_step1_8           gain 3.61x [3.16,8.31]  paired median 3.56x improved 0/12
+  ell=0.01 p4_cast8_step12_8          gain 5.99x [5.17,13.89]  paired median 6.06x improved 0/12
+  ell=0.01 p4_cast5_step1_5           gain 1.87x [1.61,4.44]  paired median 2.11x improved 0/12
+  ell=0.01 p4_cast5_step12_5          gain 2.11x [1.77,4.92]  paired median 2.22x improved 0/12
+  ell=0.01 p4_step1_8_cast4           gain 1.13x [1.02,2.51]  paired median 1.12x improved 1/12
+  ell=0.01 p4_s1.020_cast5_step1_5    gain 1.96x [1.67,4.50]  paired median 2.07x improved 0/12
+  ell=0.01 p5_s1.010                  gain 2.13x [1.81,4.98]  paired median 2.33x improved 0/12
+  ell=0.01 p8_s1.010                  gain 17.84x [15.48,40.26]  paired median 19.35x improved 0/12
+
+====================================================================================================
+[5] the floor at ell = 1e-3: the cap, per rule
+====================================================================================================
+  ship_p4_s1.010             at the cap 12/12  blow-ups 12/12  floor 2.000
+  p4_s1.020                  at the cap 12/12  blow-ups  1/12  floor 1.998
+  p4_s1.030                  at the cap 12/12  blow-ups  0/12  floor 2.000
+  p4_s1.035                  at the cap 12/12  blow-ups  0/12  floor 2.000
+  p4_s1.050                  at the cap 12/12  blow-ups  0/12  floor 1.999
+  p4_cast8_s1.010            at the cap 11/12  blow-ups 10/12  floor 2.000
+  p4_cast5_s1.010            at the cap 12/12  blow-ups 11/12  floor 2.000
+  p4_cast8_step1_8           at the cap  7/12  blow-ups 10/12  floor 1.998
+  p4_cast8_step12_8          at the cap  3/12  blow-ups  5/12  floor 0.537
+  p4_cast5_step1_5           at the cap 10/12  blow-ups  9/12  floor 2.000
+  p4_cast5_step12_5          at the cap 10/12  blow-ups  9/12  floor 2.000
+  p4_step1_8_cast4           at the cap 12/12  blow-ups 11/12  floor 2.000
+  p4_s1.020_cast5_step1_5    at the cap 11/12  blow-ups  2/12  floor 2.000
+  p5_s1.010                  at the cap 10/12  blow-ups  0/12  floor 1.923
+  p8_s1.010                  at the cap  0/12  blow-ups  0/12  floor 0.283
+
+wrote pilot18b_results.json

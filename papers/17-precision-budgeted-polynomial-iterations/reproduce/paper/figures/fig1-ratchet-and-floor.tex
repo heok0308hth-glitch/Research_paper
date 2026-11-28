@@ -1,0 +1,45 @@
+% The ratchet: the sensitivity of every prefix, and what it predicts.
+% Coordinates: figures/data/fig1-*.dat, written by data/make_figure_data.py from
+% pilot24_results.json (c_design, L0.001_K*) and pilot5c_results.json (grid_K*, shipped).
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.6cm},
+  width=0.47\linewidth, height=4.3cm,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  title style={font=\footnotesize},
+  legend style={font=\scriptsize, draw=none, fill=none},
+  axis line style={thick}, grid=major, grid style={densely dotted, black!18},
+]
+\nextgroupplot[
+  ymode=log, xmode=linear,
+  xlabel={prefix $t$}, ylabel={$S(t)$},
+  ymin=1e-3, ymax=3e3, xtick={1,2,3,4,5,6,7},
+  title={(a) prefixes of the $K=7$ design, $\ell=10^{-3}$},
+]
+\addplot[black, thick, mark=*, mark size=1.7pt]
+  table[x=t, y=S] {figures/data/fig1-ratchet-prefix.dat};
+\addplot[gray, dashed, thick] coordinates {(5,609.6) (5,0.0025)};
+\node[font=\scriptsize, anchor=west] at (axis cs:5.15,120) {terminal step};
+\node[font=\scriptsize, anchor=west] at (axis cs:5.15,2.5) {$p_K'(1)=0$};
+\node[font=\scriptsize, anchor=south west] at (axis cs:2.1,900) {ratchet $=610$};
+
+\nextgroupplot[
+  ymode=log,
+  xlabel={step budget $K$}, ylabel={error},
+  xmin=4.6, xmax=7.4, xtick={5,6,7}, ymin=2e-4, ymax=1,
+  title={(b) the floor, and the two predictions},
+  legend pos=south west, legend cell align=left,
+]
+\addplot[black, thick, mark=square*, mark size=1.7pt]
+  table[x=K, y=meas8] {figures/data/fig1-ratchet-floor.dat};
+\addplot[black, thick, mark=o, mark size=1.9pt, only marks]
+  table[x=K, y=meas11] {figures/data/fig1-ratchet-floor.dat};
+\addplot[gray, thick, dashed]
+  table[x=K, y=pred8ratchet] {figures/data/fig1-ratchet-floor.dat};
+\addplot[gray, thick, densely dotted, mark=triangle*, mark size=1.7pt]
+  table[x=K, y=pred8term] {figures/data/fig1-ratchet-floor.dat};
+\legend{measured $p=8$, measured $p=11$,
+  $0.142\,u\,S_{\mathrm{pert}}$, $0.142\,u\,S(K)$}
+\end{groupplot}
+\end{tikzpicture}

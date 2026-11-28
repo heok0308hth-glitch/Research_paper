@@ -1,0 +1,26 @@
+  prefix check vs pilot23: 24/24 agree
+
+==============================================================================================================
+the long census: 1,200 steps, 25 seeds, hazard per Muon call with 95% Wilson CI
+==============================================================================================================
+           diabetes_e5m2: 25/25 runs (rate 100.0%, CI 86.7-100.0%)  calls   2730  hazard 0.9158% [0.6211,1.3484]  1 in 109 calls
+     diabetes_e5m2_clamp:  0/25 runs (rate   0.0%, CI 0.0-13.3%)  calls  90000  hazard 0 (95% upper 0.0043%)
+     diabetes_e5m2_s1035:  0/25 runs (rate   0.0%, CI 0.0-13.3%)  calls  90000  hazard 0 (95% upper 0.0043%)
+             digits_e5m2: 25/25 runs (rate 100.0%, CI 86.7-100.0%)  calls  40002  hazard 0.0625% [0.0423,0.0922]  1 in 1600 calls
+       digits_e5m2_clamp:  0/25 runs (rate   0.0%, CI 0.0-13.3%)  calls 120000  hazard 0 (95% upper 0.0032%)
+       digits_e5m2_s1035: 17/25 runs (rate  68.0%, CI 48.4-82.8%)  calls  99822  hazard 0.0170% [0.0106,0.0273]  1 in 5872 calls
+
+  the hazard in blocks of 200 steps:
+           diabetes_e5m2: 25/ 2730(0.916%)   0/    0(0.000%)   0/    0(0.000%)   0/    0(0.000%)   0/    0(0.000%)   0/    0(0.000%)
+     diabetes_e5m2_s1035:  0/15000(0.000%)   0/15000(0.000%)   0/15000(0.000%)   0/15000(0.000%)   0/15000(0.000%)   0/15000(0.000%)
+             digits_e5m2:  3/19273(0.016%)  10/15740(0.064%)  11/ 4060(0.271%)   0/  800(0.000%)   1/  129(0.775%)   0/    0(0.000%)
+       digits_e5m2_s1035:  0/20000(0.000%)   0/20000(0.000%)   1/19876(0.005%)   5/17656(0.028%)   4/13653(0.029%)   7/ 8637(0.081%)
+
+  tests:
+                    e5m2: Fisher(run) p=None  exact(call) p=0.0  hazard ratio 14.65
+              e5m2_s1035: Fisher(run) p=0.0  exact(call) p=2.1e-05
+              e5m2_clamp: Fisher(run) p=None  exact(call) p=None
+           digits_safety: Fisher(run) p=0.004  exact(call) p=4.1e-05
+         diabetes_safety: Fisher(run) p=0.0  exact(call) p=0.0
+
+wrote pilot25_results.json

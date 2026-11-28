@@ -1,0 +1,175 @@
+\section{The Certificate and the Subspace Floor}
+\label{sec:cert}
+
+\subsection{The sensitivity indicator and the two-term law}
+\label{sec:thmcert}
+
+\begin{proposition}[Two-term law: an empirical predictive model]
+\label{thm:cert}
+Let the design have exact error $E_K$ and prefix ratchet $S_{\mathrm{pert}}(K)$ as
+in \S\ref{sec:prelim} and Definition~\ref{def:ratchet}, and let the state and the
+intermediate $B$ be stored with $p$ significant bits, $u = 2^{-p}$, in a kernel whose
+exponent range does not bind.  Then
+\begin{equation}
+\mathrm{err} \;\approx\; E_K \;+\; c\,u\,S_{\mathrm{pert}}(K) \;+\; O(u^2),
+\qquad c = 0.142,
+\label{eq:cert}
+\end{equation}
+to within a factor $1.6$ in all 192 conditions of the design family (worst deviation
+$1.60$, CI $[1.59,1.60]$), and the error after the stopping point is within
+$0.76$--$1.46\times$ of the prediction over a 90-cell sweep of dynamic ranges
+$\ell\in[10^{-4},10^{-1}]$, precisions $p\in[4,24]$ and $d\in\{64,128\}$ (median ratio
+$1.10$, CI $[1.07,1.14]$).
+\end{proposition}
+
+We call this a proposition deliberately: $c$ is a calibration and the expression a law
+fitted and tested, not a theorem with a controlled remainder.  A
+theorem of the same shape exists --- $(2K+1)\,u\,S_{\mathrm{pert}}$ bounds the
+singular-value channel with no calibration, and the subspace channel with the
+off-diagonal gain in place of $p'$ (Proposition~\ref{prop:ratchet}) --- and the gap
+between them is the calibration: the off-diagonal gain of a step is not dominated by its
+derivative, so $c=0.142$ compresses a bound by two orders of magnitude.  The
+first term is the exact error a design optimizes, the second the floor; the second is flat
+in $K$ and the first falls geometrically, so their sum has an interior minimum, where the
+shipped step counts sit.
+
+\begin{table}[t]
+\centering
+\caption{Certificate against measurement.  Shipped design, $\ell=10^{-3}$,
+$d=64$, $K=6$, $E_6 = 1.623\times10^{-3}$, $S_{\mathrm{pert}}(6) = 609.6$; $q$ is
+the input cast and both intermediate roundings.  Ratio $=$ predicted/measured.}
+\label{tab:cert}
+\begin{tabular}{rrrr}
+\toprule
+$p$ & measured & predicted & ratio \\
+\midrule
+6  & 1.66          & 1.35          & 0.82 \\
+7  & \e{6.15}{-1}  & \e{6.78}{-1}  & 1.10 \\
+8  & \e{2.63}{-1}  & \e{3.40}{-1}  & 1.29 \\
+9  & \e{1.98}{-1}  & \e{1.71}{-1}  & 0.86 \\
+10 & \e{8.36}{-2}  & \e{8.62}{-2}  & 1.03 \\
+11 & \e{3.39}{-2}  & \e{4.39}{-2}  & 1.29 \\
+12 & \e{1.89}{-2}  & \e{2.28}{-2}  & 1.20 \\
+14 & \e{5.14}{-3}  & \e{6.91}{-3}  & 1.34 \\
+16 & \e{2.31}{-3}  & \e{2.94}{-3}  & 1.28 \\
+20 & \e{1.64}{-3}  & \e{1.71}{-3}  & 1.04 \\
+24 & \e{1.62}{-3}  & \e{1.63}{-3}  & 1.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three regimes fit (Table~\ref{tab:cert}, ratios $0.82$--$1.34$): the floor
+dominates at $p\le8$, the exact error at $p\ge20$; at $p=4$ the model predicts
+non-convergence and the measurement diverges.
+
+\subsection{The exact iteration preserves the singular subspace}
+\label{sec:invariance}
+
+\begin{theorem}[Invariance]
+\label{thm:invariance}
+Let $p(x) = ax+bx^3+cx^5$ with real coefficients and
+$P(X) = aX + b(XX^\top)X + c(XX^\top)^2X$.  If $X = U\Sigma V^\top$ is full rank
+and $p(\sigma_i)\neq0$ for all $i$, then $P(X) = U\,p(\Sigma)\,V^\top$ and hence
+$\polar(P(X)) = UV^\top = \polar(X)$.  The same holds for any composition $P_K$ of
+such steps with different coefficients.
+\end{theorem}
+
+\begin{proof}
+$XX^\top = U\Sigma^2U^\top$, so $(XX^\top)X = U\Sigma^3V^\top$ and
+$(XX^\top)^2X = U\Sigma^5V^\top$; summing gives
+$U(a\Sigma+b\Sigma^3+c\Sigma^5)V^\top = Up(\Sigma)V^\top$, whose polar factor is
+$UV^\top$ whenever all $p(\sigma_i)$ are positive.  Induct over the composition.
+\qed
+\end{proof}
+
+\begin{corollary}[Why the floor is flat]
+\label{cor:flat}
+For the $p$-bit orbit $X_t = q(P_t(X_{t-1}),p)$, $\mathrm{sub}_{\mathrm{err}} =
+\norm{\polar(X_K) - \polar(X_0)}$: the exact part of the iteration contributes
+exactly zero to the subspace error.  Hence (i) the subspace floor does not fall with
+$K$, (ii) it does not depend on the design, and (iii) it does not depend on how bits
+are spread over the steps --- it is decided by the first quantisation of a state
+whose spectrum spans $[\ell,1]$.
+\end{corollary}
+
+In exact arithmetic the polar factor stays fixed to $4\times10^{-14}$ at $\ell=10^{-3}$
+over the whole orbit, and a known rotation between the two trailing singular directions is
+transported unchanged through six steps: the earlier contraction--reinjection picture
+bounds the singular-value part only.
+
+\subsection{The size of the floor: a first-order formula}
+\label{sec:firstorder}
+
+By Corollary~\ref{cor:flat} the subspace error is the response of the polar factor
+to the perturbation $E = q(\hat M,p) - \hat M$ of the start.
+
+\begin{theorem}[Polar response to a perturbation]
+\label{thm:firstorder}
+Let $\hat M = U\Sigma V^\top \in \R^{m\times n}$ have full column rank, $m\ge n$,
+$\sigma_{\min}(\hat M) = \ell$, let $E$ be a perturbation and $F = U^\top E V$.
+Then
+\begin{equation}
+\begin{aligned}
+\polar(\hat M + E) - \polar(\hat M)
+=\;& \underbrace{U\left[\frac{F_{ij}-F_{ji}}{\sigma_i+\sigma_j}\right]_{ij} V^\top}_{\text{rotation inside } \operatorname{range}(U)}
+\;+\; \underbrace{(I_m - UU^\top)\,E\,(\hat M^\top\hat M)^{-1/2}}_{\text{rotation of } \operatorname{range}(U)}
+\;+\; O(\norm{E}^2).
+\end{aligned}
+\label{eq:firstorder}
+\end{equation}
+For square $\hat M$ the second term vanishes identically and
+\eqref{eq:firstorder} reduces to the single term used in the synthetic tests; for
+$m<n$ the same statement holds with $U$ and $V$ exchanged.
+\end{theorem}
+
+\begin{proof}
+Perturb $\Sigma \to \Sigma + tF$ and write the first-order SVD as
+$(I+t\Omega_u)(\Sigma+tD)(I+t\Omega_v)^\top$ with $\Omega_u,\Omega_v$ skew.  Matching
+off-diagonal entries gives $(\Omega_u-\Omega_v)_{ij} = (F_{ij}-F_{ji})/(\sigma_i+\sigma_j)$,
+and the polar factor is $(I+t\Omega_u)(I+t\Omega_v)^\top$; this covers the part of $E$
+inside $\operatorname{range}(U)\times\R^n$.  For the complement, the differential of
+$\polar(A) = A(A^\top A)^{-1/2}$ has a summand inside $\operatorname{range}(U)$ and a
+first that contributes $(I_m-UU^\top)E(\hat M^\top\hat M)^{-1/2}$.  \qed
+\end{proof}
+
+Three consequences matter.  The \emph{symmetric part of a perturbation does not move the
+polar factor}, and the in-subspace gain peaks at $1/(2\ell)$, so quantisation is expensive
+only while the spectrum is wide.  The \emph{projected term is not damped pair by pair}:
+it carries $\norm{E}/\ell$ in any direction and is absent from every square test.  And the first term is the fixed operator $T(e_{ij})=(\sigma_i+\sigma_j)^{-1}(e_{ij}-e_{ji})$,
+answered by $2\sqrt2\,\rho\norm{W}_F/\sqrt d$ for an exchangeable perturbation
+(Appendix~\ref{app:constant}).
+
+Across the grid the prediction is within $10\%$ in 52 of 54 cells
+(Table~\ref{tab:firstorder}) and $\norm{E}_2/u$ is measured $0.46$--$0.89$.  The grid is square and a Muon update is not: on the 500 real momentum
+matrices the projected term is larger than the in-subspace one by a median $2.77$
+(\S\ref{sec:loop}), so the floor is set by the rotation of the column space, not by the
+damping of the pair weights.
+
+\begin{corollary}[Scale, and what the exponent $0.73$ was]
+\label{cor:scale}
+$\mathrm{sub}_{\mathrm{err}} \le (\norm{\skewop F}_2 + \norm{E}_2)/\ell$, so
+$\mathrm{sub}_{\mathrm{err}} = \Theta(u/\ell)$ while the response is unsaturated and
+$\norm{E}_2 = \Theta(u)$: both terms of \eqref{eq:firstorder} are bounded by
+$\norm{E}_2/\ell$, the first because $1/(\sigma_i+\sigma_j)\le1/(2\ell)$, the second
+because $\norm{(\hat M^\top\hat M)^{-1/2}}_2 = 1/\ell$.
+\end{corollary}
+
+The measured $C(\ell)$ follows \eqref{eq:firstorder} over four decades (predicted over
+measured $0.49$--$1.06$ at $d=64$, $p=12$), but its log--log fit is not a power law: the
+local slope rises from $0.2$ to $1.17$, and $-0.73$ is the chord of that crossover.
+Appendix~\ref{app:bound} has the matrix-free bound and the impossibility of a spectral one.
+
+\subsection{Consequences for the budget and how they fail}
+\label{sec:consequences}
+
+The floor is the sum of the responses to the per-slot roundings, each amplified at the
+spectrum the state has when it happens, so allocation reduces to the per-slot
+gains $\kappa_t$ (\S\ref{sec:alloc}); a step pays only while the exact error falls faster
+than a floor that does not fall with $K$ --- and on real spectra one step before the
+shipped count (\S\ref{sec:steps}).
+
+\label{sec:failures}
+Four failures are kept in the text: saturation (at $\mathrm{sub}_{\mathrm{err}}=2$,
+\eqref{eq:firstorder} over-predicts by $2.9\times$), a calibrated constant with a
+$2.1$--$14\times$ loose matrix-free bound (Appendix~\ref{app:bound}), no design lever
+(Appendix~\ref{sec:design}), and a loss that is not a meter (\S\ref{sec:realtrain}).

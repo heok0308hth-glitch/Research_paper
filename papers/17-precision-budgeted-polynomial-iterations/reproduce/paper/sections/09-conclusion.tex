@@ -1,0 +1,38 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+The coefficients of a minimax polynomial iteration are chosen for exact arithmetic, and
+the iteration does not run in it.  Storing the state and the intermediate in $p$ bits adds
+a floor $c\,u\,S_{\mathrm{pert}}(K)$, $u=2^{-p}$; with the exact error it predicts the
+measured error to a median ratio of $1.10$ over 90 cells, and survives bf16, fp8's
+exponent range and three other kernels up to the constant.
+
+The floor is not a balance of contraction and reinjection but a subspace error: the exact
+iteration preserves the polar factor, so no step count, design or schedule can undo an
+error created at the first quantisation.  A first-order formula gives that error its size: for a square state the
+pair weights $1/(\sigma_i+\sigma_j)$ say which roundings are expensive, and for the
+rectangular state a Muon update actually is, the rotation of the column space dominates,
+without which the prediction is off by $2.8\times$ in all 500 real momentum matrices.
+The one constant left is a geometric factor of the spectrum, which a four-block
+variance-profile operator reproduces to $1.2\%$ from the spectrum alone.
+
+Three consequences follow, each measured at equal cost.  A target accuracy is met by the
+first $K$ whose law value is below it, with no overshoot beyond $1.16\times$ in 62 cells,
+while the crossing reading of the same law loses up to three orders of magnitude.  Bits go
+where the max of the per-slot gains puts them, a median $3.06\times$ where the dynamic
+range is wide.  Yet on real momentum the decision that pays is earlier: the fifth
+step is a plateau, the sixth spends eight bits for under $1.5\%$, and at equal bits a
+four-step bf16 update beats the mixed-precision rule sixfold, an advantage of the
+$\sigma_{\max}$-anchored window rather than of the arithmetic.  Inside training the loss
+registers none of this --- the update error spans $1.6\times10^{-2}$ to $0.73$ while the
+loss moves by $1.65\times$ --- and what separates runs is survival: the state's top leaves
+its certified window inside one call, and a safety factor of $1.035$ widens that tolerance
+sixfold and lowers the hazard of a call $4$--$200\times$.  That is margin, not immunity:
+at $1$ in $1{,}600$ calls the shipped safety cannot outlast a long run, and only keeping the
+state inside its window left no failure in $210{,}000$ calls.
+
+What is missing is a tight matrix-free certificate, an online rule for the budget, and a
+demonstration at scale.  The claim is narrower than a new algorithm: the precision floor of an orthogonalization
+step is predictable from the coefficients before the step runs, and the daily decisions
+--- how many steps, where the bits go, whether to mix them, how much damping --- follow
+from it.

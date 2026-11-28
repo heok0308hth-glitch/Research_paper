@@ -1,0 +1,45 @@
+% One call of the iteration that escapes, and the excess a window tolerates.
+% Coordinates: figures/data/fig2-*.dat, written by data/make_figure_data.py from
+% pilot23_results.json (e_escape_traces.diabetes_s0_e5m2: exact, tops, u; w_windows).
+\begin{tikzpicture}
+\begin{groupplot}[
+  group style={group size=2 by 1, horizontal sep=1.7cm},
+  width=0.47\linewidth, height=4.3cm,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  title style={font=\footnotesize},
+  legend style={font=\scriptsize, draw=none, fill=none},
+  axis line style={thick}, grid=major, grid style={densely dotted, black!18},
+]
+\nextgroupplot[
+  ymode=log,
+  xlabel={step of the call}, ylabel={largest singular value},
+  xmin=-0.3, xmax=6.3, xtick={0,1,2,3,4,5,6},
+  ymin=0.5, ymax=1e47,
+  title={(a) E5M2, safety $1.01$: one escape},
+  legend pos=north west, legend cell align=left,
+]
+\addplot[black, thick, mark=o, mark size=1.6pt]
+  table[x=step, y=exact] {figures/data/fig2-escape.dat};
+\addplot[black, thick, dashed, mark=square*, mark size=1.7pt]
+  table[x=step, y=e5m2] {figures/data/fig2-escape.dat};
+\addplot[gray, thick, densely dotted, mark=triangle*, mark size=1.6pt]
+  table[x=step, y=edge] {figures/data/fig2-edge.dat};
+\legend{exact arithmetic, E5M2, window edge}
+
+\nextgroupplot[
+  xlabel={safety $s$}, ylabel={admissible excess $\delta^\star$},
+  xmin=0.995, xmax=1.055, ymin=0, ymax=0.072,
+  xtick={1.0, 1.02, 1.035, 1.05},
+  title={(b) the start excess a window tolerates},
+  legend pos=north west, legend cell align=left,
+]
+\addplot[black, thick, mark=square*, mark size=1.6pt]
+  table[x=safety, y=delta4] {figures/data/fig2-delta.dat};
+\addplot[black, thick, dashed, mark=o, mark size=1.6pt]
+  table[x=safety, y=delta5] {figures/data/fig2-delta.dat};
+\addplot[gray, thick, dotted, mark=triangle*, mark size=1.7pt]
+  table[x=safety, y=delta8] {figures/data/fig2-delta.dat};
+\legend{E5M2 ($p=4$), E4M3 ($p=5$), bf16 ($p=8$)}
+\end{groupplot}
+\end{tikzpicture}

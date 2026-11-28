@@ -1,0 +1,249 @@
+\section{Experiments}
+\label{sec:exp}
+
+Every number here and in \S\ref{sec:cert}--\S\ref{sec:alloc} is a field of a JSON file
+written by a script of Appendix~\ref{app:repro}; every median the abstract repeats carries
+a bootstrap interval (Table~\ref{tab:ci}).  The synthetic family is $M = U\Sigma V^\top$
+with random orthogonal $U,V$ and $\Sigma$ logspace from $1$ to $\ell$: $d\in\{32,64,128\}$,
+$\ell\in[3\cdot10^{-5},3\cdot10^{-1}]$, $p\in\{4,\dots,24\}$, the shipped quintic unless
+stated.  Two sets leave it: the momentum of a real Muon loop (500
+matrices, \S\ref{sec:realmomentum}) and training itself (\S\ref{sec:realtrain}) ---
+five-layer and residual MLPs on \texttt{digits}, a four-layer MLP on \texttt{diabetes},
+Frobenius input normalisation, per-sample LayerNorm, momentum $0.95$ Nesterov,
+$\ell_0=10^{-2}$, $K=6$ --- where the error is read on the design window, the directions
+with $\sigma\ge0.05\norm{M}_F$, because the full-spectrum error is truncation.
+
+\subsection{The floor, the certificate, and their scaling}
+
+The floor is flat in $K$ and linear in $u$: between $p=10$ and $p=12$ the
+$\ell=10^{-2}$ floor falls $3.75\times$ for a $4\times$ fall in $u$; and divergence is not
+only a precision effect --- the undamped minimax sequence on a $d=64$ matrix reaches
+$1.9\times10^{6}$ at bf16, $K=7$, where fp16 gives $0.0124$.
+
+The certificate is only as good as its indicator, and the indicator's terminal value is
+not usable (Fig.~\ref{fig:ratchet}).  At $\ell=10^{-3}$ the last step of the $K=7$ design
+has $p'(1)=0$: $S(7)=2.5\times10^{-3}$ predicts $5.5\times10^{-4}$ where $0.258$ is
+measured, while the ratchet stays at $610$ and puts the law at $0.34$; the floor moves
+$1.5\times$ from $K=5$ to $K=7$ while the terminal sensitivity falls $609$-fold.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig1-ratchet-and-floor}
+\caption{The ratchet against the terminal sensitivity (\texttt{pilot24}, \texttt{pilot5c}).
+(a) The sensitivity of every prefix of the shipped $K=7$ design at $\ell=10^{-3}$: it peaks
+at $610$ at $t=5$ and the sixth step returns it to $2.5\times10^{-3}$.  (b) The measured
+floor at $d=64$ (markers) against $0.142\,u\,S_{\mathrm{pert}}(K)$, which is flat, and
+$0.142\,u\,S(K)$, which collapses; $p=11$ is $2.8$--$7.8\times$ lower with the same shape.}
+\label{fig:ratchet}
+\end{figure}
+
+\subsection{Where the floor lives: the real momentum spectra}
+\label{sec:realmomentum}
+
+A two-layer MLP (input 32, hidden 128, 10 classes, synthetic teacher labels) trains for
+500 steps with Muon on the hidden weight; we record all 500
+momentum matrices ($128\times32$) in exact arithmetic and replay each through the $p$-bit
+kernel (median dynamic range $0.150$).
+
+\begin{table}[t]
+\centering
+\caption{Theorem~\ref{thm:firstorder} on the 500 momentum matrices of a Muon loop
+($128\times32$, $K=8$, design window $0.150$).  ``in-subspace'' uses only the first
+term of \eqref{eq:firstorder}; ``two-term'' adds
+$(I-UU^\top)E(\hat M^\top\hat M)^{-1/2}$.  Direction error is
+$\norm{\Delta_{\mathrm{pred}}-\Delta_{\mathrm{true}}}_2/\norm{\Delta_{\mathrm{true}}}_2$.}
+\label{tab:real500}
+\begin{tabular}{rcccccc}
+\toprule
+$p$ & in-subspace & two-term & within $10\%$ & direction error & $\norm{\text{term}_2}/\norm{\text{term}_1}$ & median $C\ell$ \\
+\midrule
+8  & $0.352$ & $1.000\ [0.994,1.006]$ & $500/500$ & $0.011$ & $2.77$ & $0.351$ \\
+11 & $0.352$ & $1.000\ [0.999,1.001]$ & $500/500$ & $0.001$ & $2.77$ & $0.350$ \\
+16 & $0.353$ & $1.000\ [1.000,1.000]$ & $500/500$ & $0.000$ & $2.75$ & $0.348$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+With both terms the prediction is within $0.6\%$ in all 500 cells at $p=8$ and $0.1\%$ at
+$p=16$; with the in-subspace term alone it is $0.35\times$ the measurement, the residual
+scaling as $u^{2.04}$.  On $64\times64$ and both rectangular orientations it is within
+$0.3\%$ at $\ell=10^{-1}$.
+
+\subsection{Inside the loop, and outside the fitted spectra}
+\label{sec:loop}
+
+\emph{The predictions survive the loop.}  Over 108 coupled runs (six precisions, three
+stopping policies, three seeds, two windows) none diverged, and
+$\mathrm{Spearman}(\log\text{pred},\log\text{orth}) = +0.93$ against $-0.05$ for best
+validation loss: the law predicts the arithmetic, not the loss.
+
+\emph{The constant is a calibration (held-out shapes and spectra).}  On the logspace control the ratio of \eqref{eq:cert} to measurement
+is $0.43$--$0.97$; on a two-plateau spectrum the same constant under-states the error by
+$4$--$5\times$ (\S\ref{sec:limitations}).  The first-order formula transfers where the
+constant does not ($0.51$--$0.98$, median $0.89$), and the ratchet is identical in all four
+families at fixed $\ell$: the law's domain is a spectrum family as much as a precision.
+\emph{A dimension-invariant form.}  Dividing the spectrum-only proxy
+$\hat v\norm{W}_F$ ($W=[1/(\sigma_i+\sigma_j)]$, $\hat v=\norm{\hat M}_F/(\sqrt3 d)$) by
+$\sqrt d$ leaves one number: $6.07\,u\,\hat v\norm{W}_F/\sqrt d$ at the median over 240
+cells (CI $[5.98,6.14]$), $89\%$ inside $\pm25\%$, $6.04$ on 64 held-out cells
+(Table~\ref{tab:dsinv}).  Its two factors are \S\ref{sec:profile}: a derived $2\sqrt2$
+and the spectrum's own $g$.
+
+\subsection{The participation factor, closed}
+\label{sec:profile}
+
+For a state of spectrum $s$ let $D_{ij}=1/(s_i+s_j)$ and, for an exchangeable $F$ with
+unit entry rms, $g(s)=\norm{(F-F^\top)\circ D}_2/(2\sqrt2\,\norm{D}_F/\sqrt d)$; $g=1$ is
+the exchangeable prediction.  Over 180 cells (four families, three $\ell$,
+$d=64$--$1024$, three seeds) $g$ is $1.31$ at the median (range $0.98$--$2.10$), and it is
+the edge of a variance-profile Wigner operator: coarse-grain $V=2D^2$ into $K$ contiguous
+blocks of equal count, $B_{kl}=\overline{V}_{kl}\sqrt{m_km_l}$, read
+$2\sqrt{\lambda_{\max}(B)}$.
+\footnote{Forming $D$ and $B$ is $O(d^2)$ arithmetic on $d^2$ numbers, so $g$ is a
+quantity computed from the spectrum, not a matrix-free sensor: the bound that needs no
+spectrum is \eqref{eq:bound}.}
+At $K=1$ this returns $2\sqrt2$ exactly; at $K=4$ it lands
+within $1.2\%$ of $g$ at the median ($97\%$ of 120 cells inside $\pm10\%$; at
+$K=d$, $3.6\%$); a participation-ratio guess misses by $11\times$.  The earlier negative
+was this operator with a $\sqrt d$ misplaced.  It follows the decades a spectrum spans,
+not $d$: at fixed (family, $\ell$), $g(1024)/g(64)$ spans $0.87$--$1.23$ (median $1.06$),
+so the earlier drift compared different $\ell$.  It does not follow the loop: giving each
+of the $13$ roundings the one-step law of its state over-predicts the measured floor by
+$1.27$--$2.36\times$, while the quadrature of the $13$ linearised responses matches it to $0.92$--$1.12$ (median $1.03$) over 96 cells that
+reach $d=512$ and $97\%$ of them within $\pm10\%$; the responses have mean $|\cos|$ $0.02$
+and $84\%$ of the sum is on the input cast.  The multiplicity is counted, not modelled
+(Appendix~\ref{app:constant}).
+
+\subsection{Real training: a flat loss and a sharp boundary}
+\label{sec:realtrain}
+
+To see whether the frozen-trajectory picture survives a loop that reacts, we run the
+kernel inside training on \texttt{digits} (a five-layer MLP $64\to128^4\to10$, five seeds,
+and a two-block residual MLP, three) and on \texttt{diabetes} (a four-layer regression MLP,
+three), Muon on every hidden weight (seven conditions, Table~\ref{tab:realtrain}).
+
+\emph{The loss does not move.}  On \texttt{digits} the training loss spans
+$5.77$--$7.39\times10^{-5}$ and the accuracy $0.977$--$0.980$ over all seven
+conditions; on \texttt{diabetes} the MSE spans $1.30$--$1.57\times10^{-3}$, and at
+twelve bits (E5M2, $K=2$) an update error of $0.73$ still costs $1.65\times$ the fp32 MSE
+(Appendix~\ref{app:constant}).
+
+\emph{What does move is stability.}  At the shipped safety E5M2 blows up in $6$ of $11$
+seed-runs within $400$ steps (digits $2/5$, residual $1/3$, diabetes $3/3$), E4M3 once, and
+nothing else; over $1{,}200$ steps and $25$ seeds every E5M2 run at $1.01$ fails in both
+tasks, as does $17$ of $25$ at $1.035$ on \texttt{digits} (Table~\ref{tab:census}).  The
+format is not quantising badly (flushed values have median $0$ and E5M2's relative error
+is $5.3\%$, what four bits imply): the mode is dynamical and completes inside one call
+(\S\ref{sec:escape}).
+
+\subsection{Why a run escapes: one call, one window edge}
+\label{sec:escape}
+
+The failure is not a training instability: in each failing run the weights
+move by $1$--$2\%$ per step and then, inside one call, the norm jumps by twenty
+orders of magnitude (diabetes, seed 0, step 24: $\norm{O}_F=4.9\times10^{44}$).  The
+state's top within that call traces the escape (Fig.~\ref{fig:escape}a): the exact orbit
+lands on the certified edge of each of the six steps, the E5M2 orbit
+leaves it at step 2, and all four instrumented runs repeat the trace.  A rounding of a
+tenth of a percent at step 1 lands the state past the quintic's extremum, step 2 returns it
+$14\%$ above its edge instead of below, and beyond the edge the
+gain is $2.2\times$ at $1.5$ times the edge and $9.3\times$ at twice.
+
+Two counterfactuals change one thing: rescaling the state into its window whenever a step
+would leave it makes all $50$ long runs finish, while a $10\%$ cut in the learning rate
+leaves $7$ of $11$ failing.  The mode is the escape, not the step
+size; the curvature loop is excluded directly: with
+$G=\lambda_{\max}(\mathrm{diag}(\mathrm{step})^{1/2}H\,\mathrm{diag}(\mathrm{step})^{1/2})$
+from power iteration on Hessian-vector products, $G>1$ on no trajectory (median
+$\le0.26$, max $0.83$ in five of six).  What the safety buys is the excess a window
+tolerates: $0.0075$ at $1.01$ and $0.048$ at $1.035$ for four bits, the critical safety
+$1+c\,u$ of \S\ref{sec:fp8} with $c\approx0.5$ (Fig.~\ref{fig:escape}b), for $0.4\%$ of
+the update's Frobenius norm.
+
+\emph{The risk is per call, and it grows.}  Over $1{,}200$ steps and $25$ seeds
+(Table~\ref{tab:census}) one call at the shipped safety fails at $1$ in $1{,}600$ on
+\texttt{digits} and $1$ in $109$ on \texttt{diabetes} ($14.7\times$, call-level exact
+$p=3.5\cdot10^{-17}$), while both fail $25$ of $25$ runs: the run count cannot show the
+difference.  The hazard rises --- on \texttt{digits} from $1$ in $6{,}400$ in the first two
+hundred steps to $1$ in $370$ in the fourth and fifth hundreds.  At $1.035$ it falls to $1$
+in $5{,}900$ on \texttt{digits} and to none in $90{,}000$ calls on \texttt{diabetes}; the
+clamp leaves none in $210{,}000$ calls of either.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig2-escape-phase}
+\caption{Why a call escapes, and what damping buys (\texttt{pilot23}).
+(a) \texttt{diabetes}, seed $0$, layer $0$, step $24$: the exact largest singular value
+follows the certified upper edge of each step ($1.00$, $1.92$, $1.71$, $1.29$, $1.02$,
+$1.00$), the E5M2 orbit leaves it at step $2$ and climbs $44$ decades in four steps.
+(b) The largest start excess $1+\delta^\star$ a window tolerates, per step: $0.0075$ at
+$s=1.01$ for four bits and $0.048$ at $1.035$, across which the $400$-step census goes from
+$6$ failures to none and the $1{,}200$-step hazard on \texttt{digits} from $1$ in $1{,}600$
+to $1$ in $5{,}900$ calls.}
+\label{fig:escape}
+\end{figure}
+
+\subsection{The step budget on real spectra}
+\label{sec:steps}
+
+The decisions of \S\ref{sec:alloc} are about where bits go; the one a kernel makes first
+is how many steps to run.  Table~\ref{tab:steps} (appendix) sweeps it on 80 momentum
+matrices of a five-layer \texttt{digits} run ($128\times128$ and $128\times64$, sampled
+every 20 steps) in the design window $\ell_0=10^{-2}$; bits are the input cast plus one
+stored width per step.  Fig.~\ref{fig:pareto} is the same sweep read against the budget.
+
+\emph{The step budget.}  In every format the window error stops falling at $K=5$: the
+sixth step spends eight bits for under $1.5\%$, and the smallest count within $1.15\times$
+of its best error is $K=5$ for $69$ of $80$ matrices and $K=4$ for the rest.  Downgrading a slot is never the
+cheaper trade: E5M2 on one slot of a six-step bf16 run multiplies the error by $5.5$ at
+the first step and $12.6$ at the second, and dropping the sixth step saves eight bits for
+nothing.
+
+\emph{Mixing precision is dominated.}  The $40$-bit hybrid errs by $1.45\times10^{-1}$,
+six times worse than bf16 at four steps for the same bits ($2.43\times10^{-2}$), and its
+E4M3 body ($44$ bits, $7.36\times10^{-2}$) is still three times worse; a five-step E4M3
+update spends $30$ bits for $1.24\times10^{-1}$.  The frontier is (E5M2, $K=4$), (E4M3,
+$K=4$--$5$), (bf16, $K=4$--$5$): the $40$-bit and $44$-bit hybrids are on none of it
+(Fig.~\ref{fig:pareto}), and
+the window where they are not dominated is in \S\ref{sec:fp8}.
+
+\begin{figure}[t]
+\centering
+\input{figures/fig3-pareto-frontier}
+\caption{The bit budget against the window error on the 80 momentum matrices of
+Table~\ref{tab:steps} (\texttt{pilot21}).  Lines are the three formats at $K=2$--$6$;
+diamonds are the mixed rule at $K=6$ (seven E5M2-body and seven E4M3-body splits, the
+all-bf16 end shared); the grey staircase is the frontier of every measured point.  It bends
+at two knees --- (E4M3, $25$ bits) and (bf16, $40$) --- where the error falls more than
+fivefold for eight bits, and between them it is almost flat: (E4M3, $K=5$) at $30$ bits and
+the all-E4M3 end of the ladder at $38$ are on it for under $3\%$ each, with the $35$-bit
+E4M3 point above the $30$-bit one and the ladder's $41$- and $44$-bit points dominated by
+(bf16, $40$).  Every split that mixes the body's format lies above the staircase.}
+\label{fig:pareto}
+\end{figure}
+
+\subsection{The exponent range of fp8}
+\label{sec:fp8}
+
+fp8 does not break the law where the law is used: in the normal range each format's grid
+\emph{is} the kernel's (E4M3 to $q(\cdot,5)$ on $4000$ of $4000$ window points, E5M2 to
+$q(\cdot,4)$).  At $d=64$, $K=6$, five seeds (Table~\ref{tab:fp8}) the
+E4M3 floor is within $0.3$--$3.2\%$ of the matched unlimited-exponent floor at four
+dynamic ranges and E5M2 is $1.86$--$2.09\times$ larger, the factor $2$ one significand
+bit predicts.
+
+\emph{The first slot is where precision pays --- inside the window.}  At four bits and
+$\ell=10^{-3}$ the shipped $1.01$ blows up in 12 of 12 runs; the smallest damping that
+stops it, $1.0313$, moves the benign-range floor by at most $4\%$ and yet leaves
+the $\ell=10^{-3}$ floor at the cap in 12 of 12.
+Spending the first slot works: cast and step one at bf16 with the other five at $p=4$
+takes $\ell=10^{-2}$ from $4$ to $0$ blow-ups and the floor from $0.877$ to $0.243$
+($3.6\times$), and two bf16 steps give $0.146$ ($6.0\times$) at $5.33$ bits per
+slot against $0.411$ for all-E4M3 at five (Table~\ref{tab:e5m2}).  This is the one regime
+where the hybrid wins; under a training kernel's normalisation the same rule is
+six times worse than bf16.
+
+\subsection{What to do in the next Muon step}
+\label{sec:rules}
+
+Table~\ref{tab:rules} prices the four decisions this section supports.

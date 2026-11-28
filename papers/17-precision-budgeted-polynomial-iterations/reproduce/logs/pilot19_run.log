@@ -1,0 +1,228 @@
+pilot7_pert_aware_design.py:62: RuntimeWarning: invalid value encountered in sqrt
+  qq, r = np.sqrt((-3 * b + np.array([-1, 1]) * np.sqrt(9 * b**2 - 20 * a * c)) / (10 * c))
+==============================================================================================================
+[A1] the constant on pilot 18's own grid, extended from d = 256 to d = 384 and 512
+     C = (measured floor) / [ (u/sqrt3) rms(Mhat) ||W||_F / sqrt(d) ]
+==============================================================================================================
+  288 cells = 4 families x 2 ell x 2 p x 3 seeds x 6 dims  (192 inside pilot 18's fit range, 96 new)
+
+     family    ell   p     d=32     d=64    d=128    d=256    d=384    d=512
+   logspace    0.1   8    7.029    7.148    7.341    7.660    7.720    7.763
+   logspace    0.1  12    6.755    7.010    7.184    7.413    7.572    7.572
+   logspace   0.01   8    5.834    6.815    7.386    7.892    7.979    7.746
+   logspace   0.01  12    5.854    6.904    7.405    7.603    7.917    7.939
+    plateau    0.1   8    5.150    5.993    5.951    6.099    6.144    6.240
+    plateau    0.1  12    5.150    6.047    5.923    6.184    6.241    6.269
+    plateau   0.01   8    4.165    5.399    5.644    5.710    5.848    5.999
+    plateau   0.01  12    4.779    5.234    5.543    5.695    5.851    6.005
+        gap    0.1   8    5.747    6.006    6.637    6.528    6.507    6.606
+        gap    0.1  12    5.403    6.059    6.225    6.427    6.583    6.563
+        gap   0.01   8    5.035    5.773    5.885    6.073    6.347    6.260
+        gap   0.01  12    5.638    5.306    5.996    6.046    6.068    6.105
+      power    0.1   8    5.875    6.816    7.626    8.769    8.994    9.183
+      power    0.1  12    5.265    6.503    7.774    8.462    8.763    8.930
+      power   0.01   8    5.204    6.126    6.583    6.106    6.140    6.031
+      power   0.01  12    4.841    6.140    6.382    5.943    6.145    6.344
+
+  d=  32: median   5.384  band [ 4.050,  7.285]  n=48  inside 6.073+-25%:  91.7%  +-40%: 100.0%  <= 8.918: 100.0%
+  d=  64: median   6.133  band [ 4.858,  7.744]  n=48  inside 6.073+-25%:  97.9%  +-40%: 100.0%  <= 8.918: 100.0%
+  d= 128: median   6.443  band [ 5.333,  8.016]  n=48  inside 6.073+-25%:  87.5%  +-40%: 100.0%  <= 8.918: 100.0%
+  d= 256: median   6.320  band [ 5.684,  8.918]  n=48  inside 6.073+-25%:  70.8%  +-40%:  91.7%  <= 8.918: 100.0%
+  d= 384: median   6.402  band [ 5.781,  9.024]  n=48  inside 6.073+-25%:  66.7%  +-40%:  87.5%  <= 8.918:  93.8%
+  d= 512: median   6.546  band [ 5.915,  9.205]  n=48  inside 6.073+-25%:  66.7%  +-40%:  87.5%  <= 8.918:  89.6%
+
+==============================================================================================================
+[A2] does the fit range predict the new one?  trend fitted on d <= 256,
+     extrapolated to d = 384, 512
+==============================================================================================================
+   logspace ell=   0.1 p= 8: slope +0.041   d=384: pred  7.788 meas  7.720 (0.991x)  d=512: pred  7.881 meas  7.763 (0.985x)
+   logspace ell=   0.1 p=12: slope +0.044   d=384: pred  7.546 meas  7.572 (1.004x)  d=512: pred  7.641 meas  7.572 (0.991x)
+   logspace ell=  0.01 p= 8: slope +0.142   d=384: pred  8.360 meas  7.979 (0.954x)  d=512: pred  8.710 meas  7.746 (0.889x)
+   logspace ell=  0.01 p=12: slope +0.123   d=384: pred  7.993 meas  7.917 (0.991x)  d=512: pred  8.281 meas  7.939 (0.959x)
+    plateau ell=   0.1 p= 8: slope +0.072   d=384: pred  6.280 meas  6.144 (0.978x)  d=512: pred  6.411 meas  6.240 (0.973x)
+    plateau ell=   0.1 p=12: slope +0.076   d=384: pred  6.378 meas  6.241 (0.978x)  d=512: pred  6.519 meas  6.269 (0.962x)
+    plateau ell=  0.01 p= 8: slope +0.143   d=384: pred  6.051 meas  5.848 (0.966x)  d=512: pred  6.305 meas  5.999 (0.951x)
+    plateau ell=  0.01 p=12: slope +0.084   d=384: pred  5.892 meas  5.851 (0.993x)  d=512: pred  6.037 meas  6.005 (0.995x)
+        gap ell=   0.1 p= 8: slope +0.070   d=384: pred  6.714 meas  6.507 (0.969x)  d=512: pred  6.850 meas  6.606 (0.964x)
+        gap ell=   0.1 p=12: slope +0.079   d=384: pred  6.637 meas  6.583 (0.992x)  d=512: pred  6.789 meas  6.563 (0.967x)
+        gap ell=  0.01 p= 8: slope +0.084   d=384: pred  6.284 meas  6.347 (1.010x)  d=512: pred  6.437 meas  6.260 (0.973x)
+        gap ell=  0.01 p=12: slope +0.048   d=384: pred  6.164 meas  6.068 (0.984x)  d=512: pred  6.250 meas  6.105 (0.977x)
+      power ell=   0.1 p= 8: slope +0.189   d=384: pred  9.469 meas  8.994 (0.950x)  d=512: pred 10.000 meas  9.183 (0.918x)
+      power ell=   0.1 p=12: slope +0.231   d=384: pred  9.294 meas  8.763 (0.943x)  d=512: pred  9.933 meas  8.930 (0.899x)
+      power ell=  0.01 p= 8: slope +0.080   d=384: pred  6.306 meas  6.140 (0.974x)  d=512: pred  6.453 meas  6.031 (0.935x)
+      power ell=  0.01 p=12: slope +0.094   d=384: pred  6.175 meas  6.145 (0.995x)  d=512: pred  6.345 meas  6.344 (1.000x)
+
+  residual slope over 32..256: +0.041 .. +0.231 (median +0.082);  measured/extrapolated at 384,512: 0.889 .. 1.010 (median 0.973)
+  a ratio below 1 means the fit range over-predicted the new cells, i.e. the
+  constant drifts less than the fitted trend and the extrapolation is conservative.
+
+==============================================================================================================
+[A3] the new cells on their own
+==============================================================================================================
+  d in [384, 384] (48 cells): median   6.402 = 1.054x the fit, band [ 5.781,  9.024] (1.56x), inside +-25%  66.7%, +-40%  87.5%, one-sided 8.918  93.8%
+  d in [512, 512] (48 cells): median   6.546 = 1.078x the fit, band [ 5.915,  9.205] (1.56x), inside +-25%  66.7%, +-40%  87.5%, one-sided 8.918  89.6%
+  d in [384, 512] (96 cells): median   6.476 = 1.066x the fit, band [ 5.781,  9.205] (1.59x), inside +-25%  66.7%, +-40%  87.5%, one-sided 8.918  91.7%
+
+  the same statistics inside the fit range, for comparison: n=192, median 6.106, band [4.050, 8.918], +-25% 87.0%
+
+==============================================================================================================
+[A4] where the sqrt(d) invariance comes from: the two factors of P
+==============================================================================================================
+      d    rms(X0)  v (1/sqrt d)    ||W||_F  ||W||_F/sqrt d            P
+     32     0.0616     1.390e-04      318.2           56.25    7.819e-03
+     64     0.0424     9.555e-05      623.0           77.87    7.440e-03
+    128     0.0295     6.661e-05     1232.9          108.98    7.259e-03
+    256     0.0207     4.677e-05     2453.2          153.32    7.171e-03
+    384     0.0169     3.810e-05     3673.4          187.46    7.142e-03
+    512     0.0146     3.296e-05     4893.7          216.27    7.128e-03
+  the cast error's Frobenius norm grows like sqrt(d) (d^2 entries at a fixed rms), the
+  incoherent response of the pair operator falls like 1/sqrt(d), and P is their product.
+
+==============================================================================================================
+[B1] (i) the u convention: what rms the p-bit cast actually produces
+     rho = rms of the cast error;  m = mantissa of X0;  prediction
+     rho = (u/sqrt3) sqrt(E[X^2/m^2]/E[X^2]) rms(X0),  no fitted quantity
+==============================================================================================================
+     family    ell    d   rms(X0)  m factor   rho pred   rho meas  meas/pred
+   logspace    0.1  128    0.0412    1.4660  1.362e-04  1.362e-04     0.9997
+   logspace   0.01  128    0.0295    1.4696  9.790e-05  9.726e-05     0.9935
+    plateau    0.1  128    0.0628    1.4745  2.089e-04  2.088e-04     0.9996
+    plateau   0.01  128    0.0625    1.4760  2.081e-04  2.072e-04     0.9957
+   logspace    0.1  256    0.0291    1.4719  9.645e-05  9.678e-05     1.0034
+   logspace   0.01  256    0.0207    1.4665  6.859e-05  6.902e-05     1.0063
+    plateau    0.1  256    0.0444    1.4693  1.472e-04  1.475e-04     1.0025
+    plateau   0.01  256    0.0442    1.4674  1.463e-04  1.465e-04     1.0019
+   logspace    0.1  384    0.0237    1.4669  7.842e-05  7.862e-05     1.0027
+   logspace   0.01  384    0.0169    1.4780  5.631e-05  5.639e-05     1.0013
+    plateau    0.1  384    0.0363    1.4722  1.204e-04  1.207e-04     1.0025
+    plateau   0.01  384    0.0361    1.4711  1.197e-04  1.194e-04     0.9971
+   logspace    0.1  512    0.0205    1.4699  6.802e-05  6.792e-05     0.9986
+   logspace   0.01  512    0.0146    1.4724  4.853e-05  4.857e-05     1.0009
+    plateau    0.1  512    0.0314    1.4738  1.044e-04  1.045e-04     1.0008
+    plateau   0.01  512    0.0313    1.4741  1.039e-04  1.038e-04     0.9992
+
+  measured/predicted: 0.9935 .. 1.0063   m factor: 1.4660 .. 1.4780 (median 1.4715)
+  for a log-uniform mantissa E[1/m^2] = 3/(2 ln 2) = 2.1640, so the
+  factor is sqrt(3/(2 ln 2)) = 1.4711; measured median 1.4715 (+0.03%).
+
+  the same constant written in each convention of the rounding size:
+    rms = u                            C =   3.845  [ 3.258,  4.673]
+    rms = u/2                          C =  13.320  [11.287, 16.187]
+    rms = u/sqrt3 = 2^(1-p)/sqrt12     C =   6.660  [ 5.644,  8.094]
+    rms = (u/sqrt3) x mantissa factor  C =   4.526  [ 3.824,  5.476]
+    rms = measured                     C =   4.540  [ 3.840,  5.469]
+  the paper's convention (rms u/sqrt3) gives 6.07; the kernel's own rms is 1.47x that,
+  and the constant in the kernel's own units is the fourth line.
+
+==============================================================================================================
+[B2] (ii) the channels: the input cast and the in-loop roundings
+==============================================================================================================
+     family    ell    d   measured       cast    in-loop      total  tot/meas  cast²   orth
+   logspace    0.1  128  1.492e-02  9.233e-03  1.134e-02  1.490e-02     0.999   0.38   0.96
+   logspace   0.01  128  5.110e-02  4.600e-02  2.575e-02  5.117e-02     1.001   0.81   1.06
+    plateau    0.1  128  2.533e-02  2.308e-02  1.290e-02  2.530e-02     0.999   0.83   1.09
+    plateau   0.01  128  2.251e-01  2.224e-01  5.124e-02  2.325e-01     1.033   0.91   0.96
+   logspace    0.1  256  1.514e-02  1.020e-02  1.188e-02  1.513e-02     0.999   0.45   1.07
+   logspace   0.01  256  5.570e-02  4.893e-02  2.608e-02  5.583e-02     1.002   0.77   0.99
+    plateau    0.1  256  2.529e-02  2.259e-02  1.372e-02  2.529e-02     1.000   0.80   1.09
+    plateau   0.01  256  2.278e-01  2.203e-01  5.385e-02  2.289e-01     1.005   0.93   0.98
+   logspace    0.1  384  1.489e-02  1.017e-02  1.192e-02  1.487e-02     0.999   0.47   1.11
+   logspace   0.01  384  5.780e-02  5.185e-02  2.646e-02  5.808e-02     1.005   0.80   1.00
+    plateau    0.1  384  2.552e-02  2.289e-02  1.374e-02  2.552e-02     1.000   0.80   1.09
+    plateau   0.01  384  2.306e-01  2.280e-01  5.413e-02  2.331e-01     1.011   0.96   1.01
+   logspace    0.1  512  1.489e-02  1.030e-02  1.188e-02  1.489e-02     0.999   0.48   1.12
+   logspace   0.01  512  5.521e-02  5.026e-02  2.763e-02  5.505e-02     0.997   0.83   1.09
+    plateau    0.1  512  2.610e-02  2.318e-02  1.362e-02  2.610e-02     1.000   0.79   1.06
+    plateau   0.01  512  2.359e-01  2.284e-01  5.387e-02  2.365e-01     1.002   0.93   0.98
+
+  first-order total / measured: 0.997 .. 1.033
+  cast share of the floor (norm): 0.620 .. 0.978 (median 0.895)
+  (cast² + loop²)/total²: 0.963 .. 1.116  -> the channels add in quadrature to within 10%
+  channel constants of C: cast 5.564, in-loop 3.426, total 6.665 (fit 6.660)
+
+  per-d medians (2 families x 2 ell), for the drift at large d:
+      d       C   C_cast   C_loop  cast share    mant
+    128   6.567    5.564    3.326       0.906  1.4721
+    256   6.925    5.479    3.469       0.885  1.4684
+    384   6.968    5.612    3.505       0.895  1.4717
+    512   7.013    5.650    3.576       0.900  1.4731
+
+  per-injection constant of the first-order response (cast, then B and X per step):
+     family    ell    d  cast0     B1     X1     B2     X2     B3     X3     B4     X4     B5     X5     B6     X6
+   logspace    0.1  128  4.812  2.469  2.858  1.079  2.313  0.073  2.322  0.006  2.300  0.005  2.008  0.009  0.899
+   logspace   0.01  128  6.337  2.231  2.722  1.413  1.073  0.539  0.642  0.084  0.605  0.005  0.621  0.011  0.398
+    plateau    0.1  128  5.552  1.679  1.501  0.424  1.046  0.009  1.054  0.003  1.036  0.002  0.953  0.006  0.426
+    plateau   0.01  128  5.576  0.261  1.147  0.615  0.126  0.003  0.117  0.013  0.112  0.003  0.110  0.008  0.071
+   logspace    0.1  256  5.337  2.432  2.885  1.024  2.400  0.076  2.421  0.006  2.401  0.006  2.125  0.008  0.905
+   logspace   0.01  256  6.823  2.234  2.806  1.390  1.149  0.584  0.687  0.095  0.631  0.005  0.643  0.010  0.410
+    plateau    0.1  256  5.435  1.733  1.602  0.411  1.096  0.009  1.113  0.003  1.090  0.003  0.969  0.006  0.428
+    plateau   0.01  256  5.522  0.268  1.210  0.653  0.124  0.002  0.118  0.013  0.114  0.003  0.115  0.009  0.080
+   logspace    0.1  384  5.327  2.332  2.988  1.127  2.391  0.075  2.414  0.006  2.402  0.006  2.165  0.008  0.910
+   logspace   0.01  384  7.259  2.460  2.754  1.527  1.149  0.581  0.708  0.094  0.657  0.005  0.647  0.012  0.387
+    plateau    0.1  384  5.508  1.749  1.575  0.447  1.087  0.009  1.109  0.003  1.108  0.003  0.991  0.006  0.432
+    plateau   0.01  384  5.716  0.264  1.226  0.604  0.124  0.003  0.121  0.013  0.115  0.003  0.115  0.009  0.071
+   logspace    0.1  512  5.402  2.398  2.929  1.130  2.447  0.079  2.436  0.006  2.394  0.006  2.157  0.008  0.953
+   logspace   0.01  512  7.052  2.423  2.926  1.629  1.143  0.570  0.703  0.094  0.655  0.005  0.638  0.011  0.390
+    plateau    0.1  512  5.576  1.776  1.593  0.397  1.117  0.009  1.111  0.003  1.100  0.003  0.992  0.006  0.437
+    plateau   0.01  512  5.725  0.266  1.234  0.615  0.126  0.003  0.123  0.013  0.115  0.003  0.116  0.009  0.072
+
+==============================================================================================================
+[B3] the cast channel: the incoherent-response factor against the structure of
+     a multiplicative rounding error (all over rho ||W||_F/sqrt(d))
+==============================================================================================================
+     family    ell    d  rounding  gaussian  rank-one  round/gauss  rank/gauss
+   logspace    0.1  128     3.283     3.334    10.897        0.985        3.27
+   logspace   0.01  128     4.340     4.386    10.760        0.989        2.45
+    plateau    0.1  128     3.767     3.584    10.315        1.051        2.88
+    plateau   0.01  128     3.794     3.586    10.358        1.058        2.89
+   logspace    0.1  256     3.614     3.627    15.557        0.996        4.29
+   logspace   0.01  256     4.624     4.995    15.882        0.926        3.18
+    plateau    0.1  256     3.689     3.873    14.363        0.953        3.71
+    plateau   0.01  256     3.756     4.009    14.329        0.937        3.57
+   logspace    0.1  384     3.622     3.544    19.796        1.022        5.59
+   logspace   0.01  384     4.905     4.702    19.745        1.043        4.20
+    plateau    0.1  384     3.732     3.792    20.452        0.984        5.39
+    plateau   0.01  384     3.897     3.910    20.602        0.997        5.27
+   logspace    0.1  512     3.680     3.640    23.298        1.011        6.40
+   logspace   0.01  512     4.785     4.865    24.226        0.984        4.98
+    plateau    0.1  512     3.780     3.738    23.499        1.011        6.29
+    plateau   0.01  512     3.887     3.894    23.609        0.998        6.06
+
+  medians: rho gives 3.83 x rho ||W||_F/sqrt(d) as incoherent Gaussian noise,
+  3.77 x as the actual rounding (1.00x), and 17.81 x as a rank-one perturbation (4.2x).
+  the rounding is incoherent for this purpose: its structure costs nothing, and the
+  remaining factor 3.83 is propagation, not perturbation size.
+
+==============================================================================================================
+[B4] the K-ladder: how the in-loop channels accumulate (d = 128, p = 8, seed 0)
+     C is quoted on the total error here; E_K is not attained at K = 1, 2
+==============================================================================================================
+     family    ell   K        E_K       S    C(e)   C_cast   C_loop  cast share      floor
+   logspace    0.1   1   4.53e-01   12.62   5.750    4.129    3.089       0.831  1.103e-02
+   logspace    0.1   2   6.49e-02   11.43   6.310    4.859    4.646       0.765  1.211e-02
+   logspace    0.1   3   2.17e-04   11.43   6.555    4.817    4.981       0.735  1.258e-02
+   logspace    0.1   4   8.11e-11   11.43   6.942    4.815    5.117       0.694  1.332e-02
+   logspace    0.1   6   6.66e-16   11.43   7.776    4.812    5.910       0.620  1.492e-02
+    plateau    0.1   1   4.53e-01   12.62   6.091    3.093    1.915       0.857  2.532e-02
+    plateau    0.1   2   6.49e-02   11.43   5.896    5.193    2.341       0.942  2.451e-02
+    plateau    0.1   3   2.17e-04   11.43   5.999    5.558    2.726       0.927  2.494e-02
+    plateau    0.1   4   8.11e-11   11.43   5.976    5.558    2.822       0.930  2.484e-02
+    plateau    0.1   6   6.66e-16   11.43   6.095    5.552    3.104       0.912  2.533e-02
+
+==============================================================================================================
+[B5] the decomposition, evaluated cell by cell
+==============================================================================================================
+  C (median of these 16 cells)            =  6.660
+  mantissa factor (derived, 1.471)        =  1.472
+  channel-response factor                 =  4.526   (C / mantissa factor)
+    cast channel   3.772  |  in-loop   2.331  |  quadrature  4.433  (-2.0%)
+  reconstructed: 1.472 x 4.526 = 6.660  (measured 6.660)
+  on the 240-cell fit of pilot 18 (C = 6.073) the same factors give
+    channel factor 6.073 / 1.471 = 4.128,
+    of which cast 3.77 and in-loop 2.33 by quadrature = 4.43.
+  the cast channel is 1.00x a memoryless Gaussian perturbation of
+  the same rms, i.e. the incoherent-response assumption behind ||W||_F/sqrt(d) holds;
+  the 3.83 that remains is the participation of the pair operator, and it is
+  the part of the constant that is measured rather than derived.
+
+wrote pilot19_results.json

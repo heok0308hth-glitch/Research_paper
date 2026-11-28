@@ -1,0 +1,59 @@
+% ---------------------------------------------------------------------------
+% Draft. The camera-ready must use the official ICLR 2028 style file
+% (iclr2028_conference.sty); this file uses a neutral article layout so the
+% text, tables and numbers can be reviewed before the style is applied.
+% ---------------------------------------------------------------------------
+\documentclass[10pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{microtype}
+\usepackage{array}
+\setlength{\emergencystretch}{6em}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+\newtheorem{observation}{Observation}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\polar}{\operatorname{polar}}
+\newcommand{\skewop}{\operatorname{skew}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\e}[2]{\ensuremath{#1{\times}10^{#2}}}
+
+\title{Precision-Budgeted Polynomial Iterations:\\
+Sensitivity Certificates and Subspace Error Floors}
+\author{Taehyeok Heo}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections/00-abstract}
+\input{sections/01-introduction}
+\input{sections/02-preliminaries}
+\input{sections/03-certificate-subspace}
+\input{sections/04-stopping}
+\input{sections/05-bit-allocation}
+\input{sections/06-experiments}
+\input{sections/07-related}
+\input{sections/08-limitations}
+\input{sections/09-conclusion}
+\input{sections/99-appendix}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

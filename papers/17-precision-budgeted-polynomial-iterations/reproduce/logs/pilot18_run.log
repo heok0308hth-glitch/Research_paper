@@ -1,0 +1,165 @@
+pilot7_pert_aware_design.py:62: RuntimeWarning: invalid value encountered in sqrt
+  qq, r = np.sqrt((-3 * b + np.array([-1, 1]) * np.sqrt(9 * b**2 - 20 * a * c)) / (10 * c))
+============================================================================================================
+[A1] the dimension trend of the pilot-17 proxy, per (family, ell, p): fitted exponent
+============================================================================================================
+  240 cells (4 families x 2 ell x 2 p x 3 seeds x 5 dims)
+      F: residual d-exponent per (family, ell, p) = -0.47 .. -0.28  (median -0.42)
+     Fd: residual d-exponent per (family, ell, p) = +0.03 .. +0.22  (median +0.08)
+     hd: residual d-exponent per (family, ell, p) = -0.48 .. +0.69  (median -0.43)
+   hrow: residual d-exponent per (family, ell, p) = -0.49 .. +0.37  (median -0.43)
+
+  pilot-17 proxy ratio vs d (median over seeds):
+    logspace ell=   0.1 p=8: 32:1.243  48:1.062  64:0.893  128:0.649  256:0.479
+    logspace ell=  0.01 p=8: 32:1.031  48:0.932  64:0.852  128:0.653  256:0.493
+     plateau ell=   0.1 p=8: 32:0.910  48:0.772  64:0.749  128:0.526  256:0.381
+     plateau ell=  0.01 p=8: 32:0.736  48:0.707  64:0.675  128:0.499  256:0.357
+         gap ell=   0.1 p=8: 32:1.016  48:0.822  64:0.751  128:0.587  256:0.408
+         gap ell=  0.01 p=8: 32:0.890  48:0.751  64:0.722  128:0.520  256:0.380
+       power ell=   0.1 p=8: 32:1.039  48:0.882  64:0.852  128:0.674  256:0.548
+       power ell=  0.01 p=8: 32:0.920  48:0.849  64:0.766  128:0.582  256:0.382
+
+============================================================================================================
+[A2] candidate predictors: spread over all cells, residual exponent, +-25% hit rate
+============================================================================================================
+      S: median    0.327  [  0.057,   0.794] spread 13.83x  +-25%  47.1%  d-exp +0.07 (|max| 0.39)
+     Sp: median    0.464  [  0.144,   0.959] spread  6.64x  +-25%  40.0%  d-exp +0.07 (|max| 0.14)
+      F: median    0.733  [  0.355,   1.288] spread  3.63x  +-25%  52.5%  d-exp -0.42 (|max| 0.47)
+     Fd: median    6.073  [  4.050,   8.918] spread  2.20x  +-25%  89.2%  d-exp +0.08 (|max| 0.22)
+     2d: median    6.086  [  4.050,   8.918] spread  2.20x  +-25%  88.8%  d-exp +0.08 (|max| 0.22)
+     hd: median   22.371  [  3.036, 195.993] spread 64.55x  +-25%   9.2%  d-exp -0.43 (|max| 0.69)
+   hrow: median    5.401  [  0.968,  34.548] spread 35.68x  +-25%  10.4%  d-exp -0.43 (|max| 0.49)
+   heff: median    1.733  [  0.134,  18.251] spread 136.01x  +-25%  14.2%  d-exp -0.93 (|max| 0.98)
+
+  per-family median and per-d median of the two best candidates:
+   Fd: family logspace:  7.123 plateau:  5.584 gap:  5.897 power:  6.171
+       d      32:  5.384 48:  5.727 64:  6.133 128:  6.443 256:  6.320
+   hd: family logspace: 15.575 plateau: 23.551 gap: 30.200 power: 31.324
+       d      32: 31.324 48: 31.610 64: 29.645 128: 21.340 256: 15.828
+   hrow: family logspace:  4.056 plateau:  8.372 gap:  7.296 power:  7.515
+       d      32:  7.515 48:  7.860 64:  7.323 128:  5.240 256:  3.877
+
+============================================================================================================
+[A3] the winner on a held-out grid (ell 5e-2, 3e-3; p 6, 16; seeds 3, 4; d 48, 128)
+============================================================================================================
+      S: median    0.335 (fit 0.327, x1.02)  [0.033, 0.928] spread 28.38x  inside fit +-25%: 33%
+     Sp: median    0.346 (fit 0.464, x0.75)  [0.082, 0.864] spread 10.60x  inside fit +-25%: 27%
+      F: median    0.669 (fit 0.733, x0.91)  [0.333, 1.028] spread 3.09x  inside fit +-25%: 62%
+     Fd: median    6.044 (fit 6.073, x1.00)  [3.701, 8.467] spread 2.29x  inside fit +-25%: 88%
+     2d: median    6.049 (fit 6.086, x0.99)  [3.701, 8.468] spread 2.29x  inside fit +-25%: 88%
+     hd: median   57.025 (fit 22.371, x2.55)  [7.184, 398.798] spread 55.51x  inside fit +-25%: 8%
+   hrow: median   11.595 (fit 5.401, x2.15)  [2.066, 93.292] spread 45.15x  inside fit +-25%: 17%
+   heff: median    4.951 (fit 1.733, x2.86)  [0.449, 40.702] spread 90.65x  inside fit +-25%: 19%
+
+============================================================================================================
+[A4] what the two best predictors look like on the 48 known cells of pilot 16/17
+============================================================================================================
+    logspace ell=   0.1: F=0.893  Fd=7.312  hd=5.999  hrow=1.930
+    logspace ell=  0.01: F=0.852  Fd=6.894  hd=41.832  hrow=10.018
+     plateau ell=   0.1: F=0.734  Fd=5.933  hd=7.529  hrow=2.718
+     plateau ell=  0.01: F=0.670  Fd=5.399  hd=68.121  hrow=24.090
+         gap ell=   0.1: F=0.751  Fd=6.214  hd=8.527  hrow=2.533
+         gap ell=  0.01: F=0.722  Fd=5.774  hd=95.923  hrow=22.145
+       power ell=   0.1: F=0.852  Fd=6.816  hd=17.528  hrow=4.628
+       power ell=  0.01: F=0.766  Fd=6.106  hd=98.730  hrow=17.386
+
+============================================================================================================
+[B1] E5M2 (p = 4) repairs at ell = 1e-3: 12 spectra, K = 6, shipped design (cushion 0.02)
+     div = state distance above 5 (the blow-up pilot 17 measured); cap = subspace floor >= 1.8
+============================================================================================================
+  ship_p4_s1.010             div 12/12  cap 12/12  floor 2.000e+00 [2.00e+00]  state 1.90e+07 [max 6.06e+34]  EK 1.62e-03  S 609.6
+  p4_s1.020                  div  1/12  cap 12/12  floor 1.998e+00 [2.00e+00]  state 2.01e+00 [max 4.38e+02]  EK 2.29e-03  S 616.9
+  p4_s1.030                  div  0/12  cap 12/12  floor 2.000e+00 [2.00e+00]  state 1.99e+00 [max 2.02e+00]  EK 3.12e-03  S 621.7
+  p4_s1.035                  div  0/12  cap 12/12  floor 2.000e+00 [2.00e+00]  state 1.99e+00 [max 2.12e+00]  EK 3.61e-03  S 623.4
+  p4_s1.050                  div  0/12  cap 12/12  floor 1.999e+00 [2.00e+00]  state 1.97e+00 [max 2.00e+00]  EK 5.41e-03  S 625.4
+  p4_cast8_s1.010            div 10/12  cap 11/12  floor 2.000e+00 [2.00e+00]  state 1.42e+04 [max 2.56e+20]  EK 1.62e-03  S 609.6
+  p4_cast5_s1.010            div 11/12  cap 12/12  floor 2.000e+00 [2.00e+00]  state 2.49e+08 [max 2.31e+46]  EK 1.62e-03  S 609.6
+  p4_cast8_step1_8           div 10/12  cap  7/12  floor 1.998e+00 [2.00e+00]  state 5.98e+04 [max 3.20e+17]  EK 1.62e-03  S 609.6
+  p4_cast8_step12_8          div  5/12  cap  3/12  floor 5.371e-01 [2.00e+00]  state 2.83e+00 [max 4.31e+02]  EK 1.62e-03  S 609.6
+  p4_cast5_step1_5           div  9/12  cap 10/12  floor 2.000e+00 [2.00e+00]  state 4.47e+06 [max 8.56e+19]  EK 1.62e-03  S 609.6
+  p4_cast5_step12_5          div  9/12  cap 10/12  floor 2.000e+00 [2.00e+00]  state 6.37e+01 [max 6.46e+03]  EK 1.62e-03  S 609.6
+  p4_step1_8_cast4           div 11/12  cap 12/12  floor 2.000e+00 [2.00e+00]  state 6.02e+08 [max 1.67e+20]  EK 1.62e-03  S 609.6
+  p4_s1.020_cast5_step1_5    div  2/12  cap 11/12  floor 2.000e+00 [2.00e+00]  state 1.93e+00 [max 8.19e+04]  EK 2.29e-03  S 616.9
+  p5_s1.010                  div  0/12  cap 10/12  floor 1.923e+00 [2.00e+00]  state 1.90e+00 [max 3.58e+00]  EK 1.62e-03  S 609.6
+  p8_s1.010                  div  0/12  cap  0/12  floor 2.834e-01 [4.09e-01]  state 2.90e-01 [max 4.27e-01]  EK 1.62e-03  S 609.6
+
+============================================================================================================
+[B2] the same rules where nothing blows up (ell = 1e-1 and 1e-2): floor and its cost
+============================================================================================================
+  ell=   0.1   ship_p4_s1.010             div  0/12  cap  0/12  floor 2.166e-01 [2.30e-01]  state 2.41e-01 [max 2.60e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_s1.020                  div  0/12  cap  0/12  floor 2.237e-01 [2.36e-01]  state 2.37e-01 [max 2.47e-01]  EK 4.22e-15  S 10.3
+  ell=   0.1   p4_s1.030                  div  0/12  cap  0/12  floor 2.233e-01 [2.41e-01]  state 2.37e-01 [max 2.58e-01]  EK 1.41e-13  S 9.3
+  ell=   0.1   p4_s1.035                  div  0/12  cap  0/12  floor 2.208e-01 [2.56e-01]  state 2.36e-01 [max 2.68e-01]  EK 5.39e-13  S 8.8
+  ell=   0.1   p4_s1.050                  div  0/12  cap  0/12  floor 2.106e-01 [2.37e-01]  state 2.32e-01 [max 2.59e-01]  EK 1.17e-11  S 7.5
+  ell=   0.1   p4_cast8_s1.010            div  0/12  cap  0/12  floor 1.653e-01 [1.74e-01]  state 1.93e-01 [max 2.09e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_cast5_s1.010            div  0/12  cap  0/12  floor 1.794e-01 [1.89e-01]  state 2.11e-01 [max 2.17e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_cast8_step1_8           div  0/12  cap  0/12  floor 1.327e-01 [1.40e-01]  state 1.68e-01 [max 1.79e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_cast8_step12_8          div  0/12  cap  0/12  floor 1.137e-01 [1.19e-01]  state 1.45e-01 [max 1.54e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_cast5_step1_5           div  0/12  cap  0/12  floor 1.566e-01 [1.63e-01]  state 1.88e-01 [max 2.00e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_cast5_step12_5          div  0/12  cap  0/12  floor 1.395e-01 [1.51e-01]  state 1.70e-01 [max 1.81e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_step1_8_cast4           div  0/12  cap  0/12  floor 1.875e-01 [1.92e-01]  state 2.13e-01 [max 2.22e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p4_s1.020_cast5_step1_5    div  0/12  cap  0/12  floor 1.606e-01 [1.70e-01]  state 1.86e-01 [max 1.97e-01]  EK 4.22e-15  S 10.3
+  ell=   0.1   p5_s1.010 (reference)      div  0/12  cap  0/12  floor 1.074e-01 [1.16e-01]  state 1.16e-01 [max 1.25e-01]  EK 6.66e-16  S 11.4
+  ell=   0.1   p8_s1.010 (reference)      div  0/12  cap  0/12  floor 1.376e-02 [1.47e-02]  state 1.47e-02 [max 1.54e-02]  EK 6.66e-16  S 11.4
+  ell=  0.01   ship_p4_s1.010             div  4/12  cap  4/12  floor 8.772e-01 [2.00e+00]  state 1.29e+00 [max 4.18e+34]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_s1.020                  div  0/12  cap  0/12  floor 8.498e-01 [1.04e+00]  state 8.75e-01 [max 1.06e+00]  EK 1.95e-12  S 61.5
+  ell=  0.01   p4_s1.030                  div  0/12  cap  0/12  floor 8.435e-01 [9.86e-01]  state 8.52e-01 [max 9.98e-01]  EK 3.36e-11  S 60.8
+  ell=  0.01   p4_s1.035                  div  0/12  cap  0/12  floor 8.408e-01 [9.58e-01]  state 8.51e-01 [max 9.62e-01]  EK 1.06e-10  S 60.4
+  ell=  0.01   p4_s1.050                  div  0/12  cap  0/12  floor 7.656e-01 [9.88e-01]  state 8.29e-01 [max 9.84e-01]  EK 1.65e-09  S 59.3
+  ell=  0.01   p4_cast8_s1.010            div  5/12  cap  5/12  floor 4.189e-01 [2.00e+00]  state 6.27e-01 [max 8.43e+50]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_cast5_s1.010            div  3/12  cap  2/12  floor 5.304e-01 [2.00e+00]  state 5.73e-01 [max 7.97e+38]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_cast8_step1_8           div  0/12  cap  0/12  floor 2.427e-01 [2.80e-01]  state 2.59e-01 [max 3.13e-01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_cast8_step12_8          div  0/12  cap  0/12  floor 1.463e-01 [1.55e-01]  state 1.76e-01 [max 1.95e-01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_cast5_step1_5           div  1/12  cap  0/12  floor 4.691e-01 [5.33e-01]  state 4.91e-01 [max 1.81e+01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_cast5_step12_5          div  0/12  cap  0/12  floor 4.160e-01 [4.75e-01]  state 4.30e-01 [max 4.93e-01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_step1_8_cast4           div  0/12  cap  0/12  floor 7.787e-01 [9.40e-01]  state 7.98e-01 [max 9.57e-01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p4_s1.020_cast5_step1_5    div  0/12  cap  0/12  floor 4.471e-01 [5.02e-01]  state 4.61e-01 [max 5.10e-01]  EK 1.95e-12  S 61.5
+  ell=  0.01   p5_s1.010 (reference)      div  0/12  cap  0/12  floor 4.110e-01 [4.60e-01]  state 4.15e-01 [max 4.62e-01]  EK 2.82e-14  S 76.9
+  ell=  0.01   p8_s1.010 (reference)      div  0/12  cap  0/12  floor 4.919e-02 [5.76e-02]  state 4.97e-02 [max 5.86e-02]  EK 2.82e-14  S 76.9
+
+  ell=   0.1, floor relative to the shipped p=4 rule:
+   ship_p4_s1.010=1.00  p4_s1.020=1.03  p4_s1.030=1.03  p4_s1.035=1.02  p4_s1.050=0.97  p4_cast8_s1.010=0.76  p4_cast5_s1.010=0.83  p4_cast8_step1_8=0.61  p4_cast8_step12_8=0.53  p4_cast5_step1_5=0.72  p4_cast5_step12_5=0.64  p4_step1_8_cast4=0.87  p4_s1.020_cast5_step1_5=0.74  p5_s1.010=0.50  p8_s1.010=0.06
+
+  ell=  0.01, floor relative to the shipped p=4 rule:
+   ship_p4_s1.010=1.00  p4_s1.020=0.97  p4_s1.030=0.96  p4_s1.035=0.96  p4_s1.050=0.87  p4_cast8_s1.010=0.48  p4_cast5_s1.010=0.60  p4_cast8_step1_8=0.28  p4_cast8_step12_8=0.17  p4_cast5_step1_5=0.53  p4_cast5_step12_5=0.47  p4_step1_8_cast4=0.89  p4_s1.020_cast5_step1_5=0.51  p5_s1.010=0.47  p8_s1.010=0.06
+
+============================================================================================================
+[B3] critical safety of each rule at ell = 1e-3 (bisection on the blow-up criterion)
+============================================================================================================
+  ship_p4_s1.010             critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_s1.020                  critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_s1.030                  critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_s1.035                  critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_s1.050                  critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_cast8_s1.010            critical safety 1.0235  (margin 0.0235 = 0.75 x u/2)
+  p4_cast5_s1.010            critical safety 1.0244  (margin 0.0244 = 0.78 x u/2)
+  p4_cast8_step1_8           critical safety 1.0221  (margin 0.0221 = 0.71 x u/2)
+  p4_cast8_step12_8          critical safety 1.0238  (margin 0.0238 = 0.76 x u/2)
+  p4_cast5_step1_5           critical safety 1.0219  (margin 0.0219 = 0.70 x u/2)
+  p4_cast5_step12_5          critical safety 1.0221  (margin 0.0221 = 0.71 x u/2)
+  p4_step1_8_cast4           critical safety 1.0313  (margin 0.0313 = 1.00 x u/2)
+  p4_s1.020_cast5_step1_5    critical safety 1.0219  (margin 0.0219 = 0.70 x u/2)
+  p5_s1.010                  critical safety 1.0060  (margin 0.0060 = 0.39 x u/2)
+
+============================================================================================================
+[B4] is p = 4 usable at ell = 1e-3 once the blow-up is suppressed?
+============================================================================================================
+  ship_p4_s1.010             floor 2.000e+00  max 2.000e+00  at the cap: 100% of 12  div 12/12
+  p4_s1.020                  floor 1.998e+00  max 2.000e+00  at the cap: 100% of 12  div 1/12
+  p4_s1.030                  floor 2.000e+00  max 2.000e+00  at the cap: 100% of 12  div 0/12
+  p4_s1.035                  floor 2.000e+00  max 2.000e+00  at the cap: 100% of 12  div 0/12
+  p4_s1.050                  floor 1.999e+00  max 2.000e+00  at the cap: 100% of 12  div 0/12
+  p4_cast8_s1.010            floor 2.000e+00  max 2.000e+00  at the cap:  92% of 12  div 10/12
+  p4_cast5_s1.010            floor 2.000e+00  max 2.000e+00  at the cap: 100% of 12  div 11/12
+  p4_cast8_step1_8           floor 1.998e+00  max 2.000e+00  at the cap:  58% of 12  div 10/12
+  p4_cast8_step12_8          floor 5.371e-01  max 2.000e+00  at the cap:  25% of 12  div 5/12
+  p4_cast5_step1_5           floor 2.000e+00  max 2.000e+00  at the cap:  83% of 12  div 9/12
+  p4_cast5_step12_5          floor 2.000e+00  max 2.000e+00  at the cap:  83% of 12  div 9/12
+  p4_step1_8_cast4           floor 2.000e+00  max 2.000e+00  at the cap: 100% of 12  div 11/12
+  p4_s1.020_cast5_step1_5    floor 2.000e+00  max 2.000e+00  at the cap:  92% of 12  div 2/12
+  p5_s1.010                  floor 1.923e+00  max 2.000e+00  at the cap:  83% of 12  div 0/12
+  p8_s1.010                  floor 2.834e-01  max 4.090e-01  at the cap:   0% of 12  div 0/12
+
+  law at the repaired point (safety 1.035, p=4, ell=1e-3): pred 5.536e+00 (EK 3.61e-03, c*u*S 5.53e+00), measured median 2.000e+00
+
+wrote pilot18_results.json

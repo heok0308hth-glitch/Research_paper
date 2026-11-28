@@ -1,0 +1,36 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Orthogonalized updates.}
+Muon replaces the momentum matrix by its polar factor before the weight
+update~\cite{liu2025muon}; that factor is computed by a fixed Newton--Schulz-type
+iteration whose convergence and error analysis are
+classical~\cite{higham1986polar,higham2008functions,golub2013matrix}, and
+Shampoo~\cite{gupta2018shampoo} is the other line of preconditioned tensor optimization.
+Amsel et al.~\cite{amsel2025polar} derive minimax quintic coefficients for exact
+arithmetic and add the prescriptions this paper takes as its object; the empty design
+axis (Appendix~\ref{sec:design}) is consistent with that optimality holding only in
+exact arithmetic.  Du and Su~\cite{du2026polarswitch} put rounding into the design as a constraint; we
+bound what such a design can buy.
+Huang~\cite{huang2026orthogonalization} reports a non-monotone relation between
+orthogonalization accuracy and training quality, which the two-term law explains in shape
+if not in constant.
+
+\paragraph{Low precision and bit allocation.}
+The formats are standardized~\cite{micikevicius2022fp8} and mixed-precision training is
+standard~\cite{micikevicius2018mixed}; optimizer states have been quantized
+blockwise~\cite{dettmers2022optimizers}, and limited precision with stochastic rounding
+has been studied for training~\cite{gupta2015limited}.  That line asks what precision the \emph{parameters and states} need; we ask what the
+\emph{working matrices of one iteration} need, and the answer is a floor proportional to $u$
+with a computable constant and a separate exponent-range test.  Quantization work
+allocates bits across layers, channels or tensors~\cite{hariri2025quantize,dettmers2022optimizers};
+here allocation is inside one step, across $K+1$ slots, and it is a maximum rather than a
+sum, which makes a closed form possible.
+
+\paragraph{Perturbation of the polar factor, and stopping.}
+First-order perturbation of the SVD and of orthonormal bases is
+classical~\cite{stewart1990perturbation,golub2013matrix}; the two-term form
+\eqref{eq:firstorder}, with the projected term written separately because it survives for
+rectangular matrices, is what we could not find stated as a working estimate for a
+rounded momentum matrix.  Early-exit rules in iterative solvers test a residual the algorithm can see; here the law
+runs before the iteration, against an error it cannot see.

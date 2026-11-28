@@ -1,0 +1,51 @@
+\section{Limitations}
+\label{sec:limitations}
+
+\emph{The kernel is a model, and its constant is a calibration.}  We round the state and
+the intermediate to $p$ significant bits and accumulate in float64; fp8's exponent range
+is priced separately (\S\ref{sec:fp8}); fused multiply--add, accumulation order and
+subnormals in the wide accumulator are not modelled.  The three alternative kernels of
+Appendix~\ref{sec:variants} keep the $u$-scale and the $K$-dependence but move $c$ by up
+to $2.2\times$.
+
+\emph{The constant moves with the spectrum family.}  The 48 held-out cells of
+\S\ref{sec:loop} put the law at $0.43$--$0.97$ of measurement on logspace spectra and at
+$4$--$5\times$ optimism on a two-plateau one.  The ratchet is not what moves: at fixed $\ell$ the
+prediction is identical in all four families, and a first-order bookkeeping of every
+rounding closes these measurements to $2\%$ ($63$--$91\%$ of the response on the input
+cast for logspace spectra, $88$--$99\%$ on two-plateau ones).  The normalised pair-weight
+operator is one constant across families and dimensions only to a factor, and the profile
+factor that closes one spectrum (\S\ref{sec:profile}) does not follow the loop's
+injections.  On the rectangular momenta of the Muon loop the same constant under-states the floor by
+a median $2.9\times$ ($\hat c=0.41$) because the projected term of \eqref{eq:firstorder} is
+not in the proxy, which is why the floor claim on that shape rests on
+\eqref{eq:firstorder}.
+
+\emph{The safety factor is a margin measured on a window, not a convergence knob.}
+What damping buys is the excess a state may exceed its edge and still converge, $0.008$ at
+$s=1.01$ and $0.048$ at $1.035$ for four bits (\S\ref{sec:escape}) --- the measured
+critical safety $1+c\,2^{-p}$ with $c=0.04$--$0.50$ (Table~\ref{tab:safety}), $c\approx0.5$
+on the tight steps, $22$--$55\times$ the margin bf16 needs.  At $\ell=10^{-3}$ four bits
+stay at the cap anyway: stop earlier (\S\ref{sec:steps}) or spend the first slot's
+precision where the window is wide (\S\ref{sec:fp8}).
+
+\emph{The step budget is measured on one window.}  The frontier of \S\ref{sec:steps} comes
+from the $128\times128$ and $128\times64$ momenta of a five-layer MLP at
+$\ell_0=10^{-2}$; the plateau sits where the exact error falls below the floor, so a wider
+window moves it.  On the full spectrum every design errs by $1.00$--$1.65$, because the
+median dynamic range is $2\cdot10^{-10}$ and the tail is not reached in six steps: we do
+not claim the truncated tail is harmless, only that no precision repairs it.
+
+\emph{One scale of model, a flat loss, and no online rule.}  The training measurements stop
+at five layers and 64 input dimensions, eleven seed-runs per condition at $400$ steps and
+twenty-five at $1{,}200$, and call a
+divergence a weight exceeding $10^{3}$: a transformer's momenta may be narrower, which
+moves both the profile factor and the plateau.  At this scale the update
+error spans $1.6\times10^{-2}$ to $0.73$ while the training loss moves by $1.65\times$;
+when $6\%$ would not is a GPU-scale experiment we have not run.  The per-call hazard of
+\S\ref{sec:escape} rises with the step count, so $1$ in $1{,}600$ calls is not the rate of a
+$10^{9}$-token run; read as a first-order rate it already says the shipped safety cannot
+outlast one.
+Allocation is verified
+for two operands and for per-slot schedules separately, not jointly, and the schedule has
+no online form (\S\ref{sec:online}).

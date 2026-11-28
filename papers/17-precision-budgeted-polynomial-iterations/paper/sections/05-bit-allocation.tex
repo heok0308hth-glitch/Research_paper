@@ -1,0 +1,96 @@
+\section{Allocation: the Floor Is a Maximum, Not a Sum}
+\label{sec:alloc}
+
+Given $K$ steps and $B$ bits for the state and the intermediate, which slot deserves
+them?  Each rounding contributes an independent response, and the
+responses combine as a maximum rather than a sum.
+
+\begin{proposition}[Max form]
+\label{prop:max}
+Let $\kappa_t = \mathrm{err}(\text{only slot } t \text{ at } p)/u$ be the response
+to the rounding of slot $t$ alone.  Then
+\begin{equation}
+\mathrm{err} \;\approx\; \max_{0\le t\le K} \kappa_t\,2^{-p_t},
+\qquad\text{so}\quad
+\min_{\sum_t p_t \le B}\ \mathrm{err}
+\ \text{ is solved by }\
+p_t^\star = \log_2 \kappa_t + \tfrac{1}{n}\bigl(B - \textstyle\sum_s \log_2\kappa_s\bigr),
+\label{eq:maxform}
+\end{equation}
+with $n = K+1$.  The gain over uniform precision at equal total bits is at most
+$\max_t \kappa_t / (\prod_t \kappa_t)^{1/n}$, and exactly one when the $\kappa_t$ are
+equal.
+\end{proposition}
+
+The support for \eqref{eq:maxform} is the pair of ratios
+$\mathrm{err}/\max_t(\text{channel}) = 1.00$--$1.21$ and
+$\mathrm{err}/\sum_t(\text{channel}) = 0.71$--$1.00$ on synthetic cells, $1.42$--$1.50$
+against $0.11$ on the real rectangular ones.
+
+\paragraph{Across the steps, and across the two operands.}
+By Corollary~\ref{cor:flat} the per-slot gains follow the conditioning along the orbit.
+Table~\ref{tab:profile} (appendix) shows the profile falling by $\approx2.2$ per slot to a
+$1.1u$ plateau, with a first-slot premium of $3.35$ bits at $\ell=10^{-2}$ and $5.77$ at
+$10^{-3}$; across the state and the intermediate the bottleneck is whichever operand is
+coarser, $236\times$ for a $16$-bit imbalance (Table~\ref{tab:k1},
+Appendix~\ref{app:refute}).  The mechanism is the spectrum, not the step index: on the
+real momentum matrices the per-slot responses at $p=8$, $K=6$ are $2.36u$, $1.57u$,
+$1.37u$ and a $1.27u$ plateau, a premium of $0.90$ bits rather than $5.8$.\begin{table}[t]
+\centering
+\caption{Equal total bits, uniform versus the graded schedule
+\eqref{eq:maxform} ($d=64$), with the closed form of Table~\ref{tab:profile}.
+Entries are $(p_0,p_1,\dots,p_K)$; gain is uniform error over graded error.}
+\label{tab:schedule}
+\begin{tabular}{rrrrccc}
+\toprule
+$\ell$ & $K$ & $B$ & uniform $p$ & schedule $(p_0,\dots,p_K)$ & error & gain \\
+\midrule
+$10^{-2}$ & 6 & 56 & 8 & $(10,9,9,7,7,7,7)$ & \e{2.54}{-2} & $2.02$ \\
+$10^{-3}$ & 6 & 70 & 10 & $(14,12,11,10,8,8,7)$ & \e{2.03}{-2} & $4.12$ \\
+$10^{-3}$ & 8 & 90 & 10 & $(14,13,11,10,9,8,8,8,8)$ & \e{1.32}{-2} & $6.29$ \\
+$10^{-4}$ & 8 & 90 & 10 & $(16,14,12,11,9,8,7,7,6)$ & \e{4.30}{-2} & $15.8$ \\
+$10^{-4}$ & 6 & 84 & 12 & $(17,15,13,12,10,9,8)$ & \e{3.99}{-1} & $1.22$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The solution is inverse waterfilling \eqref{eq:maxform}.  Fitting Table~\ref{tab:profile} as $\kappa_t \approx \max\{(\kappa/\ell)\rho^t, 1.1\}$
+with $\kappa\approx0.06$, $\rho\approx0.45$ gives a rule with no matrix: the first slot
+takes $\log_2(1/\ell)-4.2$ bits more than the tail and each later slot $1.2$ less.  Over
+48 cells ($d\in\{64,128\}$,
+$\ell\in\{10^{-2},10^{-3},10^{-4}\}$, $K\in\{6,8\}$, four budgets) the schedule gains a
+median $3.06\times$ over uniform precision (CI $[2.24,4.76]$, range
+$1.02$--$18.1\times$), and its largest-remainder rounding is exactly optimal in 44 of the
+48 cells.  The last row of Table~\ref{tab:schedule} is the exception ($1.22$): allocation
+is a remedy for the precision floor only.
+
+\paragraph{Where the grading pays.}
+\label{sec:premium}
+Those 48 cells are synthetic logspace spectra; on 60 of the 500 real momentum matrices
+($K\in\{4,6,8\}$, four budgets) the graded schedule buys nothing --- median gain $1.000$,
+$p_{10}$--$p_{90}$ $0.887$--$1.309$.  The reason is granularity: one bit from a tail slot to the first pays only if the premium
+clears two bits, and at the real range it is $0.9$.  A sweep of the same $128\times32$ shape (Table~\ref{tab:premium}, appendix)
+gives $1.05$--$1.19\times$ at a premium of $1.6$ bits, $3.2$--$4.9\times$ at $4.4$ and
+$6.4$--$15\times$ at $7.4$: allocation is a remedy for dynamic range and nothing at the
+range Muon produces on a small hidden layer, which needs one fewer step instead
+(\S\ref{sec:steps}).
+
+\paragraph{Online adaptation does not see the plateau (negative).}
+\label{sec:online}
+If the per-slot gains are unknown, the natural move is to read them from the iteration.
+Four sensors that cost no extra matrix product --- the progress of the state, the noise the
+last step injected, the defect
+$\norm{X_tX_t^\top-I}_F/\norm{X_tX_t^\top}_F$, and a two-iteration $\lambda_{\max}$ with a
+Hutchinson trace --- plus an exit rule that widens a slot while the progress exceeds its own
+noise change nothing: all three settings keep the bits of the uniform format they start
+from and land on its error.  The reason is in the error columns of
+\S\ref{sec:steps}: on the full spectrum every design errs by $1.00$--$1.65$
+at every precision from $24$ to $168$ bits, because the median dynamic range is
+$2\cdot10^{-10}$ and the tail is unreachable in six steps, so a global statistic is
+dominated by modes the design never moves.
+
+Nor is there anything for a per-matrix rule to allocate: every one of the 80 matrices is
+within $1.15\times$ of its best error at $K=4$ or $5$, the best Spearman of a measurable
+feature with the E4M3-over-E5M2 gain is $0.33$, and giving the wider format to the best
+quarter by any feature recovers $26$--$27\%$ of the gain, as a random quarter does: the
+schedule is a closed form for synthetic windows, not an online algorithm.

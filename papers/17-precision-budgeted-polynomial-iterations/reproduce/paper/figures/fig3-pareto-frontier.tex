@@ -1,0 +1,31 @@
+% The measured bit budget against the window error, on the 80 momentum matrices.
+% Coordinates: figures/data/fig3-*.dat, written by data/make_figure_data.py from
+% pilot21_results.json (D.ksweep: the three formats by K; D.ladder: the mixed rule).
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.72\linewidth, height=5.4cm,
+  tick label style={font=\footnotesize},
+  label style={font=\footnotesize},
+  legend style={font=\scriptsize, draw=none, fill=none,
+    at={(1.02,1.0)}, anchor=north west, legend cell align=left},
+  axis line style={thick}, grid=major, grid style={densely dotted, black!18},
+  ymode=log,
+  xlabel={bits (input cast $+$ one width per step)},
+  ylabel={window error, median over 80 matrices},
+  xmin=8, xmax=62, ymin=8e-3, ymax=1.1,
+  xtick={10,20,30,40,50,60},
+]
+\addplot[black, thick, mark=square*, mark size=1.6pt]
+  table[x=bits, y=err] {figures/data/fig3-bf16.dat};
+\addplot[black, thick, dashed, mark=o, mark size=1.6pt]
+  table[x=bits, y=err] {figures/data/fig3-e4m3.dat};
+\addplot[black, thick, densely dotted, mark=triangle*, mark size=1.7pt]
+  table[x=bits, y=err] {figures/data/fig3-e5m2.dat};
+\addplot[gray, thick, mark=diamond*, mark size=2.2pt, only marks]
+  table[x=bits, y=err] {figures/data/fig3-ladder.dat};
+\addplot[gray!60, very thick] table[x=bits, y=err] {figures/data/fig3-frontier.dat};
+\node[font=\scriptsize, anchor=south west] at (axis cs:25,0.128) {E4M3, $K=4$};
+\node[font=\scriptsize, anchor=south west] at (axis cs:40,0.023) {bf16, $K=4$};
+\legend{bf16, E4M3, E5M2, mixed rule, measured frontier}
+\end{axis}
+\end{tikzpicture}

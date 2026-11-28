@@ -1,0 +1,92 @@
+\section{Stopping: from a Crossing to a Target}
+\label{sec:stopping}
+
+The law \eqref{eq:cert} estimates the error at a given $K$; a practitioner needs a
+decision, and there are two ways to read it as a rule.  The first asks where the precision
+term overtakes the exact term,
+\begin{equation}
+K_{\mathrm{cross}}(u) \;=\; \min\{K:\ E_K \le u\,S_{\mathrm{pert}}(K)\},
+\label{eq:cross}
+\end{equation}
+the reading the two-term structure invites; as a stopping time it is also wrong by up to
+three orders of magnitude in error (Table~\ref{tab:cross}, appendix).  The second asks which $K$ first meets a stated accuracy,
+\begin{equation}
+K(\varepsilon) \;=\; \min\{K:\ J(K) \le \varepsilon\},
+\qquad J(K) = E_K + c\,u\,S_{\mathrm{pert}}(K),
+\label{eq:target}
+\end{equation}
+and it is the one we recommend and verify.
+
+\begin{theorem}[Stopping at a target accuracy]
+\label{thm:stop}
+Let $J(K) = E_K + c\,u\,S_{\mathrm{pert}}(K)$ with the calibrated $c$ and $K_{\max}$ the
+largest step count the caller will run.  If $\varepsilon > \min_{K \le K_{\max}} J(K)$
+then $K(\varepsilon)$ exists and is finite; if $\varepsilon$ is below the predicted floor
+the rule returns nothing, and no step count exists.  At the returned step count
+$\mathrm{err}(K(\varepsilon)) \le 1.16\,\varepsilon$ in all 62 cells tested (median
+$0.45\,\varepsilon$), and it is below $\varepsilon$ in 60 of 62.
+\end{theorem}
+
+Existence is immediate; the content is the last sentence, measured over
+$d\in\{64,128\}$, three $\ell$, four $p$ and eight
+targets from $0.3$ to $10^{-4}$ (Table~\ref{tab:stop}); at $\ell=10^{-3}$, $p=10$ the
+predicted floor, $0.0845$, takes the refusal branch.
+
+\begin{table}[t]
+\centering
+\caption{Target-accuracy stopping rule \eqref{eq:target} against measurement.  Eight
+representative rows of the 62 defined cells.  Ratio $=$ measured error / target; the
+refusal branch is taken exactly when the target is below the predicted floor
+$\min_K J(K)$.}
+\label{tab:stop}
+\begin{tabular}{rrrr rc}
+\toprule
+$\ell$ & $p$ & $\varepsilon$ & $K(\varepsilon)$ & measured & ratio \\
+\midrule
+$10^{-2}$ & 12 & $0.3$  & 3 & \e{2.80}{-1} & 0.93 \\
+$10^{-2}$ & 12 & $0.1$  & 4 & \e{1.67}{-2} & 0.17 \\
+$10^{-2}$ & 12 & $0.01$ & 5 & \e{3.46}{-3} & 0.35 \\
+$10^{-3}$ & 12 & $0.3$  & 5 & \e{1.36}{-1} & 0.45 \\
+$10^{-3}$ & 12 & $0.1$  & 6 & \e{1.89}{-2} & 0.19 \\
+$10^{-3}$ & 16 & $0.003$& 6 & \e{2.21}{-3} & 0.74 \\
+$10^{-4}$ & 16 & $0.3$  & 7 & \e{4.50}{-2} & 0.15 \\
+$10^{-4}$ & 16 & $0.03$ & 8 & \e{9.55}{-3} & 0.32 \\
+\midrule
+\multicolumn{3}{r}{summary, 62 cells} & \multicolumn{2}{c}{ratio $= 0.020$--$1.153$, median $0.451$} \\
+\multicolumn{3}{r}{within $1.5\times$} & \multicolumn{2}{c}{62/62} \\
+\multicolumn{3}{r}{below the target} & \multicolumn{2}{c}{60/62} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The rule is not monotone in $\varepsilon$: over the 44 consecutive
+target pairs $K(\varepsilon)$ moves in the expected direction 26 times, because $J$ is not
+monotone in $K$; both members of an inverted pair still meet their own targets, and a
+$3.5\times$ over-estimate of $c$ changes no selected $K$.
+
+\paragraph{Why the crossing rule is the wrong stopping time.}
+Equation~\eqref{eq:cross} does describe where the floor takes over, at the $u$-scale
+\eqref{eq:cert} predicts, but it does not locate the argmin: on the frozen real momentum
+spectra ($\ell=10^{-3}$, $K$ swept to 10) it stops one to three steps early --- at $p=8$
+where the error is $9.1\times$ its value at $K=6$, and $926\times$ in the wide window at
+$p=24$ --- because it asks where the two terms are equal in size, where the sum is still
+dominated by the falling term, and the error is minimized where they are equal in
+\emph{slope}; stopping late is cheap ($6.237\times10^{-2}$ at $K=10$ against
+$6.229\times10^{-2}$ at $K=6$).
+
+\paragraph{A lower bound on the dynamic range.}
+\label{sec:ellsens}
+The last input is $\ell$, which a caller does not have.  With the design and the rule
+given $\hat\ell=\alpha\ell$, over 36 cells ($d\in\{64,128\}$,
+three $\ell$, $p\in\{8,12\}$) at three targets each
+($\varepsilon=r\min_K J(K)$, $r\in\{1.2,3,10\}$; Table~\ref{tab:ell}),
+under-estimating is safe and costs arithmetic: at $\alpha\le0.5$ no target is missed, the
+error stays below $0.99\,\varepsilon$, and the rule either returns a step count within
+three steps of the right one or refuses a target it could have met (8 to 16 of 36 cells,
+all at $r=1.2$).  Over-estimating is neither safe nor visible: at $\alpha=10$, 24 targets
+are missed with errors up to $244\,\varepsilon$ and the caller's own prediction
+under-states the measurement by up to $1275\times$ ($\e{6.1}{-4}$ against $0.782$ at
+$\ell=10^{-2}$, $p=12$).  A design fitted to $[\hat\ell,1]$ leaves the polynomial
+outside its minimax interval below $\hat\ell$, so the orbit converges to the wrong point.
+So $\sigma_{\min}$ should be passed as a lower bound --- a power iteration count with a
+safety factor.

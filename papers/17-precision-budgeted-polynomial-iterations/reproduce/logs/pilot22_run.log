@@ -1,0 +1,97 @@
+pilot7_pert_aware_design.py:62: RuntimeWarning: invalid value encountered in sqrt
+  qq, r = np.sqrt((-3 * b + np.array([-1, 1]) * np.sqrt(9 * b**2 - 20 * a * c)) / (10 * c))
+======================================================================================================================
+[A] the one-step profile factor g(s) = ||(F-F^T) o D||_2 / (2sqrt2 ||D||_F/sqrt d)
+    g = 1 is the exchangeable 2sqrt2;  d trend at fixed (family, ell) is the question
+======================================================================================================================
+  logspace: 45 cells
+  plateau: 90 cells
+  gap: 135 cells
+  power: 180 cells
+
+  180 cells;  g by (family, ell) across d
+     family    ell    d=64   d=128   d=256   d=512  d=1024
+   logspace    0.1   1.193   1.227   1.231   1.271   1.289
+   logspace   0.01   1.497   1.631   1.655   1.676   1.734
+   logspace  0.001   1.709   1.866   1.994   1.995   2.096
+    plateau    0.1   1.281   1.275   1.327   1.336   1.356
+    plateau   0.01   1.313   1.309   1.363   1.373   1.393
+    plateau  0.001   1.313   1.309   1.364   1.373   1.394
+        gap    0.1   1.221   1.208   1.262   1.273   1.288
+        gap   0.01   1.307   1.301   1.356   1.365   1.385
+        gap  0.001   1.313   1.308   1.363   1.373   1.393
+      power    0.1   1.002   0.995   0.985   0.993   0.993
+      power   0.01   1.160   1.138   1.060   1.035   1.011
+      power  0.001   1.160   1.173   1.183   1.205   1.217
+
+  all cells: median 1.308  [0.985, 2.096]
+
+  ratio to d=64 at fixed (family, ell):
+   logspace    0.1:   1.000   1.029   1.032   1.066   1.081
+   logspace   0.01:   1.000   1.089   1.105   1.119   1.158
+   logspace  0.001:   1.000   1.092   1.167   1.168   1.227
+    plateau    0.1:   1.000   0.995   1.036   1.043   1.058
+    plateau   0.01:   1.000   0.997   1.038   1.046   1.061
+    plateau  0.001:   1.000   0.997   1.038   1.046   1.061
+        gap    0.1:   1.000   0.989   1.033   1.043   1.055
+        gap   0.01:   1.000   0.995   1.037   1.044   1.060
+        gap  0.001:   1.000   0.997   1.038   1.046   1.061
+      power    0.1:   1.000   0.992   0.982   0.990   0.991
+      power   0.01:   1.000   0.981   0.914   0.892   0.871
+      power  0.001:   1.000   1.011   1.020   1.038   1.049
+
+  d=1024 / d=64 over the twelve pairs: 0.871 .. 1.227 (median 1.060)
+
+======================================================================================================================
+[B] candidate closures of g from the spectrum, no fitted constant
+======================================================================================================================
+  120 cells;  candidate / measured  (block_full only for d <= 256)
+       candidate   median             span    d=64  d=1024   logsp3 d64  logsp3 d1024
+   participation    0.091   0.032-   0.306   0.185   0.044        0.306         0.061   +/-10%   0%  +/-20%   0%
+          block1    0.764   0.477-   1.016   0.773   0.730        0.585         0.477   +/-10%  13%  +/-20%  33%
+          block2    1.006   0.670-   1.080   1.023   0.998        0.822         0.670   +/-10%  83%  +/-20%  92%
+          block4    1.012   0.856-   1.080   1.053   1.000        1.054         0.856   +/-10%  97%  +/-20% 100%
+          block8    1.016   0.937-   1.157   1.069   1.003        1.157         0.937   +/-10%  98%  +/-20% 100%
+         block16    1.018   0.950-   1.185   1.069   1.006        1.185         0.959   +/-10%  97%  +/-20% 100%
+         block32    1.019   0.950-   1.192   1.069   1.007        1.192         0.965   +/-10%  97%  +/-20% 100%
+      block_full    1.036   0.997-   1.194   1.069     n/a        1.194           n/a   +/-10%  94%  +/-20% 100%
+           rowcv    1.016   0.931-   1.163   1.066   1.005        1.163         0.941   +/-10%  98%  +/-20% 100%
+
+  a closure needs candidate/measured = 1 with a flat span: the best span here is 1.00x
+
+======================================================================================================================
+[C] the loop half of 1.46: per-injection coefficients in their own units
+    kappa_inj = response / (rms(E_inj) scale_t),  against 2sqrt2 g(s_t)
+======================================================================================================================
+   logspace d=  64 L=   0.1: C_tot  4.140 = cast  2.897 + loop 3.392 (quad  4.460);  law prediction  7.699 = 1.860x;  quad/meas 1.077
+   logspace d=  64 L=  0.01: C_tot  3.863 = cast  3.192 + loop 2.096 (quad  3.819);  law prediction  9.116 = 2.359x;  quad/meas 0.989
+    plateau d=  64 L=   0.1: C_tot  3.460 = cast  3.117 + loop 1.781 (quad  3.590);  law prediction  5.287 = 1.528x;  quad/meas 1.037
+    plateau d=  64 L=  0.01: C_tot  3.097 = cast  2.896 + loop 0.786 (quad  3.000);  law prediction  5.312 = 1.715x;  quad/meas 0.969
+        gap d=  64 L=   0.1: C_tot  3.597 = cast  2.914 + loop 2.387 (quad  3.767);  law prediction  6.157 = 1.712x;  quad/meas 1.047
+        gap d=  64 L=  0.01: C_tot  3.334 = cast  3.211 + loop 1.373 (quad  3.492);  law prediction  7.571 = 2.271x;  quad/meas 1.047
+      power d=  64 L=   0.1: C_tot  3.935 = cast  2.710 + loop 3.100 (quad  4.118);  law prediction  5.348 = 1.359x;  quad/meas 1.046
+      power d=  64 L=  0.01: C_tot  3.185 = cast  2.843 + loop 1.802 (quad  3.366);  law prediction  6.316 = 1.983x;  quad/meas 1.057
+   logspace d=  96 L=   0.1: C_tot  4.357 = cast  2.851 + loop 3.370 (quad  4.414);  law prediction  8.032 = 1.843x;  quad/meas 1.013
+   logspace d=  96 L=  0.01: C_tot  4.158 = cast  3.460 + loop 2.247 (quad  4.126);  law prediction  9.640 = 2.319x;  quad/meas 0.992
+    plateau d=  96 L=   0.1: C_tot  3.451 = cast  2.993 + loop 1.773 (quad  3.479);  law prediction  5.224 = 1.514x;  quad/meas 1.008
+    plateau d=  96 L=  0.01: C_tot  3.035 = cast  2.981 + loop 0.791 (quad  3.084);  law prediction  5.376 = 1.771x;  quad/meas 1.016
+        gap d=  96 L=   0.1: C_tot  3.551 = cast  2.863 + loop 2.485 (quad  3.792);  law prediction  6.300 = 1.774x;  quad/meas 1.068
+        gap d=  96 L=  0.01: C_tot  3.446 = cast  3.187 + loop 1.551 (quad  3.544);  law prediction  7.795 = 2.262x;  quad/meas 1.028
+      power d=  96 L=   0.1: C_tot  4.381 = cast  2.376 + loop 3.563 (quad  4.283);  law prediction  5.553 = 1.268x;  quad/meas 0.978
+      power d=  96 L=  0.01: C_tot  3.317 = cast  2.845 + loop 1.752 (quad  3.341);  law prediction  6.272 = 1.891x;  quad/meas 1.007
+
+  per-injection kappa / (2sqrt2 g(state)): 0.003 .. 2.645 (median 0.569) over 208 injections
+  predicted total / measured total: 1.268 .. 2.359 (median 1.809)
+  quadrature / measured: 0.969 .. 1.077 (median 1.022)
+
+======================================================================================================================
+[D] assembly: 4.13 = 2sqrt2 x g x (injection quadrature)?
+======================================================================================================================
+  measured C_total in u rms(X0) scale units: median 3.505 [3.035, 4.381] over 16 cells
+  C_total / 2sqrt2 = 1.239   (the 4.13 of pilot 19-20)
+  cast share of the total: median 0.845
+  injection-weighted g: median 1.135 [0.964, 1.474]
+  one-step g on the input spectrum (180 cells): 1.308
+  ratio (injection-weighted g)/(one-step g) = 0.867
+
+wrote pilot22_results.json
