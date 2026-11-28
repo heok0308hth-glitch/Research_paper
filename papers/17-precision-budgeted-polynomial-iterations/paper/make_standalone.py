@@ -27,10 +27,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SECT = os.path.join(HERE, "sections")
 FIG = os.path.join(HERE, "figures")
 DATA = os.path.join(FIG, "data")
-DEFAULT_OUT = os.path.normpath(os.path.join(HERE, "..", "..", "..", "downloads",
-                                            "iclr-2028-paper-final.tex"))
-if not os.path.isdir(os.path.dirname(DEFAULT_OUT)):
-    # packaged layout (reproduce/paper/): write beside the sources instead
+TREE = os.path.normpath(os.path.join(HERE, ".."))
+DOWNLOADS = os.path.normpath(os.path.join(TREE, "..", "..", "downloads"))
+if os.path.basename(TREE) == "iclr-research" and os.path.isdir(DOWNLOADS):
+    # working tree: the review copy lives in the workspace's downloads/
+    DEFAULT_OUT = os.path.join(DOWNLOADS, "iclr-2028-paper-final.tex")
+else:
+    # packaged layout (reproduce/paper/): write beside the sources, never outside
+    # the package
     DEFAULT_OUT = os.path.join(HERE, "iclr-2028-paper-final.tex")
 
 HEADER = """% ---------------------------------------------------------------------------
