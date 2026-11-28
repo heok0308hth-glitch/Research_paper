@@ -1,0 +1,435 @@
+{
+ "source": "pilot25_results.json",
+ "unit": "seed (one 1,200-step run); a call is one application of the composite to one hidden weight matrix",
+ "bootstrap": {
+  "resamples": 4000,
+  "seed": 20261128,
+  "resamples_unit": "run (cluster), pooled calls and events"
+ },
+ "permutation": {
+  "draws": 40000,
+  "seed": 20261131,
+  "statistic": "median steps to divergence, diabetes minus digits"
+ },
+ "cells": {
+  "digits_e5m2": {
+   "task": "digits",
+   "cond": "e5m2",
+   "runs": 25,
+   "diverged": 25,
+   "run_rate": 1.0,
+   "run_rate_cp95": [
+    0.8628148284692875,
+    1.0
+   ],
+   "calls": 40002,
+   "hazard_per_call": 0.0006249687515624218,
+   "hazard_wilson95": [
+    0.000423374691797082,
+    0.000922465237007187
+   ],
+   "hazard_seed_boot95": [
+    0.0005477168150769458,
+    0.0007234926791428214
+   ],
+   "hazard_seed_boot_sd": 4.532962003538109e-05,
+   "binomial_sd": 0.00012495468561393353,
+   "design_effect": 0.3627684693268233,
+   "run_rate_seed_boot95": [
+    1.0,
+    1.0
+   ],
+   "steps_to_div_median": 396.0,
+   "steps_to_div_iqr": [
+    341.0,
+    463.0
+   ],
+   "steps_to_div": [
+    118,
+    119,
+    180,
+    272,
+    314,
+    327,
+    341,
+    356,
+    360,
+    381,
+    386,
+    394,
+    396,
+    409,
+    433,
+    436,
+    450,
+    452,
+    463,
+    470,
+    480,
+    535,
+    535,
+    544,
+    832
+   ]
+  },
+  "digits_e5m2_s1035": {
+   "task": "digits",
+   "cond": "e5m2_s1035",
+   "runs": 25,
+   "diverged": 17,
+   "run_rate": 0.68,
+   "run_rate_cp95": [
+    0.4649992825026277,
+    0.8505045773864304
+   ],
+   "calls": 99822,
+   "hazard_per_call": 0.00017030313958846748,
+   "hazard_wilson95": [
+    0.00010633655545244048,
+    0.00027273822386013027
+   ],
+   "hazard_seed_boot95": [
+    0.00011394453186601616,
+    0.00022600876597523624
+   ],
+   "hazard_seed_boot_sd": 2.8407042381041748e-05,
+   "binomial_sd": 4.130106110628972e-05,
+   "design_effect": 0.6878041779104714,
+   "run_rate_seed_boot95": [
+    0.48,
+    0.84
+   ],
+   "steps_to_div_median": 908.0,
+   "steps_to_div_iqr": [
+    772.0,
+    1061.0
+   ],
+   "steps_to_div": [
+    568,
+    641,
+    691,
+    710,
+    772,
+    795,
+    826,
+    882,
+    908,
+    994,
+    1028,
+    1031,
+    1061,
+    1099,
+    1099,
+    1110,
+    1125
+   ]
+  },
+  "digits_e5m2_clamp": {
+   "task": "digits",
+   "cond": "e5m2_clamp",
+   "runs": 25,
+   "diverged": 0,
+   "run_rate": 0.0,
+   "run_rate_cp95": [
+    0.0,
+    0.1371851715307125
+   ],
+   "calls": 120000,
+   "hazard_per_call": 0.0,
+   "hazard_wilson95": [
+    3.388023331082952e-21,
+    3.2011132093736525e-05
+   ],
+   "hazard_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "hazard_seed_boot_sd": 0.0,
+   "binomial_sd": 2.886751345948129e-18,
+   "design_effect": null,
+   "run_rate_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "steps_to_div_median": null,
+   "steps_to_div_iqr": null,
+   "steps_to_div": []
+  },
+  "diabetes_e5m2": {
+   "task": "diabetes",
+   "cond": "e5m2",
+   "runs": 25,
+   "diverged": 25,
+   "run_rate": 1.0,
+   "run_rate_cp95": [
+    0.8628148284692875,
+    1.0
+   ],
+   "calls": 2730,
+   "hazard_per_call": 0.009157509157509158,
+   "hazard_wilson95": [
+    0.006210523243044045,
+    0.01348391026076268
+   ],
+   "hazard_seed_boot95": [
+    0.006636404843609351,
+    0.012807541162161483
+   ],
+   "hazard_seed_boot_sd": 0.0016190898035650624,
+   "binomial_sd": 0.0018230965469802918,
+   "design_effect": 0.888098771426484,
+   "run_rate_seed_boot95": [
+    1.0,
+    1.0
+   ],
+   "steps_to_div_median": 35.0,
+   "steps_to_div_iqr": [
+    22.0,
+    45.0
+   ],
+   "steps_to_div": [
+    3,
+    3,
+    4,
+    6,
+    11,
+    20,
+    22,
+    24,
+    25,
+    25,
+    27,
+    33,
+    35,
+    35,
+    38,
+    38,
+    39,
+    40,
+    45,
+    47,
+    48,
+    48,
+    50,
+    60,
+    170
+   ]
+  },
+  "diabetes_e5m2_s1035": {
+   "task": "diabetes",
+   "cond": "e5m2_s1035",
+   "runs": 25,
+   "diverged": 0,
+   "run_rate": 0.0,
+   "run_rate_cp95": [
+    0.0,
+    0.1371851715307125
+   ],
+   "calls": 90000,
+   "hazard_per_call": 0.0,
+   "hazard_wilson95": [
+    0.0,
+    4.268105403536249e-05
+   ],
+   "hazard_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "hazard_seed_boot_sd": 0.0,
+   "binomial_sd": 3.3333333333333333e-18,
+   "design_effect": null,
+   "run_rate_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "steps_to_div_median": null,
+   "steps_to_div_iqr": null,
+   "steps_to_div": []
+  },
+  "diabetes_e5m2_clamp": {
+   "task": "diabetes",
+   "cond": "e5m2_clamp",
+   "runs": 25,
+   "diverged": 0,
+   "run_rate": 0.0,
+   "run_rate_cp95": [
+    0.0,
+    0.1371851715307125
+   ],
+   "calls": 90000,
+   "hazard_per_call": 0.0,
+   "hazard_wilson95": [
+    0.0,
+    4.268105403536249e-05
+   ],
+   "hazard_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "hazard_seed_boot_sd": 0.0,
+   "binomial_sd": 3.3333333333333333e-18,
+   "design_effect": null,
+   "run_rate_seed_boot95": [
+    0.0,
+    0.0
+   ],
+   "steps_to_div_median": null,
+   "steps_to_div_iqr": null,
+   "steps_to_div": []
+  }
+ },
+ "pairs": {
+  "digits:e5m2_vs_e5m2_s1035": {
+   "task": "digits",
+   "a": "e5m2",
+   "b": "e5m2_s1035",
+   "rates": [
+    25,
+    25,
+    17,
+    25
+   ],
+   "fisher_p": 0.004029122782215311,
+   "rate_diff_boot95": [
+    0.16000000000000003,
+    0.52
+   ],
+   "hazard_ratio_boot95": [
+    2.6841477227895,
+    5.522246371991516
+   ],
+   "hazard_ratio": 3.669742983439063
+  },
+  "digits:e5m2_vs_e5m2_clamp": {
+   "task": "digits",
+   "a": "e5m2",
+   "b": "e5m2_clamp",
+   "rates": [
+    25,
+    25,
+    0,
+    25
+   ],
+   "fisher_p": 1.5821457204897235e-14,
+   "rate_diff_boot95": [
+    1.0,
+    1.0
+   ],
+   "hazard_ratio_boot95": [
+    null,
+    null
+   ],
+   "hazard_ratio": null
+  },
+  "digits:e5m2_s1035_vs_e5m2_clamp": {
+   "task": "digits",
+   "a": "e5m2_s1035",
+   "b": "e5m2_clamp",
+   "rates": [
+    17,
+    25,
+    0,
+    25
+   ],
+   "fisher_p": 2.1966757998011714e-07,
+   "rate_diff_boot95": [
+    0.48,
+    0.84
+   ],
+   "hazard_ratio_boot95": [
+    null,
+    null
+   ],
+   "hazard_ratio": null
+  },
+  "diabetes:e5m2_vs_e5m2_s1035": {
+   "task": "diabetes",
+   "a": "e5m2",
+   "b": "e5m2_s1035",
+   "rates": [
+    25,
+    25,
+    0,
+    25
+   ],
+   "fisher_p": 1.5821457204897235e-14,
+   "rate_diff_boot95": [
+    1.0,
+    1.0
+   ],
+   "hazard_ratio_boot95": [
+    null,
+    null
+   ],
+   "hazard_ratio": null
+  },
+  "diabetes:e5m2_vs_e5m2_clamp": {
+   "task": "diabetes",
+   "a": "e5m2",
+   "b": "e5m2_clamp",
+   "rates": [
+    25,
+    25,
+    0,
+    25
+   ],
+   "fisher_p": 1.5821457204897235e-14,
+   "rate_diff_boot95": [
+    1.0,
+    1.0
+   ],
+   "hazard_ratio_boot95": [
+    null,
+    null
+   ],
+   "hazard_ratio": null
+  },
+  "diabetes:e5m2_s1035_vs_e5m2_clamp": {
+   "task": "diabetes",
+   "a": "e5m2_s1035",
+   "b": "e5m2_clamp",
+   "rates": [
+    0,
+    25,
+    0,
+    25
+   ],
+   "fisher_p": 1.0,
+   "rate_diff_boot95": [
+    0.0,
+    0.0
+   ],
+   "hazard_ratio_boot95": [
+    null,
+    null
+   ],
+   "hazard_ratio": null
+  }
+ },
+ "cross_task": {
+  "digits_e5m2": {
+   "diverged": 25,
+   "runs": 25,
+   "steps_median": 396.0
+  },
+  "diabetes_e5m2": {
+   "diverged": 25,
+   "runs": 25,
+   "steps_median": 35.0
+  },
+  "fisher_p_counts": 1.0,
+  "median_shift_steps_diabetes_minus_digits": -361.0,
+  "permutation_p_median_shift": 2.499937501562461e-05,
+  "mannwhitney_p": 1.79055532110296e-09,
+  "mannwhitney_u": 623.0,
+  "hazard_ratio_diabetes_over_digits": 14.652747252747254,
+  "hazard_ratio_boot95": [
+   10.296363135148738,
+   20.975983891287925
+  ],
+  "hazard_ratio_seed_boot95": [
+   10.018042975896083,
+   22.30803268845045
+  ]
+ }
+}

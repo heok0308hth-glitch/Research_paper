@@ -22,16 +22,14 @@ $\ell\in[10^{-4},10^{-1}]$, precisions $p\in[4,24]$ and $d\in\{64,128\}$ (median
 $1.10$, CI $[1.07,1.14]$).
 \end{proposition}
 
-We call this a proposition deliberately: $c$ is a calibration and the expression a law
-fitted and tested, not a theorem with a controlled remainder.  A
-theorem of the same shape exists --- $(2K+1)\,u\,S_{\mathrm{pert}}$ bounds the
-singular-value channel with no calibration, and the subspace channel with the
-off-diagonal gain in place of $p'$ (Proposition~\ref{prop:ratchet}) --- and the gap
-between them is the calibration: the off-diagonal gain of a step is not dominated by its
-derivative, so $c=0.142$ compresses a bound by two orders of magnitude.  The
-first term is the exact error a design optimizes, the second the floor; the second is flat
-in $K$ and the first falls geometrically, so their sum has an interior minimum, where the
-shipped step counts sit.
+We call this a proposition deliberately: $c$ is a calibration, not a theorem with a
+controlled remainder.  A bound of the same shape exists --- $(2K+1)\,u\,S_{\mathrm{pert}}$
+for the singular-value channel with no calibration, and with the off-diagonal gain in place
+of $p'$ for the subspace channel (Proposition~\ref{prop:ratchet}) --- and the gap is the
+calibration: the off-diagonal gain is not dominated by the derivative, so $c=0.142$
+compresses a bound by two orders of magnitude.  The second term is flat in $K$ and the
+first falls geometrically, so their sum has an interior minimum, where the shipped step
+counts sit.
 
 \begin{table}[t]
 \centering
@@ -69,7 +67,7 @@ non-convergence and the measurement diverges.
 \label{thm:invariance}
 Let $p(x) = ax+bx^3+cx^5$ with real coefficients and
 $P(X) = aX + b(XX^\top)X + c(XX^\top)^2X$.  If $X = U\Sigma V^\top$ is full rank
-and $p(\sigma_i)\neq0$ for all $i$, then $P(X) = U\,p(\Sigma)\,V^\top$ and hence
+and $p(\sigma_i)>0$ for all $i$, then $P(X) = U\,p(\Sigma)\,V^\top$ and hence
 $\polar(P(X)) = UV^\top = \polar(X)$.  The same holds for any composition $P_K$ of
 such steps with different coefficients.
 \end{theorem}
@@ -78,18 +76,28 @@ such steps with different coefficients.
 $XX^\top = U\Sigma^2U^\top$, so $(XX^\top)X = U\Sigma^3V^\top$ and
 $(XX^\top)^2X = U\Sigma^5V^\top$; summing gives
 $U(a\Sigma+b\Sigma^3+c\Sigma^5)V^\top = Up(\Sigma)V^\top$, whose polar factor is
-$UV^\top$ whenever all $p(\sigma_i)$ are positive.  Induct over the composition.
-\qed
+$UV^\top$ whenever all $p(\sigma_i)$ are positive, which is the hypothesis.  Induct over
+the composition.  \qed
 \end{proof}
 
-\begin{corollary}[Why the floor is flat]
+The sign in that hypothesis is not cosmetic: if $p(\sigma_i)<0$ the singular value flips,
+$\polar(P(X)) = U\operatorname{diag}(\operatorname{sgn}p(\sigma_i))V^\top$, and the polar
+factor is $U$ with that column reversed.
+
+\begin{corollary}[What the exact part cannot do, and what the roundings do]
 \label{cor:flat}
-For the $p$-bit orbit $X_t = q(P_t(X_{t-1}),p)$, $\mathrm{sub}_{\mathrm{err}} =
-\norm{\polar(X_K) - \polar(X_0)}$: the exact part of the iteration contributes
-exactly zero to the subspace error.  Hence (i) the subspace floor does not fall with
-$K$, (ii) it does not depend on the design, and (iii) it does not depend on how bits
-are spread over the steps --- it is decided by the first quantisation of a state
-whose spectrum spans $[\ell,1]$.
+For the $p$-bit orbit $X_t = q(P_t(X_{t-1}),p)$ with
+$\mathrm{sub}_{\mathrm{err}} = \norm{\polar(X_K) - \polar(X_0)}_2$, the exact part
+contributes nothing, so every bit of the subspace error is created by the $2K+1$
+roundings.  Hence (i) no step count and no coefficient design removes it, and it saturates
+in $K$ rather than vanishing ($0.394$, $0.263$, $0.258$ at $K=5,6,7$, $d=64$, $p=8$,
+$\ell=10^{-3}$); (ii) it is not the first cast alone: the thirteen first-order responses add
+in quadrature to the measured floor with $84$--$86\%$ of the sum on the cast, so every step
+adds its own at the sensitivity of the spectrum it runs at and of the direction of its
+error (the state's rounding carries most of it, the intermediate's almost none: median
+coefficient $0.89$ against $0.054$); (iii) the cast costs most
+because the spectrum it is made at still spans $[\ell,1]$, where $1/(\sigma_i+\sigma_j)$ is
+largest.
 \end{corollary}
 
 In exact arithmetic the polar factor stays fixed to $4\times10^{-14}$ at $\ell=10^{-3}$
@@ -100,8 +108,10 @@ bounds the singular-value part only.
 \subsection{The size of the floor: a first-order formula}
 \label{sec:firstorder}
 
-By Corollary~\ref{cor:flat} the subspace error is the response of the polar factor
-to the perturbation $E = q(\hat M,p) - \hat M$ of the start.
+By Corollary~\ref{cor:flat} the cast's share of the subspace error is the response of the
+polar factor to the perturbation $E = q(\hat M,p) - \hat M$ of the start, and the in-loop
+share is the same response evaluated at the spectrum the state has when the rounding
+happens.  For the cast the response is first order in $E$:
 
 \begin{theorem}[Polar response to a perturbation]
 \label{thm:firstorder}
@@ -145,27 +155,35 @@ matrices the projected term is larger than the in-subspace one by a median $2.77
 (\S\ref{sec:loop}), so the floor is set by the rotation of the column space, not by the
 damping of the pair weights.
 
-\begin{corollary}[Scale, and what the exponent $0.73$ was]
+\begin{corollary}[An upper bound, and the condition a lower one needs]
 \label{cor:scale}
-$\mathrm{sub}_{\mathrm{err}} \le (\norm{\skewop F}_2 + \norm{E}_2)/\ell$, so
-$\mathrm{sub}_{\mathrm{err}} = \Theta(u/\ell)$ while the response is unsaturated and
-$\norm{E}_2 = \Theta(u)$: both terms of \eqref{eq:firstorder} are bounded by
-$\norm{E}_2/\ell$, the first because $1/(\sigma_i+\sigma_j)\le1/(2\ell)$, the second
-because $\norm{(\hat M^\top\hat M)^{-1/2}}_2 = 1/\ell$.
+$\mathrm{sub}_{\mathrm{err}} \le (\norm{\skewop F}_2 + \norm{E}_2)/\ell \le
+2\norm{E}_2/\ell$: the first term of \eqref{eq:firstorder} because
+$1/(\sigma_i+\sigma_j)\le1/(2\ell)$ and $\norm{\skewop F}_2\le\norm{F}_2=\norm{E}_2$, the
+second because $\norm{(\hat M^\top\hat M)^{-1/2}}_2 = 1/\ell$.  With
+$\norm{E}_2=O(u)$ this is $\mathrm{sub}_{\mathrm{err}}=O(u/\ell)$ for every $E$ and with no
+condition.
+
+A matching lower bound is false for an arbitrary $E$: if $E=UDV^\top$ with $D$ diagonal in
+the basis of $\hat M$, then $F=D$ is symmetric, the first term vanishes, and
+$\polar(\hat M+E)=\polar(\hat M)$ exactly although $\norm{E}_2>0$ --- a perturbation that
+only rescales the singular values moves no subspace.  The $u/\ell$ scaling is therefore
+conditional on the rounding error being non-degenerate in the pair channels, and
+it is what we observe rather than what we prove: the measured $C(\ell)$ follows
+\eqref{eq:firstorder} over four decades (predicted over measured $0.49$--$1.06$ at
+$d=64$, $p=12$), but its log--log fit is not a power law --- the local slope rises from
+$0.2$ to $1.17$ and $-0.73$ is the chord of that crossover.
 \end{corollary}
 
-The measured $C(\ell)$ follows \eqref{eq:firstorder} over four decades (predicted over
-measured $0.49$--$1.06$ at $d=64$, $p=12$), but its log--log fit is not a power law: the
-local slope rises from $0.2$ to $1.17$, and $-0.73$ is the chord of that crossover.
 Appendix~\ref{app:bound} has the matrix-free bound and the impossibility of a spectral one.
 
 \subsection{Consequences for the budget and how they fail}
 \label{sec:consequences}
 
-The floor is the sum of the responses to the per-slot roundings, each amplified at the
-spectrum the state has when it happens, so allocation reduces to the per-slot
-gains $\kappa_t$ (\S\ref{sec:alloc}); a step pays only while the exact error falls faster
-than a floor that does not fall with $K$ --- and on real spectra one step before the
+The floor is the response to the per-slot roundings, each amplified at the spectrum the
+state has when it happens and combining as the maximum of \S\ref{sec:alloc}, so allocation
+reduces to the per-slot gains $\kappa_t$; a step pays only while the exact error falls
+faster than a floor that does not fall with $K$ --- and on real spectra one step before the
 shipped count (\S\ref{sec:steps}).
 
 \label{sec:failures}

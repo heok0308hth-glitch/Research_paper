@@ -10,8 +10,20 @@ Shampoo~\cite{gupta2018shampoo} is the other line of preconditioned tensor optim
 Amsel et al.~\cite{amsel2025polar} derive minimax quintic coefficients for exact
 arithmetic and add the prescriptions this paper takes as its object; the empty design
 axis (Appendix~\ref{sec:design}) is consistent with that optimality holding only in
-exact arithmetic.  Du and Su~\cite{du2026polarswitch} put rounding into the design as a constraint; we
-bound what such a design can buy.
+exact arithmetic.
+
+\paragraph{Circuits against the chain, and two different certificates.}
+Du and Su~\cite{du2026polarswitch} replace the quintic chain by polynomial circuits of
+degree up to $65$, choosing the products and coefficients to minimize a worst-case error
+under a FLOP budget and a half-precision rounding constraint; they report $15.5$--$18.7\%$
+less runtime at comparable accuracy, with the output's spectral norm inside its designed
+bound on $14$ million matrices.  The certificates differ: a circuit buys FLOPs at a fixed
+singular-value error, whereas the subspace error is no functional of the singular values
+(Proposition~\ref{prop:nospectral}) and no polynomial removes it at fixed bits
+(Corollary~\ref{cor:flat}).  Our numbers say where such a design stops paying: the shipped
+point is within $1.11\times$ of the best of 35 designs at bf16, a step past $K=5$ costs
+eight bits for under $1.5\%$, and the four-bit failure is an escape from the window rather
+than an accuracy loss (\S\ref{sec:escape}).
 Huang~\cite{huang2026orthogonalization} reports a non-monotone relation between
 orthogonalization accuracy and training quality, which the two-term law explains in shape
 if not in constant.

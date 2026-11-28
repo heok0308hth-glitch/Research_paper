@@ -32,9 +32,9 @@ precision where the window is wide (\S\ref{sec:fp8}).
 \emph{The step budget is measured on one window.}  The frontier of \S\ref{sec:steps} comes
 from the $128\times128$ and $128\times64$ momenta of a five-layer MLP at
 $\ell_0=10^{-2}$; the plateau sits where the exact error falls below the floor, so a wider
-window moves it.  On the full spectrum every design errs by $1.00$--$1.65$, because the
-median dynamic range is $2\cdot10^{-10}$ and the tail is not reached in six steps: we do
-not claim the truncated tail is harmless, only that no precision repairs it.
+window moves it.  On the full spectrum every design errs by $1.00$--$1.65$, since the
+median dynamic range is $2\cdot10^{-10}$: we do not claim the truncated tail is harmless,
+only that no precision repairs it.
 
 \emph{One scale of model, a flat loss, and no online rule.}  The training measurements stop
 at five layers and 64 input dimensions, eleven seed-runs per condition at $400$ steps and
@@ -45,7 +45,8 @@ error spans $1.6\times10^{-2}$ to $0.73$ while the training loss moves by $1.65\
 when $6\%$ would not is a GPU-scale experiment we have not run.  The per-call hazard of
 \S\ref{sec:escape} rises with the step count, so $1$ in $1{,}600$ calls is not the rate of a
 $10^{9}$-token run; read as a first-order rate it already says the shipped safety cannot
-outlast one.
+outlast one, and the inferential unit is the run, not the call: at that level the two tasks
+tie at $25/25$ and the seed-level tests of \S\ref{sec:escape} carry the conclusions.
 Allocation is verified
 for two operands and for per-slot schedules separately, not jointly, and the schedule has
 no online form (\S\ref{sec:online}).

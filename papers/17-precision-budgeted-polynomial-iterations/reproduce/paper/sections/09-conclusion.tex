@@ -8,8 +8,11 @@ measured error to a median ratio of $1.10$ over 90 cells, and survives bf16, fp8
 exponent range and three other kernels up to the constant.
 
 The floor is not a balance of contraction and reinjection but a subspace error: the exact
-iteration preserves the polar factor, so no step count, design or schedule can undo an
-error created at the first quantisation.  A first-order formula gives that error its size: for a square state the
+iteration preserves the polar factor, so no step count and no design can undo what the
+roundings create --- most at the first cast, the rest at every step, by the gain of the
+spectrum it runs at.  The bound is $O(u/\ell)$ with no condition on the error; that the
+floor scales as $u/\ell$ is measured, and needs the rounding error not to be a pure
+rescaling of the singular values.  A first-order formula gives that error its size: for a square state the
 pair weights $1/(\sigma_i+\sigma_j)$ say which roundings are expensive, and for the
 rectangular state a Muon update actually is, the rotation of the column space dominates,
 without which the prediction is off by $2.8\times$ in all 500 real momentum matrices.

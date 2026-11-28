@@ -56,6 +56,7 @@ script & what it measures & used in \\
 \texttt{pilot23\_divergence\_mechanism} & the window and the escape; the four counterfactuals; the loop gain & \S\ref{sec:escape} \\
 \texttt{pilot24\_large\_d\_multiplicity} & the multiplicity to $d=512$; per-injection quartiles; the ratchet's bound & \S\ref{sec:profile}, Appendix~\ref{app:bound} \\
 \texttt{pilot25\_long\_census} & 1,200 steps $\times$ 25 seeds: the hazard of a call, with intervals and tests & \S\ref{sec:realtrain}, \S\ref{sec:escape}, Table~\ref{tab:census} \\
+\texttt{pilot25b\_seed\_level} & the same runs read per seed: run rates, seed bootstrap, seed-level tests & \S\ref{sec:escape}, Table~\ref{tab:seedlevel} \\
 \texttt{make\_figure\_data} & every plotted coordinate, read from the JSON files above & Figs.~\ref{fig:ratchet}--\ref{fig:pareto} \\
 \bottomrule
 \end{tabular}
@@ -80,7 +81,7 @@ $5\times10^{-2}$ there.
 \paragraph{Archive.}
 The scripts, their JSON results and logs, and the validation script are distributed as
 \path{iclr-2028-artifact.tar.gz}; \texttt{MANIFEST.sha256} pins each experiment file
-and hashes to \texttt{5aebe2b2772e38cc}\allowbreak\texttt{e2c054c2860d32c3}\allowbreak\texttt{a71845610635d1e5}\allowbreak\texttt{1e2ad70c579f2375}, so the numbers in the tables can be checked
+and hashes to \texttt{05ab9d2132ab4f46}\allowbreak\texttt{39dfb44366811d45}\allowbreak\texttt{5f228d2b2a4e38d3}\allowbreak\texttt{fd48a389544bd567}, so the numbers in the tables can be checked
 against the code that produced them without re-running it.
 
 \section{The Negative Results in Full}
@@ -207,33 +208,38 @@ anything measured from $X$ alone.
 
 \paragraph{The ratchet, and the channel it certifies.}
 Definition~\ref{def:ratchet} is a maximum, and it is worth stating exactly what it
-bounds.  Write the $p$-bit scalar orbit as $\hat x_t = p_t(\hat x_{t-1}) + \delta_t$ with
+bounds --- and what it does not.  Write the $p$-bit scalar orbit as
+$\hat x_t = p_t(\hat x_{t-1}) + \delta_t$ with
 $|\delta_t|\le\rho u$ --- one cast and, per step, the rounding of $B$ and of the state,
 $2K+1$ injections in all --- and let $x_t$ be the exact orbit it shadows.
 
-\begin{proposition}[What the ratchet bounds]
+\begin{proposition}[What the ratchet bounds, and what it is for]
 \label{prop:ratchet}
 Let $p_l\in C^1(W)$ on a window $W$ containing the orbit of every $\sigma\in[\ell,1]$ and
-its perturbations, $\rho=\max_W|x|$.  Then, for $u\to0$,
+its perturbations, $\rho=\max_W|x|$, and let $S(K)=\max_\sigma S_K(\sigma)$ with the empty
+product --- the rounding of the output itself --- taken as $1$.  Then, for $u\to0$,
 \begin{equation}
-|x_K-\hat x_K| \;\le\; (2K+1)\,\rho\,u\,S_{\mathrm{pert}}(K) \;+\; O(u^2),
+|x_K-\hat x_K| \;\le\; (2K+1)\,\rho\,u\,\max\{1,S(K)\} \;+\; O(u^2),
 \label{eq:ratchet}
 \end{equation}
 and with the off-diagonal gain $\gamma_l(x,y)=a_l+b_l(x^2+y^2)+c_l(x^4+x^2y^2+y^4)$ in
-place of $|p_l'|$ in the same prefix maximum, call it $G_{\mathrm{pert}}(K)$, the subspace
-error obeys the same inequality.  In neither case may $S_{\mathrm{pert}}(K)$ be replaced by
-the terminal $S(K)$.
+place of $|p_l'|$ in the same maximum, call it $G(K)$, the subspace error obeys the same
+inequality.  Neither inequality needs the ratchet: $S_{\mathrm{pert}}(K)\ge\max\{1,S(K)\}$,
+so substituting it can only loosen \eqref{eq:ratchet}.  What the ratchet does is index the
+law across $K$: $\max\{1,S(K)\}$ is not monotone in $K$, and the running maximum over
+prefixes (Definition~\ref{def:ratchet}) is.
 \end{proposition}
 
 \begin{proof}
 $\hat x_t = \phi_t(\hat x_{t-1})+\delta_t$ with $\phi_t$ differentiable on $W$, so the
 first-order response to the injection at step $j$ is
-$\delta_j\prod_{l>j}p_l'(x_{l-1})$; the response to $\delta_j$ summed over the $2K+1$
-injections is bounded by $\rho u\sum_j\prod_{l>j}|p_l'|\le(2K+1)\rho u\max_j\prod_{l>j}|p_l'|$,
-and $\prod_{l>j}|p_l'|\le S(K)\le S_{\mathrm{pert}}(K)$ by Definition~\ref{def:ratchet} ---
-the suffix product is one of the products $S(K)$ maximises over.  The $O(u^2)$ term is the
+$\delta_j\prod_{l>j}p_l'(x_{l-1})$.  For $j<K$ the product is
+$\prod_{l=j+1}^{K}|p_l'|$, which is one of the products $S_K(\sigma)$ maximises over its
+injection point --- $j'=j+1$ is among the points it maximises over --- and hence at most
+$S(K)$; for the last injection, $j=K$, the product is empty and equals $1$.  Summing the
+moduli over the $2K+1$ injections gives \eqref{eq:ratchet}.  The $O(u^2)$ term is the
 second-order remainder of the composition, once per injection, and it can be given its own
-coefficient: with $M=\max_W|p_\ell''|$ and $B=\max_W|x|$, the recursion
+coefficient: with $M=\max_W|p_l''|$ and $B=\max_W|x|$, the recursion
 $e_t=p_t'(x_{t-1})e_{t-1}+\delta_t+\tfrac12p_t''(\xi_t)e_{t-1}^2$ with
 $|e_{t-1}|\le(2t-1)BuS_{\mathrm{pert}}(t-1)$ propagates the quadratic parts through the
 same prefix products, so
@@ -247,21 +253,35 @@ At the shipped point ($\ell=10^{-3}$, $K=7$, $u=2^{-8}$, $B=1$, $M=2.0\cdot10^3$
 visited window) the quadratic coefficient exceeds the first-order term by orders of
 magnitude: \eqref{eq:second} is a $u\to0$ statement, and at four bits what certifies
 \eqref{eq:ratchet} is the measurement (24 of 24 cells, $16$--$1048\times$ slack), not the
-remainder bound.  We claim it as a first-order envelope at four bits.  The pair channel is the
-same argument: an injection's off-diagonal component is multiplied, step by step, by
-$\gamma_l$ at the pair's own orbit, so the triangle inequality and the definition of
-$G_{\mathrm{pert}}$ give it.  The terminal value fails because $S(K)$ maximises over the
-injection points of \emph{one} prefix, while the same products regrouped by prefix can
-exceed it --- and do when the last step collapses (Fig.~\ref{fig:ratchet}a).
+remainder bound.  We claim it as a first-order envelope at four bits.  The pair channel is
+the same argument with $\gamma_l$ in place of $|p_l'|$: an injection's off-diagonal
+component is multiplied, step by step, by $\gamma_l$ at the pair's own orbit, so the
+triangle inequality and the definition of $G(K)$ give it.
 \end{proof}
+
+\paragraph{Why the scalar channel collapses and the subspace one does not.}  The derivation
+above uses $S(K)$ and an earlier form of this proposition concluded that
+$S_{\mathrm{pert}}(K)$ could not be replaced by it, which was a contradiction: the two
+claims answer different questions, and they are now separated.  The terminal value is the
+valid bound; the ratchet is the predictor; and why they differ so far is measured rather
+than argued.  At $\ell=10^{-3}$ the shipped design's prefixes give $S(t)=609$, $60$,
+$2.5\cdot10^{-3}$ for $t=5,6,7$ --- the Newton-type last step has $p'(1)=0$ and multiplies
+every suffix product --- so $\max\{1,S(K)\}$ is $1$ at $K=7$ and puts the two-term law at
+$5.5\cdot10^{-4}$ where $2.58\cdot10^{-1}$ is measured, a factor $470$, while the ratchet
+stays at $610$ and puts it at $0.34$.  The pair envelope over the same three counts is
+$737$, $735$, $735$: the gain of the last step at the top of the window is
+$\gamma(1,1)=1/2$ where $p'(1)=0$, and the subspace channel therefore does not inherit the
+collapse of the scalar one.  That is also why the scalar $S$ enters the law as a calibrated
+surrogate rather than as the certificate, and why the certificate of the floor is the pair
+envelope, whose constant has to be measured ($0.011$--$0.912$) instead of read off.
 
 Two measurements test it (\texttt{pilot24}).  The certified bound holds in all 24 cells
 tested ($d=64$, $p=8$, $K=6,7$, four families, three $\ell$) with a slack of
 $16$--$1048\times$ (median $41\times$), computed with $\rho=1$: the inequality is true and
 loose by about the ratio of $2K+1$ to the calibrated $c$, which is what sign cancellation
-does (\S\ref{sec:profile}).  The pair ratchet is not a small correction to the scalar one:
-$G_{\mathrm{pert}}/S_{\mathrm{pert}}$ is $0.62$--$1.21$ (below one in 16 of 24 cells), and
-the constant it leaves, $\mathrm{err}/(u\,G_{\mathrm{pert}})$, is $0.011$--$0.912$
+does (\S\ref{sec:profile}).  The pair envelope is not a small correction to the scalar one:
+$G(K)/S_{\mathrm{pert}}(K)$ is $0.62$--$1.21$ (below one in 16 of 24 cells), and
+the constant it leaves, $\mathrm{err}/(u\,G(K))$, is $0.011$--$0.912$
 (median $0.44$) --- below one in every cell.  So the subspace channel needs no constant
 above one, and the $0.142$ the text reports is the scalar surrogate of that envelope.  The
 two constants are unstable and tight for the same reason.  The scalar inequality replaces
@@ -349,8 +369,8 @@ measured floor over 96 cells, with $84\%$ of the total on the input cast.  Givin
 injection the one-step law of the state it enters, however, over-predicts the floor by
 $1.27$--$2.36\times$: the per-injection coefficient divided by $2\sqrt2\,g(s_t)$ spans
 $0.003$--$2.6$ (median $0.57$), because a rounding injected into an intermediate is not a
-rounding of the state.  So $4.13=2.83\times g\times$(the counted multiplicity), with both
-factors computable and neither fitted.
+rounding of the state.  So $4.13=2.828\times1.46$, with $1.46=g\,m$: $g=1.31$ on the 180 profile cells,
+and $m=1.11$ the counted multiplicity, both computable and neither fitted.
 
 \paragraph{The coefficient, in quartiles.}  A range of $0.003$--$2.6$ hides where the mass
 is; Table~\ref{tab:w13} splits it.  The input cast obeys the one-step law almost exactly
@@ -448,6 +468,43 @@ task & condition & div/runs & calls & hazard & 95\% CI & $1$ in \\
 \end{tabular}
 \end{table}
 
+\begin{table}[h]
+\centering
+\caption{The same census at the level of the seed (\texttt{pilot25b}): 25 runs per cell, the
+run rate with an exact Clopper--Pearson interval, the pooled call hazard with a bootstrap
+that resamples \emph{seeds}, and the design effect --- that bootstrap's standard error
+divided by the binomial standard error the Wilson interval uses.}
+\label{tab:seedlevel}
+\begin{tabular}{llccccc}
+\toprule
+task & condition & div/runs & run rate [95\%] & hazard & seed-boot 95\% & DEFF \\
+\midrule
+\texttt{digits} & $s=1.01$  & $25/25$ & $1.00\ [0.86,1.00]$ & $6.25\cdot10^{-4}$ & $[5.48,7.23]\cdot10^{-4}$ & $0.36$ \\
+                & $s=1.035$ & $17/25$ & $0.68\ [0.46,0.85]$ & $1.70\cdot10^{-4}$ & $[1.14,2.26]\cdot10^{-4}$ & $0.69$ \\
+                & clamp     & $0/25$  & $0\ [0,0.14]$      & $0$ & $0$ & --- \\
+\texttt{diabetes} & $s=1.01$  & $25/25$ & $1.00\ [0.86,1.00]$ & $9.16\cdot10^{-3}$ & $[6.64,12.8]\cdot10^{-3}$ & $0.89$ \\
+                & $s=1.035$ & $0/25$  & $0\ [0,0.14]$      & $0$ & $0$ & --- \\
+                & clamp     & $0/25$  & $0\ [0,0.14]$      & $0$ & $0$ & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{The seed as the unit of inference.}  Calls within a run share weights and
+momentum, so the $25$ seeds, not the calls, are the independent repetitions.  Resampling
+seeds and pooling their calls gives the last two columns of Table~\ref{tab:seedlevel}: the
+pooled hazard moves little ($6.25\cdot10^{-4}$ against the Wilson $[4.23,9.22]\cdot10^{-4}$
+at \texttt{digits}, $1.01$) because exposure varies between runs more than the events do,
+and the bootstrap's standard error is $0.36$--$0.89$ of the binomial one --- the effective
+sample size is the run, so the call-level interval is not anti-conservative, it is the
+wrong experiment.  On counts the conditions do separate at seed level: \texttt{digits}
+$25/25$ against $17/25$ at $1.035$ (Fisher $p=4.0\cdot10^{-3}$, run-rate difference
+$[0.16,0.52]$, hazard ratio $3.7$ with a seed bootstrap $[2.7,5.5]$) and \texttt{diabetes}
+$25/25$ against $0/25$ ($p=1.6\cdot10^{-14}$); between the tasks the counts are tied
+($25/25$ each, $p=1$) and what differs is \emph{when} a run fails, median $396$ steps
+against $35$ (permutation $p=2.5\cdot10^{-5}$, Mann--Whitney $1.8\cdot10^{-9}$).  The
+call-level exact $p$ below is therefore an ordering of hazards, and the seed-level tests are
+the inference.
+
 \paragraph{What the run count cannot say.}  At this horizon the two tasks are
 indistinguishable as runs --- 25 of 25 fail in both at $s=1.01$, so Fisher's exact test is
 undefined --- and they are $14.7\times$ apart per call: $42\,732$ calls carry 50 events, and
@@ -479,7 +536,8 @@ JSON is a function of the seeds and reruns byte for byte.
 
 \paragraph{Two caveats on the estimate.}  The Wilson interval treats each call as an
 independent Bernoulli trial; within a run the calls are correlated through the weights, so
-the interval describes the exposure rather than upper-bounding a dependent process.  The
+the interval describes the exposure rather than upper-bounding a dependent process, and
+Table~\ref{tab:seedlevel} prices that gap with the seed bootstrap.  The
 clamp is not free: the implementation costs a four-iteration power estimate per step, which
 this paper does not price --- doing so at scale is the one measurement we would add to it.
 

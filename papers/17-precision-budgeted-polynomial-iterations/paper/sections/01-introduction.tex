@@ -44,20 +44,26 @@ Three prescriptions are wrong at four bits, each with its measured price.
 \item \textbf{A computable sensitivity indicator and its calibration}
 (Proposition~\ref{thm:cert}).  $S_{\mathrm{pert}}$ is a \emph{prefix ratchet} of the
 orbit sensitivity of the coefficients: a scalar of $O(K)$ arithmetic, needing no
-matrix.  The ratchet matters: the terminal sensitivity collapses to $1.0$ when the last
-step is of Newton type and under-estimates the error by $66\times$.  With one constant
+matrix.  The ratchet matters: the terminal sensitivity is $2.5\times10^{-3}$ when the last
+step is of Newton type, its envelope of $1$ puts the law $470\times$ low, and the pair
+envelope stays at $735$.  With one constant
 $c=0.142$ it forms $\mathrm{err} \approx E_K + c\,u\,S_{\mathrm{pert}}(K)$, whose median
 ratio to measurement is $1.10$ over 90 cells.
 \item \textbf{The floor is a subspace error, and it is invariant} (Theorems
 \ref{thm:invariance}, \ref{thm:firstorder}).  The exact iteration preserves the polar
-factor, so no step count, design or schedule reduces the floor; it is created at the first
-quantisation of a state whose spectrum is still $[\ell,1]$.  A
+factor, so no step count and no design removes an error that lives in the subspace, and no
+exact arithmetic creates it: the roundings do, $84$--$86\%$ of it at the first cast of a
+state whose spectrum is still $[\ell,1]$ and the rest at the spectra the later steps run at
+--- which is why the floor saturates in $K$ ($1.5\times$ from five steps to seven) rather
+than vanishing.  A
 first-order formula predicts it within $10\%$ in 52 of 54 square cells and, in the
 two-term form rectangular matrices require, within $0.6\%$ in all 500 real momentum
-matrices, and yields $\mathrm{err}=\Theta(u/\ell)$.
+matrices, and bounds it by $O(u/\ell)$; the $u/\ell$ scaling is measured, not proved.
 \item \textbf{The constant closes} (\S\ref{sec:profile}).  Normalising the pair operator
-by $\sqrt d$ leaves $6.07$, a derived $2\sqrt2$ times a profile factor $g$ measured at
-$1.31$ (median, 180 cells).  $g$ is the edge of a four-block
+by $\sqrt d$ leaves $6.07=1.471\times2\sqrt2\times1.46$: the cast's rms factor
+$\sqrt{3/(2\ln2)}$, a derived $2\sqrt2$, and $1.46=g\,m$ --- a profile factor $g=1.31$
+(median, 180 cells) times the counted multiplicity $m=1.11$ of the thirteen injections.
+$g$ is the edge of a four-block
 variance-profile operator built from the spectrum, with no fitted constant ($1.2\%$ of the
 measurement at the median, $97\%$ of cells inside $\pm10\%$), and it follows the decades a
 spectrum spans, not $d$.
@@ -69,18 +75,17 @@ median $3.06\times$ where the first-slot premium exceeds two bits and is neutral
 momentum ($0.9$ bits).
 \item \textbf{Where the arithmetic ends: fp8} (\S\ref{sec:fp8}).  With the significand
 matched, the fp8 floor equals the unlimited-exponent kernel's to $1$--$3\%$ over four
-dynamic ranges, and the exponent window is a second, separable constraint with a computable
-boundary; inside it, casting the start and running the first step in bf16 cures the
-divergence, and outside it the same hybrid loses to dropping a step.
+dynamic ranges; the exponent window is a second, separable constraint, inside which casting
+the start and the first step in bf16 cures the divergence, and outside which the same hybrid
+loses to dropping a step.
 \item \textbf{What real training breaks, and how} (\S\ref{sec:realtrain},
 \S\ref{sec:escape}).  The training loss is flat across four formats and update errors up
 to $0.73$; what fails is survival, and it fails inside one call of the iteration rather
 than in the training dynamics: the state's top leaves its certified window, the quintic
 amplifies it ($2.2\times$ at $1.5$ times the edge, $9.3\times$ at twice), and the update
 reaches $10^{44}$ in four steps.  Clamping the state into its window makes every long run
-finish where a $10\%$ cut in the learning rate leaves 7 of 11 failing, and the curvature loop
-gain stays below one ($\le0.83$ in five of six trajectories), which excludes an
-edge-of-stability story.
+finish where a $10\%$ learning-rate cut leaves 7 of 11 failing, and the curvature loop gain
+stays below one ($\le0.83$ in five of six), excluding an edge-of-stability story.
 \item \textbf{Three negative results.}  Accuracy does not require sensitivity (the error
 falls $500\times$ while the sensitivity is non-monotone); the law does not design (at
 bf16 the shipped point is within $1.11\times$ of the best of 35 designs and the law's own

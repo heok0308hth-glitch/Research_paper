@@ -40,7 +40,8 @@ S_K(\sigma) = \max_{1\le j \le K}\ \prod_{l=j}^{K} \bigl|p_l'(x_{l-1})\bigr|,
 \end{equation}
 $S_K(\sigma)$ is the largest amplification a rounding injected at step $j$ suffers on its
 way to the output; the product form is exact because each $p_l$ is differentiable and the
-orbit is one-dimensional.  $S(K)$ is a scalar of the coefficients: on a 400-point grid it
+orbit is one-dimensional, and the empty product --- the rounding of the output itself ---
+counts as $1$.  $S(K)$ is a scalar of the coefficients: on a 400-point grid it
 costs $O(K)$ arithmetic per point, needs no matrix and no SVD.
 
 \begin{definition}[Prefix ratchet sensitivity indicator]
@@ -48,11 +49,15 @@ costs $O(K)$ arithmetic per point, needs no matrix and no SVD.
 $S_{\mathrm{pert}}(K) = \max_{1\le t\le K} S(t)$.
 \end{definition}
 
-The ratchet is what makes $S$ usable.  A Newton-type final step has $p'(1)=0$, so the
-terminal factor of $S_K$ vanishes and $S(K)$ collapses to $1.0$ exactly where the floor
-dominates: at $\ell=10^{-3}$, $K=7$, $p=8$ it predicts $3.9\times10^{-3}$ against a measured
-$2.58\times10^{-1}$, a $66\times$ under-estimate, while the off-diagonal gain of that step
-is $1/2$ --- which the prefix maximum retains (Fig.~\ref{fig:ratchet}).
+The ratchet is a predictor's device, not part of a bound: the envelope holds with the
+terminal $\max\{1,S(K)\}$, which the ratchet only loosens.  What the terminal value cannot
+do is index a law across $K$, because a Newton-type final step has $p'(1)=0$ and multiplies
+every suffix product: at $\ell=10^{-3}$ the prefixes give $S(t)=609$, $60$,
+$2.5\times10^{-3}$ for $t=5,6,7$, so the envelope is $1$ at $K=7$ and puts the law at
+$5.5\times10^{-4}$ where $2.58\times10^{-1}$ is measured, while the ratchet stays at $610$
+and predicts $0.34$ (Fig.~\ref{fig:ratchet}).  The pair envelope over the same three counts
+is $737$, $735$, $735$: $\gamma(1,1)=1/2$ where $p'(1)=0$, which is why the subspace floor
+survives a Newton final step.
 
 \paragraph{Decomposition.}
 We separate $\mathrm{err} = \norm{X_K - \polar(M)}_2$ into the singular-value part

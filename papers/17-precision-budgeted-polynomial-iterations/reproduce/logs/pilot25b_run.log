@@ -1,0 +1,21 @@
+========================================================================================================
+pilot25b - the census read at the level of the seed
+========================================================================================================
+  cell                        div/runs  run rate                CP95     hazard          seed-boot 95   DEFF
+  digits_e5m2                 25/25         1.00         [0.86,1.00]  6.250e-04   [5.48e-04,7.23e-04]   0.36
+  digits_e5m2_s1035           17/25         0.68         [0.46,0.85]  1.703e-04   [1.14e-04,2.26e-04]   0.69
+  digits_e5m2_clamp            0/25         0.00         [0.00,0.14]  0.000e+00   [0.00e+00,0.00e+00]   0.00
+  diabetes_e5m2               25/25         1.00         [0.86,1.00]  9.158e-03   [6.64e-03,1.28e-02]   0.89
+  diabetes_e5m2_s1035          0/25         0.00         [0.00,0.14]  0.000e+00   [0.00e+00,0.00e+00]   0.00
+  diabetes_e5m2_clamp          0/25         0.00         [0.00,0.14]  0.000e+00   [0.00e+00,0.00e+00]   0.00
+  digits          e5m2 vs e5m2_s1035   Fisher p 4.029e-03   rate diff +0.16..+0.52
+  digits          e5m2 vs e5m2_clamp   Fisher p 1.582e-14   rate diff +1.00..+1.00
+  digits    e5m2_s1035 vs e5m2_clamp   Fisher p 2.197e-07   rate diff +0.48..+0.84
+  diabetes        e5m2 vs e5m2_s1035   Fisher p 1.582e-14   rate diff +1.00..+1.00
+  diabetes        e5m2 vs e5m2_clamp   Fisher p 1.582e-14   rate diff +1.00..+1.00
+  diabetes  e5m2_s1035 vs e5m2_clamp   Fisher p 1.000e+00   rate diff +0.00..+0.00
+
+  digits vs diabetes at E5M2, 1.01: counts 25/25 vs 25/25 (Fisher p 1.00), median steps 396 vs 35 (permutation p 2.50e-05; Mann-Whitney p 1.79e-09)
+  call-level hazard ratio 14.7x, seed bootstrap 95% [10.3, 21.0] of the ratio
+
+  wrote pilot25b_seedlevel_results.json

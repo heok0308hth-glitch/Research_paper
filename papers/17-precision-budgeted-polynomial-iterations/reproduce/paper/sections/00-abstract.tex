@@ -6,38 +6,41 @@ give that account in three separable pieces and spend it on the
 three prescriptions that are wrong at four bits.
 \textbf{Concretely, on the next Muon step:} raise the safety factor from $1.01$ to at
 least $1.035$ --- it widens the tolerance of the certified window from $0.8\%$ to $4.8\%$
-of its upper edge and lowers the hazard of one Muon call from $1$ in $1{,}600$ to $1$ in
-$5{,}900$ on \texttt{digits} and from $1$ in $109$ to below $1$ in $23{,}000$ on
-\texttt{diabetes} ($1{,}200$ steps, $25$ seeds each), which is margin and not immunity:
-on \texttt{digits} it delays the escape, while keeping the state inside its window removes
-it ($0$ in $210{,}000$ calls); stop at $K=4$--$5$, since the sixth step costs
-eight bits for under $1.5\%$ of the window error and a four-step E4M3 update reaches
-$1.3\times10^{-1}$ at 25 bits; and mix precision only inside a $\sigma_{\max}$-anchored
-window with $\ell\le10^{-2}$, where alone it is not Pareto dominated, since at 40 bits a
-four-step bf16 update errs by $2.4\times10^{-2}$ against $1.4\times10^{-1}$ for the
-shipped bf16-cast, two-bf16-step hybrid.
+of its upper edge and lowers the hazard of one Muon call $4$--$200\times$ over
+\ $1{,}200$ steps, which is margin and not immunity: on \texttt{digits} it only delays the
+escape, while keeping the state inside its window removes it ($0$ in $210{,}000$ calls);
+stop at $K=4$--$5$, since the sixth step spends eight bits for under $1.5\%$ of the window
+error; and mix precision only inside a $\sigma_{\max}$-anchored window with
+$\ell\le10^{-2}$, where alone it is not Pareto dominated, since at 40 bits a four-step bf16
+update errs by $2.4\times10^{-2}$ against $1.4\times10^{-1}$ for the shipped bf16-cast,
+two-bf16-step hybrid.
 The account: a computable sensitivity indicator $S_{\mathrm{pert}}(K)$ --- a prefix
 ratchet of the coefficients' orbit sensitivity, needing no matrix and no iteration ---
 forms with one calibration constant $c$ the law
 $\mathrm{err} \approx E_K + c\,u\,S_{\mathrm{pert}}(K)$, $u = 2^{-p}$, whose median
-predicted/measured ratio over 90 cells is $1.10$ (range $0.76$--$1.46$).  The floor is a subspace error, created at the first quantisation of a state whose spectrum still spans $[\ell,1]$; a first-order formula
+predicted/measured ratio over 90 cells is $1.10$ (range $0.76$--$1.46$).  The floor is a
+subspace error: the exact iteration adds none of it, the roundings add it at every slot ---
+$84$--$86\%$ of it at the first cast of a state whose spectrum still spans $[\ell,1]$, the
+rest where each step's sensitivity puts it.  A first-order formula
 predicts it within $10\%$ in 52 of 54 square cells and, in the two-term form a rectangular
-update requires, within $0.6\%$ in all 500 momentum matrices of a Muon loop, so the floor
-is $\Theta(u/\ell)$ and the earlier exponent $\ell^{-0.73}$ a chord.
-Normalising the pair operator $[1/(\sigma_i+\sigma_j)]$ by $\sqrt d$ turns the floor's
-family and dimension dependence into one number, $6.07$: a derived $2\sqrt2$ times a
-profile factor ($1.31$ at the median over
-180 cells, $0.98$--$2.10$) that the edge of a four-block variance-profile operator reproduces
-to $1.2\%$ with no fitted constant, and that follows the decades a spectrum spans, not
-$d$.
-Inside real training (digits, diabetes; eleven seed-runs each) the loss is flat where the
-update error is not: twelve bits and an update error of $0.73$ raise it by $1.65\times$
---- and what low precision breaks is survival, in a single
-call of the iteration: one rounding lands the state past its window edge, the quintic's
-gain then exceeds one ($2.2\times$ at $1.5$ times the edge, $9.3\times$ at twice it) and
-the update runs to $10^{44}$, while clamping the state inside the window makes all fifty runs
-finish and a $10\%$ learning-rate cut leaves seven of eleven failing.  In fp8 the floor matches the unlimited-exponent kernel's at the matched significand to
-$1$--$3\%$, and online budget adaptation is a negative result: four spectrum-free sensors
-cannot see the plateau ($69$ of $80$ matrices want $K=5$, the rest $K=4$).  No lower bound on accuracy versus
-sensitivity holds.
+update requires, within $0.6\%$ in all 500 momentum matrices of a Muon loop, and bounds it
+by $O(u/\ell)$; the $u/\ell$ scaling is measured, not proved (a perturbation that only
+rescales singular values moves no polar factor), and $\ell^{-0.73}$ is the chord of a
+crossover.
+Normalising the pair operator by $\sqrt d$ turns the floor's family and dimension
+dependence into one number, $6.07 = 1.471\times2\sqrt2\times1.46$: the cast's rms factor
+$\sqrt{3/(2\ln2)}$, a derived $2\sqrt2$, and a profile factor of $1.31$ at the median over
+180 cells ($0.98$--$2.10$) times the counted multiplicity $1.11$ of the thirteen
+injections.  The profile factor is the edge of a four-block variance-profile operator that
+reproduces it to $1.2\%$ with no fitted constant, and it follows the decades a spectrum
+spans, not $d$.
+Inside real training the loss is flat where the update error is not (at twelve bits an
+update error of $0.73$ costs $1.65\times$ the loss), and what low precision breaks is
+survival, in a single call of the iteration: one rounding lands the state past its window
+edge, the quintic's gain then exceeds one ($2.2\times$ at $1.5$ times the edge, $9.3\times$
+at twice it) and the update runs to $10^{44}$, while clamping the state inside the window
+makes all fifty runs finish and a $10\%$ learning-rate cut leaves seven of eleven failing.
+In fp8 the floor matches the unlimited-exponent kernel's at the matched significand to
+$1$--$3\%$; online budget adaptation is a negative result (four spectrum-free sensors
+cannot see the plateau), and so is a lower bound that trades accuracy against sensitivity.
 \end{abstract}

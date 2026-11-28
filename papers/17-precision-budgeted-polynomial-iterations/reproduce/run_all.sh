@@ -75,8 +75,17 @@ echo "== pilot25_long_census (the hazard of a Muon call over 1,200 steps)"
 rm -f pilot25_results.json
 python3 pilot25_long_census.py --workers 2 > pilot25_run.log 2>&1
 python3 pilot25_long_census.py --analyse >> pilot25_run.log 2>&1
+# pilot25b reads pilot25's runs and has no experiment of its own: it is the same
+# census at the level of the seed (run rates, seed bootstrap, seed-level tests).
+echo "== pilot25b_seed_level (the same runs read per seed)"
+python3 pilot25b_seed_level.py > pilot25b_run.log 2>&1
 echo "== make_figure_data (the coordinates of Figs. 1-3)"
 python3 make_figure_data.py > make_figure_data_run.log 2>&1
 
 echo "== static check of the paper sources"
 cd ../paper && python3 validate.py && python3 validate_figures.py && python3 pagebudget.py
+
+# The single self-contained review copy of the paper (the one that compiles with
+# nothing beside it) is built from the sources, so it is never edited by hand.
+echo "== make_standalone (the self-contained .tex)"
+python3 make_standalone.py

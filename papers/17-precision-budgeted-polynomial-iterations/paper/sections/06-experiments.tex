@@ -15,16 +15,16 @@ with $\sigma\ge0.05\norm{M}_F$, because the full-spectrum error is truncation.
 
 \subsection{The floor, the certificate, and their scaling}
 
-The floor is flat in $K$ and linear in $u$: between $p=10$ and $p=12$ the
-$\ell=10^{-2}$ floor falls $3.75\times$ for a $4\times$ fall in $u$; and divergence is not
-only a precision effect --- the undamped minimax sequence on a $d=64$ matrix reaches
-$1.9\times10^{6}$ at bf16, $K=7$, where fp16 gives $0.0124$.
+The floor is nearly flat in $K$ ($1.5\times$ from five steps to seven) and linear in $u$:
+between $p=10$ and $p=12$ the
+$\ell=10^{-2}$ floor falls $3.75\times$ for a $4\times$ fall in $u$.
 
 The certificate is only as good as its indicator, and the indicator's terminal value is
 not usable (Fig.~\ref{fig:ratchet}).  At $\ell=10^{-3}$ the last step of the $K=7$ design
-has $p'(1)=0$: $S(7)=2.5\times10^{-3}$ predicts $5.5\times10^{-4}$ where $0.258$ is
-measured, while the ratchet stays at $610$ and puts the law at $0.34$; the floor moves
-$1.5\times$ from $K=5$ to $K=7$ while the terminal sensitivity falls $609$-fold.
+has $p'(1)=0$: $S(7)=2.5\times10^{-3}$ puts the law at $5.5\times10^{-4}$ where $0.258$ is
+measured, the ratchet stays at $610$ and puts it at $0.34$, and the floor moves
+$1.5\times$ from $K=5$ to $K=7$ while the terminal sensitivity falls $2.4\cdot10^{5}$-fold
+and the pair envelope does not move at all ($737$, $735$, $735$).
 
 \begin{figure}[t]
 \centering
@@ -77,17 +77,17 @@ stopping policies, three seeds, two windows) none diverged, and
 $\mathrm{Spearman}(\log\text{pred},\log\text{orth}) = +0.93$ against $-0.05$ for best
 validation loss: the law predicts the arithmetic, not the loss.
 
-\emph{The constant is a calibration (held-out shapes and spectra).}  On the logspace control the ratio of \eqref{eq:cert} to measurement
-is $0.43$--$0.97$; on a two-plateau spectrum the same constant under-states the error by
-$4$--$5\times$ (\S\ref{sec:limitations}).  The first-order formula transfers where the
+\emph{The constant is a calibration.}  On the logspace control the ratio of \eqref{eq:cert}
+to measurement is $0.43$--$0.97$ and on a two-plateau spectrum the same constant
+under-states the error by $4$--$5\times$ (\S\ref{sec:limitations}).  The first-order formula transfers where the
 constant does not ($0.51$--$0.98$, median $0.89$), and the ratchet is identical in all four
 families at fixed $\ell$: the law's domain is a spectrum family as much as a precision.
 \emph{A dimension-invariant form.}  Dividing the spectrum-only proxy
 $\hat v\norm{W}_F$ ($W=[1/(\sigma_i+\sigma_j)]$, $\hat v=\norm{\hat M}_F/(\sqrt3 d)$) by
 $\sqrt d$ leaves one number: $6.07\,u\,\hat v\norm{W}_F/\sqrt d$ at the median over 240
 cells (CI $[5.98,6.14]$), $89\%$ inside $\pm25\%$, $6.04$ on 64 held-out cells
-(Table~\ref{tab:dsinv}).  Its two factors are \S\ref{sec:profile}: a derived $2\sqrt2$
-and the spectrum's own $g$.
+(Table~\ref{tab:dsinv}).  Its factors are \S\ref{sec:profile}: the cast's rms, a derived
+$2\sqrt2$, the spectrum's own $g$ and the counted multiplicity.
 
 \subsection{The participation factor, closed}
 \label{sec:profile}
@@ -118,41 +118,39 @@ and $84\%$ of the sum is on the input cast.  The multiplicity is counted, not mo
 \label{sec:realtrain}
 
 To see whether the frozen-trajectory picture survives a loop that reacts, we run the
-kernel inside training on \texttt{digits} (a five-layer MLP $64\to128^4\to10$, five seeds,
-and a two-block residual MLP, three) and on \texttt{diabetes} (a four-layer regression MLP,
-three), Muon on every hidden weight (seven conditions, Table~\ref{tab:realtrain}).
+kernel inside training on \texttt{digits} (a five-layer MLP $64\to128^4\to10$ and a
+two-block residual MLP, eight seed-runs) and on \texttt{diabetes} (a four-layer regression
+MLP, three), Muon on every hidden weight, seven conditions
+(Table~\ref{tab:realtrain}).
 
 \emph{The loss does not move.}  On \texttt{digits} the training loss spans
 $5.77$--$7.39\times10^{-5}$ and the accuracy $0.977$--$0.980$ over all seven
-conditions; on \texttt{diabetes} the MSE spans $1.30$--$1.57\times10^{-3}$, and at
-twelve bits (E5M2, $K=2$) an update error of $0.73$ still costs $1.65\times$ the fp32 MSE
+conditions; on \texttt{diabetes} the MSE spans $1.30$--$1.57\times10^{-3}$
 (Appendix~\ref{app:constant}).
 
 \emph{What does move is stability.}  At the shipped safety E5M2 blows up in $6$ of $11$
 seed-runs within $400$ steps (digits $2/5$, residual $1/3$, diabetes $3/3$), E4M3 once, and
 nothing else; over $1{,}200$ steps and $25$ seeds every E5M2 run at $1.01$ fails in both
-tasks, as does $17$ of $25$ at $1.035$ on \texttt{digits} (Table~\ref{tab:census}).  The
-format is not quantising badly (flushed values have median $0$ and E5M2's relative error
-is $5.3\%$, what four bits imply): the mode is dynamical and completes inside one call
-(\S\ref{sec:escape}).
+tasks (Table~\ref{tab:census}).  The
+format is not quantising badly (flushed values have median $0$, E5M2's relative error
+is $5.3\%$, what four bits imply): the mode is dynamical (\S\ref{sec:escape}).
 
 \subsection{Why a run escapes: one call, one window edge}
 \label{sec:escape}
 
-The failure is not a training instability: in each failing run the weights
-move by $1$--$2\%$ per step and then, inside one call, the norm jumps by twenty
-orders of magnitude (diabetes, seed 0, step 24: $\norm{O}_F=4.9\times10^{44}$).  The
+The failure is not a training instability: the weights move by $1$--$2\%$ per step and
+then, inside one call, the norm jumps by twenty orders of magnitude (diabetes, seed 0,
+step 24: $\norm{O}_F=4.9\times10^{44}$).  The
 state's top within that call traces the escape (Fig.~\ref{fig:escape}a): the exact orbit
 lands on the certified edge of each of the six steps, the E5M2 orbit
 leaves it at step 2, and all four instrumented runs repeat the trace.  A rounding of a
-tenth of a percent at step 1 lands the state past the quintic's extremum, step 2 returns it
-$14\%$ above its edge instead of below, and beyond the edge the
-gain is $2.2\times$ at $1.5$ times the edge and $9.3\times$ at twice.
+tenth of a percent at step 1 lands the state past the quintic's extremum and step 2 returns
+it $14\%$ above its edge instead of below.
 
 Two counterfactuals change one thing: rescaling the state into its window whenever a step
-would leave it makes all $50$ long runs finish, while a $10\%$ cut in the learning rate
-leaves $7$ of $11$ failing.  The mode is the escape, not the step
-size; the curvature loop is excluded directly: with
+would leave it makes all $50$ long runs finish, while a $10\%$ learning-rate cut
+leaves $7$ of $11$ failing.  The mode is the escape, not the step size, and the curvature
+loop is excluded directly: with
 $G=\lambda_{\max}(\mathrm{diag}(\mathrm{step})^{1/2}H\,\mathrm{diag}(\mathrm{step})^{1/2})$
 from power iteration on Hessian-vector products, $G>1$ on no trajectory (median
 $\le0.26$, max $0.83$ in five of six).  What the safety buys is the excess a window
@@ -162,12 +160,21 @@ the update's Frobenius norm.
 
 \emph{The risk is per call, and it grows.}  Over $1{,}200$ steps and $25$ seeds
 (Table~\ref{tab:census}) one call at the shipped safety fails at $1$ in $1{,}600$ on
-\texttt{digits} and $1$ in $109$ on \texttt{diabetes} ($14.7\times$, call-level exact
-$p=3.5\cdot10^{-17}$), while both fail $25$ of $25$ runs: the run count cannot show the
-difference.  The hazard rises --- on \texttt{digits} from $1$ in $6{,}400$ in the first two
+\texttt{digits} and $1$ in $109$ on \texttt{diabetes}, while both fail $25$ of $25$ runs.
+The hazard rises --- on \texttt{digits} from $1$ in $6{,}400$ in the first two
 hundred steps to $1$ in $370$ in the fourth and fifth hundreds.  At $1.035$ it falls to $1$
 in $5{,}900$ on \texttt{digits} and to none in $90{,}000$ calls on \texttt{diabetes}; the
 clamp leaves none in $210{,}000$ calls of either.
+
+\emph{Read at the seed level, where the runs are independent.}  At $1.035$ \texttt{digits}
+goes from $25/25$ to $17/25$ (Fisher $p=4.0\cdot10^{-3}$, run-rate difference
+$[0.16,0.52]$ by a seed bootstrap) and \texttt{diabetes} from $25/25$ to $0/25$
+($p=1.6\cdot10^{-14}$); the two tasks then tie on counts ($25/25$ each, $p=1$) and differ in
+\emph{when} they fail (median $396$ against $35$ steps; permutation $p=2.5\cdot10^{-5}$).
+Resampling seeds rather than calls leaves the $14.7\times$ ratio at $[10.3,21.0]$ and its
+standard error at $0.36$--$0.89$ of the binomial one: the call interval is not
+anti-conservative, it is in the wrong unit, since with every run failing the exposure is
+the run (Appendix~\ref{app:census}).
 
 \begin{figure}[t]
 \centering
@@ -240,8 +247,7 @@ Spending the first slot works: cast and step one at bf16 with the other five at 
 takes $\ell=10^{-2}$ from $4$ to $0$ blow-ups and the floor from $0.877$ to $0.243$
 ($3.6\times$), and two bf16 steps give $0.146$ ($6.0\times$) at $5.33$ bits per
 slot against $0.411$ for all-E4M3 at five (Table~\ref{tab:e5m2}).  This is the one regime
-where the hybrid wins; under a training kernel's normalisation the same rule is
-six times worse than bf16.
+where the hybrid wins.
 
 \subsection{What to do in the next Muon step}
 \label{sec:rules}
