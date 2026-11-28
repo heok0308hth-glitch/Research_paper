@@ -268,7 +268,7 @@ three prescriptions that are wrong at four bits.
 \textbf{Concretely, on the next Muon step:} raise the safety factor from $1.01$ to at
 least $1.035$ --- it widens the tolerance of the certified window from $0.8\%$ to $4.8\%$
 of its upper edge and lowers the hazard of one Muon call $4$--$200\times$ over
-\ $1{,}200$ steps, which is margin and not immunity: on \texttt{digits} it only delays the
+$1{,}200$ steps, which is margin and not immunity: on \texttt{digits} it only delays the
 escape, while keeping the state inside its window removes it ($0$ in $210{,}000$ calls);
 stop at $K=4$--$5$, since the sixth step spends eight bits for under $1.5\%$ of the window
 error; and mix precision only inside a $\sigma_{\max}$-anchored window with
@@ -303,7 +303,7 @@ at twice it) and the update runs to $10^{44}$, while clamping the state inside t
 makes all fifty runs finish and a $10\%$ learning-rate cut leaves seven of eleven failing.
 In fp8 the floor matches the unlimited-exponent kernel's at the matched significand to
 $1$--$3\%$; online budget adaptation is a negative result (four spectrum-free sensors
-cannot see the plateau), and so is a lower bound that trades accuracy against sensitivity.
+cannot see the plateau), and no lower bound on accuracy versus sensitivity holds.
 \end{abstract}
 % --- END sections/00-abstract.tex ---
 % --- BEGIN sections/01-introduction.tex ---
